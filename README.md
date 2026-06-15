@@ -1,4 +1,4 @@
-# PrimeDirectory
+# Grow with BA
 
 A programmatic-SEO directory site built with Next.js 15 (App Router) that
 generates **1,000+ statically rendered pages** targeting high-CPC service

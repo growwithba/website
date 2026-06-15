@@ -5,7 +5,7 @@ import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Contact Us',
-  description: 'Get in touch with PrimeDirectory or list your business.',
+  description: 'Get in touch with Grow with BA or list your business.',
   path: '/contact/',
 });
 
@@ -18,7 +18,7 @@ export default function ContactPage() {
         </div>
       </div>
       <section className="mx-auto max-w-3xl px-4 py-12">
-        <h1 className="text-4xl font-bold text-slate-900">Contact PrimeDirectory</h1>
+        <h1 className="text-4xl font-bold text-slate-900">Contact Grow with BA</h1>
         <p className="mt-4 text-lg text-slate-600">
           Questions, feedback, or want to list your business? We typically reply
           within one business day.
