@@ -34,14 +34,11 @@ export function buildMetadata({ title, description, path }: BuildMetadataInput):
 }
 
 export function localBusinessJsonLd(business: Business, category: Category, city: City) {
-  return {
+  const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     '@id': `${SITE.url}/${category.slug}/${city.slug}/#${business.id}`,
     name: business.name,
-    description: business.tagline,
-    telephone: business.phone,
-    url: business.website,
     address: {
       '@type': 'PostalAddress',
       streetAddress: business.address.split(',')[0],
@@ -55,13 +52,22 @@ export function localBusinessJsonLd(business: Business, category: Category, city
       latitude: city.lat,
       longitude: city.lng,
     },
-    aggregateRating: {
+  };
+
+  if (business.tagline) jsonLd.description = business.tagline;
+  if (business.phone) jsonLd.telephone = business.phone;
+  if (business.website) jsonLd.url = business.website;
+  if (business.hours) jsonLd.openingHours = business.hours;
+  // Only emit aggregateRating when there are real reviews to back it.
+  if (business.rating > 0 && business.reviewCount > 0) {
+    jsonLd.aggregateRating = {
       '@type': 'AggregateRating',
       ratingValue: business.rating,
       reviewCount: business.reviewCount,
-    },
-    openingHours: business.hours,
-  };
+    };
+  }
+
+  return jsonLd;
 }
 
 export function itemListJsonLd(

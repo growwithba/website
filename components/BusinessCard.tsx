@@ -34,7 +34,9 @@ export default function BusinessCard({
           <h3 className="mt-2 text-lg font-semibold text-slate-900">
             {business.name}
           </h3>
-          <p className="text-sm text-slate-600">{business.tagline}</p>
+          {business.tagline && (
+            <p className="text-sm text-slate-600">{business.tagline}</p>
+          )}
         </div>
         <div className="text-right text-sm">
           <Stars rating={business.rating} />
@@ -45,39 +47,59 @@ export default function BusinessCard({
       </div>
 
       <dl className="mt-4 grid gap-2 text-sm text-slate-600 sm:grid-cols-2">
-        <div>
-          <dt className="text-xs uppercase text-slate-400">Phone</dt>
-          <dd className="font-medium text-slate-900">{business.phone}</dd>
-        </div>
+        {business.phone && (
+          <div>
+            <dt className="text-xs uppercase text-slate-400">Phone</dt>
+            <dd className="font-medium text-slate-900">{business.phone}</dd>
+          </div>
+        )}
         <div>
           <dt className="text-xs uppercase text-slate-400">Address</dt>
           <dd>{business.address} {business.zip}</dd>
         </div>
-        <div>
-          <dt className="text-xs uppercase text-slate-400">Hours</dt>
-          <dd>{business.hours}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase text-slate-400">Experience</dt>
-          <dd>{business.yearsInBusiness} years in business</dd>
-        </div>
+        {business.hours && (
+          <div>
+            <dt className="text-xs uppercase text-slate-400">Hours</dt>
+            <dd>{business.hours}</dd>
+          </div>
+        )}
+        {typeof business.yearsInBusiness === 'number' && (
+          <div>
+            <dt className="text-xs uppercase text-slate-400">Experience</dt>
+            <dd>{business.yearsInBusiness} years in business</dd>
+          </div>
+        )}
       </dl>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <a
-          href={`tel:${business.phone.replace(/\D/g, '')}`}
-          className="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700"
-        >
-          Call now
-        </a>
-        <a
-          href={business.website}
-          rel="nofollow noopener noreferrer"
-          target="_blank"
-          className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Visit website
-        </a>
+        {business.phone && (
+          <a
+            href={`tel:${business.phone.replace(/\D/g, '')}`}
+            className="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700"
+          >
+            Call now
+          </a>
+        )}
+        {business.website && (
+          <a
+            href={business.website}
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+            className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Visit website
+          </a>
+        )}
+        {business.googleMapsUri && (
+          <a
+            href={business.googleMapsUri}
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+            className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            View on Google
+          </a>
+        )}
       </div>
     </article>
   );

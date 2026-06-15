@@ -1,4 +1,4 @@
-# PrimeDirectory
+# Grow with BA
 
 A programmatic-SEO directory site built with Next.js 15 (App Router) that
 generates **1,000+ statically rendered pages** targeting high-CPC service
@@ -48,15 +48,46 @@ app/                     # Next.js 15 App Router pages
 data/
   categories.ts          # 10 high-CPC categories
   cities.ts              # 100 US cities
-  businesses.ts          # deterministic business generator
+  businesses.ts          # getBusinesses() — real data w/ synthetic fallback
+  listings.generated.json # Google Places cache (built by fetch:places)
 lib/
   seo.ts                 # metadata + JSON-LD helpers
   site.ts                # site-wide constants
+  places.ts              # Google Places API (New) client + mapping
+scripts/
+  fetch-places.ts        # build the listings cache from Google Places
 components/              # Header, Footer, BusinessCard, Breadcrumbs, JsonLd
 ```
 
-## Notes
+## Business data (Google Places)
 
-Business listings are generated deterministically from a seeded PRNG so SSG
-output is stable. Replace `data/businesses.ts` with a real data source
-(Google Places API, internal DB, CSV import) for production.
+Pages resolve listings through `getBusinesses(category, city)` in
+`data/businesses.ts`. It returns **real Google Places data** when present in
+`data/listings.generated.json`, and otherwise falls back to a deterministic
+seeded-PRNG generator so the site always builds — even before any data is
+fetched.
+
+To populate real listings:
+
+```bash
+cp .env.example .env            # then set GOOGLE_PLACES_API_KEY
+npm run fetch:places            # fetches all 1,000 category×city pairs
+```
+
+The fetch script (`scripts/fetch-places.ts`) is incremental — re-running it
+skips pairs already cached, so an interrupted run resumes. Useful flags:
+
+```bash
+# Test a small slice before a full run
+npm run fetch:places -- --categories=plumbers --cities=austin-tx,miami-fl
+npm run fetch:places -- --delay=300        # slow down to respect rate limits
+npm run fetch:places -- --fresh            # ignore cache and refetch everything
+```
+
+Requires the **Places API (New)** enabled in Google Cloud with billing on. The
+field mask requests only the fields the site renders to keep per-request cost
+down. Pairs returning zero results stay uncached and fall back to synthetic
+data.
+
+Static export (`next build`) reads the cache at build time, so the deployed
+site is fully static with no runtime API calls.

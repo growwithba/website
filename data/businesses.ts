@@ -1,20 +1,33 @@
 import type { Category } from './categories';
 import type { City } from './cities';
+import listings from './listings.generated.json';
 
 export interface Business {
   id: string;
   name: string;
   rating: number;
   reviewCount: number;
-  phone: string;
+  phone?: string;
   address: string;
   zip: string;
-  yearsInBusiness: number;
-  website: string;
-  tagline: string;
-  hours: string;
+  /** Not provided by Google Places — only present for synthetic listings. */
+  yearsInBusiness?: number;
+  website?: string;
+  tagline?: string;
+  hours?: string;
   verified: boolean;
+  /** Provenance so the UI/JSON-LD can adapt; defaults to 'synthetic'. */
+  source?: 'google-places' | 'synthetic';
+  placeId?: string;
+  googleMapsUri?: string;
 }
+
+/** Real listings keyed by `${categorySlug}|${citySlug}`, populated by
+ *  `npm run fetch:places`. Empty until the fetch script runs. */
+const realListings = listings as Record<string, Business[]>;
+
+export const listingKey = (categorySlug: string, citySlug: string): string =>
+  `${categorySlug}|${citySlug}`;
 
 // Deterministic PRNG so SSG output is stable across builds.
 function mulberry32(seed: number) {
@@ -208,8 +221,24 @@ export function generateBusinesses(category: Category, city: City, count = 12): 
       tagline,
       hours,
       verified: rand() < 0.55,
+      source: 'synthetic',
     });
   }
 
   return list.sort((a, b) => b.rating - a.rating || b.reviewCount - a.reviewCount);
+}
+
+/**
+ * Resolve listings for a category + city. Returns real Google Places data
+ * when it has been fetched into the cache, otherwise falls back to the
+ * deterministic synthetic generator so builds always succeed.
+ */
+export function getBusinesses(category: Category, city: City, count = 12): Business[] {
+  const real = realListings[listingKey(category.slug, city.slug)];
+  if (real && real.length > 0) {
+    return [...real]
+      .sort((a, b) => b.rating - a.rating || b.reviewCount - a.reviewCount)
+      .slice(0, count);
+  }
+  return generateBusinesses(category, city, count);
 }

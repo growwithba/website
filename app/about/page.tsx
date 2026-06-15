@@ -3,9 +3,9 @@ import { buildMetadata } from '@/lib/seo';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'About PrimeDirectory',
+  title: 'About Grow with BA',
   description:
-    'PrimeDirectory connects homeowners and small businesses with vetted, top-rated local pros across the categories that matter most.',
+    'Grow with BA connects homeowners and small businesses with vetted, top-rated local pros across the categories that matter most.',
   path: '/about/',
 });
 
@@ -18,9 +18,9 @@ export default function AboutPage() {
         </div>
       </div>
       <section className="mx-auto max-w-3xl px-4 py-12 prose-clean">
-        <h1 className="text-4xl font-bold text-slate-900">About PrimeDirectory</h1>
+        <h1 className="text-4xl font-bold text-slate-900">About Grow with BA</h1>
         <p className="mt-6 text-lg text-slate-600">
-          We built PrimeDirectory because finding a trustworthy local professional in
+          We built Grow with BA because finding a trustworthy local professional in
           high-stakes categories — legal, financial, medical, and home services — is
           one of the highest-friction tasks on the internet.
         </p>

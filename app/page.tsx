@@ -120,7 +120,7 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">Why PrimeDirectory</h2>
+        <h2 className="text-3xl font-bold text-slate-900">Why Grow with BA</h2>
         <div className="mt-8 grid gap-6 md:grid-cols-3">
           <div className="rounded-xl border border-slate-200 p-6">
             <div className="text-2xl font-bold text-brand-700">10</div>
