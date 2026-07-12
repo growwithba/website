@@ -55,6 +55,21 @@ lib/
 components/              # Header, Footer, BusinessCard, Breadcrumbs, JsonLd
 ```
 
+## Glif MCP server
+
+The repo ships a project-scoped `.mcp.json` that registers the
+[glif-mcp-server](https://github.com/glifxyz/glif-mcp-server), so Claude Code
+sessions in this repo can run [glif.app](https://glif.app) AI workflows
+(image generators, meme creators, etc.) — useful for generating imagery and
+media for the directory pages.
+
+To enable it, set `GLIF_API_TOKEN` in your environment (get a token at
+<https://glif.app/settings/api-tokens>) — see `.env.example`. The server runs
+via `npx @glifxyz/glif-mcp-server@latest`; no install step needed.
+
+Note: the upstream GitHub repo was archived in May 2026 and is read-only,
+but the npm package remains installable.
+
 ## Notes
 
 Business listings are generated deterministically from a seeded PRNG so SSG
