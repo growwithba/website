@@ -4,7 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Privacy Policy',
-  description: 'PrimeDirectory privacy policy.',
+  description: 'Grow with BA privacy policy.',
   path: '/privacy/',
 });
 
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         <h1 className="text-4xl font-bold text-slate-900">Privacy Policy</h1>
         <p className="mt-4 text-slate-600">Last updated: April 2026</p>
         <p className="mt-4 text-slate-600">
-          PrimeDirectory respects your privacy. We collect only the information needed
+          Grow with BA respects your privacy. We collect only the information needed
           to operate the directory and improve recommendations. We do not sell personal
           data to third parties.
         </p>

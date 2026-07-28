@@ -7,7 +7,7 @@ export default function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg text-brand-700">
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-600 text-white text-sm">
-            PD
+            BA
           </span>
           {SITE.name}
         </Link>
