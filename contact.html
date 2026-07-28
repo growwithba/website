@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0A0E1A" />
+<meta name="description" content="Contact GrowwithBA — tell us what you're building and where it's stuck. We read every note." />
+<title>Contact · GrowwithBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body data-page="contact">
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="noise"></div>
+<div class="page-transition" id="pageTransition"><span></span><span></span><span></span></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a href="index.html" class="nav__logo">
+      <span class="nav__logo-mark"><svg viewBox="0 0 40 40" width="28" height="28"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C9A96E"/><stop offset="100%" stop-color="#F4E1B2"/></linearGradient></defs><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg></span>
+      <span class="nav__logo-text">Groww<em>with</em>BA</span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="work.html">Work</a>
+      <a href="insights.html">Insights</a>
+      <a href="contact.html" class="is-active">Contact</a>
+    </nav>
+    <a href="contact.html" class="btn btn--primary nav__cta"><span>Book a call</span><svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu"><div class="menu__inner">
+  <a href="index.html">Home <span>01</span></a>
+  <a href="about.html">About <span>02</span></a>
+  <a href="services.html">Services <span>03</span></a>
+  <a href="work.html">Work <span>04</span></a>
+  <a href="insights.html">Insights <span>05</span></a>
+  <a href="contact.html">Contact <span>06</span></a>
+</div></div>
+
+<main>
+
+  <section class="page-hero page-hero--short">
+    <div class="page-hero__bg"><div class="hero__gradient"></div><div class="hero__grid"></div></div>
+    <div class="container">
+      <div class="crumb" data-reveal><a href="index.html">Home</a> <span>/</span> <em>Contact</em></div>
+      <h1 class="page-hero__title">
+        <span class="line" data-reveal-line><span>The best conversations</span></span>
+        <span class="line" data-reveal-line><span>start with a <em>note.</em></span></span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="cta" id="contact">
+    <div class="cta__bg"><div class="cta__orb cta__orb--1"></div><div class="cta__orb cta__orb--2"></div></div>
+    <div class="container cta__inner">
+      <div class="cta__head">
+        <span class="eyebrow" data-reveal><em>·</em> Partner with us</span>
+        <h2 class="h2" data-reveal>Tell us what you're building <br/><span class="grad">and where it's stuck.</span></h2>
+        <p data-reveal>We read every note. If we're the right fit, you'll hear back within two business days. If we're not, we'll usually introduce someone who is.</p>
+      </div>
+
+      <form class="form" id="contactForm" novalidate>
+        <div class="field" data-reveal><label for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" required placeholder="Jane Operator" /></div>
+        <div class="field" data-reveal><label for="email">Work email</label><input id="email" name="email" type="email" autocomplete="email" required placeholder="jane@company.com" /></div>
+        <div class="field" data-reveal><label for="company">Company</label><input id="company" name="company" type="text" placeholder="Company name" /></div>
+        <div class="field" data-reveal>
+          <label for="stage">Stage</label>
+          <div class="select">
+            <select id="stage" name="stage">
+              <option>$1M – $5M revenue</option>
+              <option>$5M – $20M revenue</option>
+              <option>$20M – $50M revenue</option>
+              <option>$50M+ revenue</option>
+              <option>Pre-revenue / Fund</option>
+            </select>
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="field field--full" data-reveal>
+          <label>What are you interested in?</label>
+          <div class="pill-choice">
+            <label><input type="checkbox" checked /><span>Growth Strategy</span></label>
+            <label><input type="checkbox" /><span>Capital &amp; Deal</span></label>
+            <label><input type="checkbox" /><span>Operating Systems</span></label>
+            <label><input type="checkbox" /><span>Founder Advisory</span></label>
+            <label><input type="checkbox" /><span>Just exploring</span></label>
+          </div>
+        </div>
+        <div class="field field--full" data-reveal>
+          <label for="message">What are you trying to solve?</label>
+          <textarea id="message" name="message" rows="5" placeholder="A paragraph is plenty. We'll dig in from there." required></textarea>
+        </div>
+        <div class="field field--full form__submit" data-reveal>
+          <button type="submit" class="btn btn--primary btn--lg"><span>Send note</span><svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <span class="form__note" id="formNote">Encrypted in transit · NDA on request</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- OFFICES -->
+  <section class="offices">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow" data-reveal><em>·</em> Elsewhere</span>
+        <h2 class="h2" data-reveal>Three cities. <span class="grad">One practice.</span></h2>
+      </div>
+      <div class="offices__grid">
+        <div class="office" data-reveal data-tilt>
+          <span class="office__city">London</span>
+          <p>18 Charterhouse Street<br/>Farringdon, London EC1M 6AX</p>
+          <a href="mailto:london@growwithba.com" class="link-arrow">london@growwithba.com →</a>
+          <span class="office__time" data-tz="Europe/London">—</span>
+        </div>
+        <div class="office" data-reveal data-tilt>
+          <span class="office__city">New York</span>
+          <p>Suite 2410, 40 Worth Street<br/>Tribeca, New York NY 10013</p>
+          <a href="mailto:ny@growwithba.com" class="link-arrow">ny@growwithba.com →</a>
+          <span class="office__time" data-tz="America/New_York">—</span>
+        </div>
+        <div class="office" data-reveal data-tilt>
+          <span class="office__city">Singapore</span>
+          <p>Level 24, Ocean Financial Centre<br/>10 Collyer Quay, Singapore 049315</p>
+          <a href="mailto:sg@growwithba.com" class="link-arrow">sg@growwithba.com →</a>
+          <span class="office__time" data-tz="Asia/Singapore">—</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow" data-reveal><em>·</em> Common questions</span>
+        <h2 class="h2" data-reveal>Before you <span class="grad">write.</span></h2>
+      </div>
+      <div class="faq__list">
+        <details class="faq__item" data-reveal><summary><span>What size company do you typically work with?</span><i></i></summary><p>Most partners are between $5M and $250M in revenue. Below that we sometimes advise informally; above that we usually work with an operating unit or portfolio company.</p></details>
+        <details class="faq__item" data-reveal><summary><span>Do you work with venture-backed founders?</span><i></i></summary><p>Often — but not exclusively. Roughly half our partners are VC-backed, a third are founder-owned and profitable, and the rest are portfolio companies of PE or family offices.</p></details>
+        <details class="faq__item" data-reveal><summary><span>How long is a typical engagement?</span><i></i></summary><p>Most start with a 10–14 week structured engagement, then continue in a retained governance mode. The average total partnership runs 18–36 months.</p></details>
+        <details class="faq__item" data-reveal><summary><span>Do you take equity in lieu of fees?</span><i></i></summary><p>Sometimes. On the right engagement we structure some or all of our compensation as equity, revenue share, or exit-linked bonus. We prefer skin in the outcome.</p></details>
+        <details class="faq__item" data-reveal><summary><span>What if we're pre-revenue?</span><i></i></summary><p>We take on a small number of pre-revenue partners each year — usually second-time founders with a clean thesis and enough runway to work through a structured 12-week engagement.</p></details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href="index.html" class="nav__logo"><span class="nav__logo-mark"><svg viewBox="0 0 40 40" width="28" height="28"><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg></span><span class="nav__logo-text">Groww<em>with</em>BA</span></a>
+      <p>A boutique advisory for founders, operators, and funds who treat the next decade as a single compounding decision.</p>
+    </div>
+    <div class="footer__col"><h4>Practice</h4><a href="services.html">Growth Strategy</a><a href="services.html">Capital &amp; Deal</a><a href="services.html">Operating Systems</a><a href="services.html">Founder Advisory</a></div>
+    <div class="footer__col"><h4>Company</h4><a href="about.html">About</a><a href="work.html">Selected work</a><a href="insights.html">Journal</a><a href="contact.html">Contact</a></div>
+    <div class="footer__col"><h4>Elsewhere</h4><a href="#">LinkedIn</a><a href="#">X / Twitter</a><a href="#">Substack</a><a href="mailto:partners@growwithba.com">partners@growwithba.com</a></div>
+  </div>
+  <div class="footer__base container">
+    <span>© 2026 GrowwithBA · All rights reserved</span>
+    <span class="footer__loc"><span class="dot"></span> London · New York · Singapore</span>
+    <span>Designed &amp; built in-house</span>
+  </div>
+</footer>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>

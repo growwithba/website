@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0A0E1A" />
+<meta name="description" content="Selected work — outcomes, not case studies. Growth engagements from SaaS to fintech to services." />
+<title>Work · GrowwithBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body data-page="work">
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="noise"></div>
+<div class="page-transition" id="pageTransition"><span></span><span></span><span></span></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a href="index.html" class="nav__logo">
+      <span class="nav__logo-mark"><svg viewBox="0 0 40 40" width="28" height="28"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C9A96E"/><stop offset="100%" stop-color="#F4E1B2"/></linearGradient></defs><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg></span>
+      <span class="nav__logo-text">Groww<em>with</em>BA</span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="work.html" class="is-active">Work</a>
+      <a href="insights.html">Insights</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="contact.html" class="btn btn--primary nav__cta"><span>Book a call</span><svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu"><div class="menu__inner">
+  <a href="index.html">Home <span>01</span></a>
+  <a href="about.html">About <span>02</span></a>
+  <a href="services.html">Services <span>03</span></a>
+  <a href="work.html">Work <span>04</span></a>
+  <a href="insights.html">Insights <span>05</span></a>
+  <a href="contact.html">Contact <span>06</span></a>
+</div></div>
+
+<main>
+
+  <section class="page-hero">
+    <div class="page-hero__bg"><div class="hero__gradient"></div><div class="hero__grid"></div></div>
+    <div class="container">
+      <div class="crumb" data-reveal><a href="index.html">Home</a> <span>/</span> <em>Work</em></div>
+      <h1 class="page-hero__title">
+        <span class="line" data-reveal-line><span>Outcomes,</span></span>
+        <span class="line" data-reveal-line><span>not <em>case studies.</em></span></span>
+      </h1>
+      <p class="page-hero__sub" data-reveal>A selection of the engagements we can talk about publicly. Many of the best ones we can't — that's part of the deal.</p>
+    </div>
+  </section>
+
+  <!-- FILTER -->
+  <section class="filter-bar">
+    <div class="container filter-bar__inner">
+      <div class="chips" data-reveal>
+        <button class="chip is-active" data-filter="all">All work</button>
+        <button class="chip" data-filter="saas">SaaS</button>
+        <button class="chip" data-filter="commerce">Commerce</button>
+        <button class="chip" data-filter="fintech">Fintech</button>
+        <button class="chip" data-filter="services">Services</button>
+      </div>
+      <div class="filter-bar__meta" data-reveal><span>Showing <em id="filterCount">8</em> engagements</span></div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section class="work-grid">
+    <div class="container">
+      <div class="cases" id="casesGrid">
+
+        <article class="case" data-reveal data-cat="saas">
+          <div class="case__tag">SaaS · Series B</div>
+          <div class="case__metric"><span class="case__big" data-counter="3.4" data-suffix="×" data-decimals="1">0×</span><span class="case__label">ARR in 14 months</span></div>
+          <h3>Re-architected a vertical SaaS from feature factory to category owner.</h3>
+          <p>Repriced, repositioned, and rebuilt the go-to-market engine. Closed a $42M Series B at 2.1× the pre-engagement mark.</p>
+          <div class="case__foot"><span>2024 → 2025</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case case--alt" data-reveal data-cat="commerce">
+          <div class="case__tag">D2C · Recap</div>
+          <div class="case__metric"><span class="case__big" data-counter="68" data-suffix="%">0%</span><span class="case__label">EBITDA uplift, 9 months</span></div>
+          <h3>Took a founder-led commerce brand from break-even to PE-ready.</h3>
+          <p>Rebuilt unit economics, installed senior finance leadership, and closed a minority recap at a 7.8× EBITDA multiple.</p>
+          <div class="case__foot"><span>2023 → 2024</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case" data-reveal data-cat="fintech">
+          <div class="case__tag">Fintech · Exit</div>
+          <div class="case__metric"><span class="case__big" data-counter="119" data-suffix="M">$0M</span><span class="case__label">All-cash acquisition</span></div>
+          <h3>Led a founder-operated fintech through a 14-week bake-off to exit.</h3>
+          <p>Structured the process, ran the diligence room, and negotiated to a clean strategic exit — 2.6× the original inbound offer.</p>
+          <div class="case__foot"><span>2022 → 2023</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case case--alt" data-reveal data-cat="services">
+          <div class="case__tag">Services · Scale-up</div>
+          <div class="case__metric"><span class="case__big" data-counter="4.2" data-suffix="×" data-decimals="1">0×</span><span class="case__label">Enterprise value, 22 months</span></div>
+          <h3>Productized a senior services firm into a compounding platform.</h3>
+          <p>Built the offer ladder, installed the margin discipline, and recruited the COO who now runs it. Partner earnings up 3.1×.</p>
+          <div class="case__foot"><span>2022 → 2024</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case" data-reveal data-cat="saas">
+          <div class="case__tag">SaaS · Pricing</div>
+          <div class="case__metric"><span class="case__big" data-counter="31" data-suffix="%">0%</span><span class="case__label">Net revenue retention lift</span></div>
+          <h3>Repriced a horizontal SaaS platform without a single major churn event.</h3>
+          <p>Segment-first repricing rolled out across 4,000 accounts in 90 days. Gross margin up 640 bps year over year.</p>
+          <div class="case__foot"><span>2024</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case case--alt" data-reveal data-cat="commerce">
+          <div class="case__tag">Commerce · Platform</div>
+          <div class="case__metric"><span class="case__big" data-counter="2.8" data-suffix="×" data-decimals="1">0×</span><span class="case__label">Contribution margin, 12 months</span></div>
+          <h3>Turned a 9-figure DTC brand into a marketplace-first platform.</h3>
+          <p>Reframed the business as a distribution asset, launched wholesale, and doubled contribution margin without cutting a single dollar of brand spend.</p>
+          <div class="case__foot"><span>2023 → 2024</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case" data-reveal data-cat="fintech">
+          <div class="case__tag">Fintech · Series A</div>
+          <div class="case__metric"><span class="case__big" data-counter="28" data-suffix="M">$0M</span><span class="case__label">Series A close</span></div>
+          <h3>Reframed a payments infra startup from tool to platform in one quarter.</h3>
+          <p>New narrative, new comps, new lead investor. Closed a $28M A at 3.4× pre-money uplift on the prior seed extension.</p>
+          <div class="case__foot"><span>2023</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+        <article class="case case--alt" data-reveal data-cat="services">
+          <div class="case__tag">Services · Ops</div>
+          <div class="case__metric"><span class="case__big" data-counter="47" data-suffix="%">0%</span><span class="case__label">Utilization uplift</span></div>
+          <h3>Installed the operating system behind a boutique consulting scale-up.</h3>
+          <p>Weekly leadership rhythm, real-time margin dashboards, and a project economics rewrite that partners actually use.</p>
+          <div class="case__foot"><span>2024</span><a href="#" class="link-arrow">Read the brief →</a></div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS -->
+  <section class="marquee marquee--light">
+    <div class="marquee__label"><span class="pulse"></span><span>A few of the operators we've partnered with</span></div>
+    <div class="marquee__track">
+      <div class="marquee__row"><span>Northwind</span><span>·</span><span>Ashcroft &amp; Co</span><span>·</span><span>Vela Health</span><span>·</span><span>Meridian Pay</span><span>·</span><span>Lattice Retail</span><span>·</span><span>Highfield</span><span>·</span><span>Verdant Ops</span><span>·</span><span>Kaido Labs</span><span>·</span></div>
+      <div class="marquee__row" aria-hidden="true"><span>Northwind</span><span>·</span><span>Ashcroft &amp; Co</span><span>·</span><span>Vela Health</span><span>·</span><span>Meridian Pay</span><span>·</span><span>Lattice Retail</span><span>·</span><span>Highfield</span><span>·</span><span>Verdant Ops</span><span>·</span><span>Kaido Labs</span><span>·</span></div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section class="cta-strip">
+    <div class="container cta-strip__inner">
+      <div data-reveal><span class="eyebrow"><em>·</em> Next partner</span><h2 class="h2">Your business, <span class="grad">on this page next.</span></h2></div>
+      <a href="contact.html" class="btn btn--primary btn--lg" data-reveal><span>Book a strategy call</span><svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href="index.html" class="nav__logo"><span class="nav__logo-mark"><svg viewBox="0 0 40 40" width="28" height="28"><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg></span><span class="nav__logo-text">Groww<em>with</em>BA</span></a>
+      <p>A boutique advisory for founders, operators, and funds who treat the next decade as a single compounding decision.</p>
+    </div>
+    <div class="footer__col"><h4>Practice</h4><a href="services.html">Growth Strategy</a><a href="services.html">Capital &amp; Deal</a><a href="services.html">Operating Systems</a><a href="services.html">Founder Advisory</a></div>
+    <div class="footer__col"><h4>Company</h4><a href="about.html">About</a><a href="work.html">Selected work</a><a href="insights.html">Journal</a><a href="contact.html">Contact</a></div>
+    <div class="footer__col"><h4>Elsewhere</h4><a href="#">LinkedIn</a><a href="#">X / Twitter</a><a href="#">Substack</a><a href="mailto:partners@growwithba.com">partners@growwithba.com</a></div>
+  </div>
+  <div class="footer__base container">
+    <span>© 2026 GrowwithBA · All rights reserved</span>
+    <span class="footer__loc"><span class="dot"></span> London · New York · Singapore</span>
+    <span>Designed &amp; built in-house</span>
+  </div>
+</footer>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>

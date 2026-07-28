@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0A0E1A" />
+<meta name="description" content="GrowwithBA — Strategic business advisory that compounds. Helping ambitious founders scale from six to eight figures with precision systems and capital strategy." />
+<title>GrowwithBA — Strategic Growth Advisory for Ambitious Founders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body data-page="home">
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="noise" aria-hidden="true"></div>
+
+<div class="loader" id="loader">
+  <div class="loader__logo">
+    <span class="loader__mark">BA</span>
+    <svg class="loader__ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" /></svg>
+  </div>
+  <div class="loader__text"><span>Architecting growth</span><em id="loader-percent">00</em></div>
+</div>
+
+<div class="page-transition" id="pageTransition"><span></span><span></span><span></span></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- NAV -->
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a href="index.html" class="nav__logo" aria-label="GrowwithBA home">
+      <span class="nav__logo-mark">
+        <svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true">
+          <defs>
+            <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#C9A96E"/>
+              <stop offset="100%" stop-color="#F4E1B2"/>
+            </linearGradient>
+          </defs>
+          <path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/>
+          <path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/>
+        </svg>
+      </span>
+      <span class="nav__logo-text">Groww<em>with</em>BA</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="index.html" class="is-active">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="work.html">Work</a>
+      <a href="insights.html">Insights</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="contact.html" class="btn btn--primary nav__cta">
+      <span>Book a call</span>
+      <svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu">
+  <div class="menu__inner">
+    <a href="index.html">Home <span>01</span></a>
+    <a href="about.html">About <span>02</span></a>
+    <a href="services.html">Services <span>03</span></a>
+    <a href="work.html">Work <span>04</span></a>
+    <a href="insights.html">Insights <span>05</span></a>
+    <a href="contact.html">Contact <span>06</span></a>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg">
+      <div class="hero__gradient"></div>
+      <canvas id="particles" class="hero__particles"></canvas>
+      <div class="hero__grid"></div>
+    </div>
+    <div class="container hero__content">
+      <div class="hero__meta" data-reveal>
+        <span class="dot"></span>
+        <span>Accepting 3 new partners · Q2 2026</span>
+      </div>
+      <h1 class="hero__title">
+        <span class="line" data-reveal-line><span>We architect</span></span>
+        <span class="line" data-reveal-line><span>growth that <em>compounds.</em></span></span>
+      </h1>
+      <p class="hero__sub" data-reveal>
+        GrowwithBA is a strategic advisory for founders scaling past the messy middle.
+        Precision systems, capital strategy, and operator-grade execution — designed to turn
+        ambition into durable enterprise value.
+      </p>
+      <div class="hero__actions" data-reveal>
+        <a href="contact.html" class="btn btn--primary btn--lg">
+          <span>Start with a strategy call</span>
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="services.html" class="btn btn--ghost btn--lg">
+          <span class="play"><svg viewBox="0 0 24 24" width="10" height="10"><path d="M7 5l12 7-12 7V5z" fill="currentColor"/></svg></span>
+          <span>Explore the practice</span>
+        </a>
+      </div>
+      <div class="hero__stats" data-reveal>
+        <div class="stat"><span class="stat__num" data-counter="284" data-suffix="M+">$0</span><span class="stat__label">Client revenue influenced</span></div>
+        <div class="stat"><span class="stat__num" data-counter="47" data-suffix="">0</span><span class="stat__label">Growth engagements delivered</span></div>
+        <div class="stat"><span class="stat__num" data-counter="96" data-suffix="%">0</span><span class="stat__label">Partner retention rate</span></div>
+        <div class="stat"><span class="stat__num" data-counter="12" data-suffix="">0</span><span class="stat__label">Industries served globally</span></div>
+      </div>
+    </div>
+    <div class="hero__scroll" aria-hidden="true"><span>Scroll</span><div class="hero__scroll-line"></div></div>
+  </section>
+
+  <!-- MARQUEE -->
+  <section class="marquee" aria-label="Trusted by operators at">
+    <div class="marquee__label"><span class="pulse"></span><span>Trusted by operators from</span></div>
+    <div class="marquee__track">
+      <div class="marquee__row">
+        <span>Sequoia-backed</span><span>·</span><span>Y Combinator</span><span>·</span><span>Techstars</span><span>·</span>
+        <span>a16z portfolio</span><span>·</span><span>Founders Fund</span><span>·</span><span>Insight Partners</span><span>·</span>
+        <span>Bessemer Venture</span><span>·</span><span>Index Ventures</span><span>·</span><span>Accel</span><span>·</span>
+      </div>
+      <div class="marquee__row" aria-hidden="true">
+        <span>Sequoia-backed</span><span>·</span><span>Y Combinator</span><span>·</span><span>Techstars</span><span>·</span>
+        <span>a16z portfolio</span><span>·</span><span>Founders Fund</span><span>·</span><span>Insight Partners</span><span>·</span>
+        <span>Bessemer Venture</span><span>·</span><span>Index Ventures</span><span>·</span><span>Accel</span><span>·</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section class="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow" data-reveal><em>01</em> · Services</span>
+        <h2 class="h2" data-reveal>Four disciplines.<br/><span class="grad">One compounding thesis.</span></h2>
+        <p class="section-lead" data-reveal>Each engagement pairs a principal with your leadership team — then embeds the systems, operators, and capital strategy to move fast without breaking form.</p>
+      </div>
+      <div class="services__grid">
+        <a href="services.html" class="service" data-reveal data-tilt>
+          <div class="service__num">01</div>
+          <div class="service__icon"><svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40 L20 28 L28 36 L40 18"/><path d="M40 28 V18 H30"/><circle cx="20" cy="28" r="1.5" fill="currentColor"/><circle cx="28" cy="36" r="1.5" fill="currentColor"/></svg></div>
+          <h3>Growth Strategy</h3>
+          <p>Defensible positioning, category design, and revenue architecture that scales beyond a single channel.</p>
+          <div class="service__cta">Explore <span>→</span></div>
+        </a>
+        <a href="services.html" class="service service--accent" data-reveal data-tilt>
+          <div class="service__num">02</div>
+          <div class="service__icon"><svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="12" width="36" height="24" rx="3"/><path d="M6 20 H42"/><path d="M14 28 H22"/><circle cx="34" cy="28" r="2"/></svg></div>
+          <h3>Capital &amp; Deal</h3>
+          <p>Raise smart, sell smart, or recapitalize cleanly. We sit on your side of the table from term sheet to close.</p>
+          <div class="service__cta">Explore <span>→</span></div>
+        </a>
+        <a href="services.html" class="service" data-reveal data-tilt>
+          <div class="service__num">03</div>
+          <div class="service__icon"><svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="16"/><path d="M24 8 V24 L34 30"/><circle cx="24" cy="24" r="2" fill="currentColor"/></svg></div>
+          <h3>Operating Systems</h3>
+          <p>Install the rituals, metrics, and org design that let leadership move in concert — not in meetings.</p>
+          <div class="service__cta">Explore <span>→</span></div>
+        </a>
+        <a href="services.html" class="service" data-reveal data-tilt>
+          <div class="service__num">04</div>
+          <div class="service__icon"><svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10 H36 L40 20 L24 42 L8 20 Z"/><path d="M12 10 L24 20 L36 10"/><path d="M8 20 H40"/><path d="M24 20 V42"/></svg></div>
+          <h3>Founder Advisory</h3>
+          <p>A confidential sounding board for the decisions that never make it into a slide — with judgment earned the hard way.</p>
+          <div class="service__cta">Explore <span>→</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <div class="container">
+      <div class="testimonial__quote" data-reveal>
+        <svg class="testimonial__mark" viewBox="0 0 120 90" aria-hidden="true"><path d="M0 90V55C0 25 18 5 48 0L54 14C36 20 28 32 28 48H48V90H0ZM66 90V55C66 25 84 5 114 0L120 14C102 20 94 32 94 48H114V90H66Z" fill="currentColor"/></svg>
+        <blockquote>They walked into a room full of noise and left with the cleanest plan we've ever run. Eighteen months later we sold the business at a number we would not have dared write down before working with BA.</blockquote>
+        <div class="testimonial__attr">
+          <div class="avatar"><span>MA</span></div>
+          <div><strong>Marcus A.</strong><span>Founder &amp; CEO · Vertical SaaS (exited 2024)</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <section class="cta-strip">
+    <div class="container cta-strip__inner">
+      <div data-reveal>
+        <span class="eyebrow"><em>06</em> · Partner with us</span>
+        <h2 class="h2">Ready to <span class="grad">compound?</span></h2>
+      </div>
+      <a href="contact.html" class="btn btn--primary btn--lg" data-reveal>
+        <span>Book a strategy call</span>
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href="index.html" class="nav__logo">
+        <span class="nav__logo-mark">
+          <svg viewBox="0 0 40 40" width="28" height="28"><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg>
+        </span>
+        <span class="nav__logo-text">Groww<em>with</em>BA</span>
+      </a>
+      <p>A boutique advisory for founders, operators, and funds who treat the next decade as a single compounding decision.</p>
+    </div>
+    <div class="footer__col"><h4>Practice</h4><a href="services.html">Growth Strategy</a><a href="services.html">Capital &amp; Deal</a><a href="services.html">Operating Systems</a><a href="services.html">Founder Advisory</a></div>
+    <div class="footer__col"><h4>Company</h4><a href="about.html">About</a><a href="work.html">Selected work</a><a href="insights.html">Journal</a><a href="contact.html">Contact</a></div>
+    <div class="footer__col"><h4>Elsewhere</h4><a href="#">LinkedIn</a><a href="#">X / Twitter</a><a href="#">Substack</a><a href="mailto:partners@growwithba.com">partners@growwithba.com</a></div>
+  </div>
+  <div class="footer__base container">
+    <span>© 2026 GrowwithBA · All rights reserved</span>
+    <span class="footer__loc"><span class="dot"></span> London · New York · Singapore</span>
+    <span>Designed &amp; built in-house</span>
+  </div>
+</footer>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>

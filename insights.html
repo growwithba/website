@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0A0E1A" />
+<meta name="description" content="Field notes from the work — writing on capital, operating systems, growth, and founder decisions." />
+<title>Insights · GrowwithBA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/styles.css" />
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+</head>
+<body data-page="insights">
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="noise"></div>
+<div class="page-transition" id="pageTransition"><span></span><span></span><span></span></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header class="nav" id="nav">
+  <div class="nav__inner container">
+    <a href="index.html" class="nav__logo">
+      <span class="nav__logo-mark"><svg viewBox="0 0 40 40" width="28" height="28"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C9A96E"/><stop offset="100%" stop-color="#F4E1B2"/></linearGradient></defs><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg></span>
+      <span class="nav__logo-text">Groww<em>with</em>BA</span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="work.html">Work</a>
+      <a href="insights.html" class="is-active">Insights</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a href="contact.html" class="btn btn--primary nav__cta"><span>Book a call</span><svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="menu" id="menu"><div class="menu__inner">
+  <a href="index.html">Home <span>01</span></a>
+  <a href="about.html">About <span>02</span></a>
+  <a href="services.html">Services <span>03</span></a>
+  <a href="work.html">Work <span>04</span></a>
+  <a href="insights.html">Insights <span>05</span></a>
+  <a href="contact.html">Contact <span>06</span></a>
+</div></div>
+
+<main>
+
+  <section class="page-hero">
+    <div class="page-hero__bg"><div class="hero__gradient"></div><div class="hero__grid"></div></div>
+    <div class="container">
+      <div class="crumb" data-reveal><a href="index.html">Home</a> <span>/</span> <em>Insights</em></div>
+      <h1 class="page-hero__title">
+        <span class="line" data-reveal-line><span>Field notes</span></span>
+        <span class="line" data-reveal-line><span>from the <em>work.</em></span></span>
+      </h1>
+      <p class="page-hero__sub" data-reveal>Short essays on capital, operating rhythm, growth, and the decisions founders make when the room goes quiet.</p>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <section class="feature-post">
+    <div class="container">
+      <a href="#" class="feature" data-reveal data-tilt>
+        <div class="feature__meta">
+          <span>Featured essay · 12 min read</span>
+          <em>04 · 2026</em>
+        </div>
+        <h2>The raise you don't take: when a clean recap beats a Series C.</h2>
+        <p>Three frameworks for founders weighing dilution against control — and the diligence room signals that decide it before the term sheet ever hits your inbox.</p>
+        <div class="feature__cta"><span>Read the essay</span><svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="feature__glow"></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ARCHIVE -->
+  <section class="archive">
+    <div class="container">
+      <div class="section-head section-head--row">
+        <div><span class="eyebrow" data-reveal><em>·</em> Archive</span><h2 class="h2" data-reveal>Recent <span class="grad">essays.</span></h2></div>
+        <div class="chips" data-reveal>
+          <button class="chip is-active">All</button>
+          <button class="chip">Capital</button>
+          <button class="chip">Operating</button>
+          <button class="chip">Growth</button>
+          <button class="chip">Founder</button>
+        </div>
+      </div>
+
+      <div class="posts posts--archive">
+        <a href="#" class="post" data-reveal><div class="post__meta"><span>Operating</span><em>03 · 2026</em></div><h3>Leadership cadence: the 4-week loop we install at every engagement.</h3><p>Why most "operating systems" die in month two — and the ritual architecture that keeps them alive past year one.</p><span class="post__more">Read →</span></a>
+        <a href="#" class="post" data-reveal><div class="post__meta"><span>Growth</span><em>02 · 2026</em></div><h3>Pricing leverage: the quiet 30% that never shows up in a pitch deck.</h3><p>A working rubric for repricing without churn, and the three sequencing mistakes that usually cost the upside.</p><span class="post__more">Read →</span></a>
+        <a href="#" class="post" data-reveal><div class="post__meta"><span>Founder</span><em>01 · 2026</em></div><h3>The one board meeting that decided the entire year.</h3><p>How the framing you bring to Q1 quietly writes every quarterly decision after it — and how to prepare like it does.</p><span class="post__more">Read →</span></a>
+        <a href="#" class="post" data-reveal><div class="post__meta"><span>Capital</span><em>12 · 2025</em></div><h3>Diligence room, decoded: what buyers actually look for after month two.</h3><p>The 12 questions we watch every strategic acquirer ask — and how the answer shapes the multiple by close.</p><span class="post__more">Read →</span></a>
+        <a href="#" class="post" data-reveal><div class="post__meta"><span>Operating</span><em>11 · 2025</em></div><h3>Second-line leaders: the hire that decouples growth from the founder.</h3><p>Why the "hire a COO" move fails 60% of the time — and the 90-day install that changes the odds.</p><span class="post__more">Read →</span></a>
+        <a href="#" class="post" data-reveal><div class="post__meta"><span>Growth</span><em>10 · 2025</em></div><h3>Category design without the manifesto — a working founder's guide.</h3><p>The three moves that create real category gravity, without the tortured keynote and $2M brand budget.</p><span class="post__more">Read →</span></a>
+      </div>
+
+      <div class="archive__more" data-reveal><a href="#" class="btn btn--ghost btn--lg"><span>Load more essays</span><svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+    </div>
+  </section>
+
+  <!-- SUBSCRIBE -->
+  <section class="subscribe">
+    <div class="container subscribe__inner">
+      <div data-reveal>
+        <span class="eyebrow"><em>·</em> Substack</span>
+        <h2 class="h2">A short essay, <span class="grad">every second Thursday.</span></h2>
+        <p>3,400 operators, founders, and investors read it. Unsubscribe from the footer of any issue, no ceremony.</p>
+      </div>
+      <form class="subscribe__form" data-reveal onsubmit="event.preventDefault(); this.querySelector('input').value=''; this.querySelector('.subscribe__ok').classList.add('is-on');">
+        <input type="email" required placeholder="you@company.com" aria-label="Email" />
+        <button type="submit" class="btn btn--primary"><span>Subscribe</span><svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <span class="subscribe__ok">✓ Almost — check your inbox to confirm.</span>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a href="index.html" class="nav__logo"><span class="nav__logo-mark"><svg viewBox="0 0 40 40" width="28" height="28"><path d="M6 34 L20 6 L34 34 Z" fill="none" stroke="url(#lg1)" stroke-width="2"/><path d="M14 34 L20 22 L26 34 Z" fill="url(#lg1)"/></svg></span><span class="nav__logo-text">Groww<em>with</em>BA</span></a>
+      <p>A boutique advisory for founders, operators, and funds who treat the next decade as a single compounding decision.</p>
+    </div>
+    <div class="footer__col"><h4>Practice</h4><a href="services.html">Growth Strategy</a><a href="services.html">Capital &amp; Deal</a><a href="services.html">Operating Systems</a><a href="services.html">Founder Advisory</a></div>
+    <div class="footer__col"><h4>Company</h4><a href="about.html">About</a><a href="work.html">Selected work</a><a href="insights.html">Journal</a><a href="contact.html">Contact</a></div>
+    <div class="footer__col"><h4>Elsewhere</h4><a href="#">LinkedIn</a><a href="#">X / Twitter</a><a href="#">Substack</a><a href="mailto:partners@growwithba.com">partners@growwithba.com</a></div>
+  </div>
+  <div class="footer__base container">
+    <span>© 2026 GrowwithBA · All rights reserved</span>
+    <span class="footer__loc"><span class="dot"></span> London · New York · Singapore</span>
+    <span>Designed &amp; built in-house</span>
+  </div>
+</footer>
+
+<script src="js/main.js" defer></script>
+</body>
+</html>
