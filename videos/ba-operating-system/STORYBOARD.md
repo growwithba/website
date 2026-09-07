@@ -57,7 +57,7 @@ consistency: all primary content plans into the top ~83%, a centered hero anchor
 - duration: 7.381s
 - poster: 5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/01-the-report.html
 - type: hook
 - persuasion: Pain validation + Before/after
@@ -86,7 +86,7 @@ keyMessage: Deliverables being complete says nothing about the business moving.
 - duration: 5.376s
 - poster: 5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/02-nobody-owns-it.html
 - type: pain_point
 - persuasion: Common-belief vs reality + Distillation
@@ -113,7 +113,7 @@ keyMessage: The gap is ownership, not effort or talent.
 - duration: 8.725s
 - poster: 7s
 - transition_in: push-slide UP
-- status: outline
+- status: animated
 - src: compositions/frames/03-the-menu.html
 - type: pain_point
 - persuasion: Concretization + Counterexample
@@ -142,7 +142,7 @@ keyMessage: A service list is a menu, and menus compete on price.
 - duration: 6.251s
 - poster: 6s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/frames/04-operating-system.html
 - type: product_intro
 - persuasion: Coined term + Subtractive framing
@@ -169,7 +169,7 @@ keyMessage: An operating system defines ownership and failure behaviour, not a m
 - duration: 10.923s
 - poster: 7s
 - transition_in: push-slide UP
-- status: outline
+- status: animated
 - src: compositions/frames/05-five-verticals.html
 - type: feature_showcase
 - persuasion: Numbered enumeration + Frame-then-fill
@@ -200,7 +200,7 @@ keyMessage: BA is five accountable verticals, each with a named owner.
 - duration: 4.8s
 - poster: 7s
 - transition_in: push-slide UP
-- status: outline
+- status: animated
 - src: compositions/frames/06-friday.html
 - type: feature_showcase
 - persuasion: Demonstration + Progressive disclosure
@@ -227,7 +227,7 @@ keyMessage: Accountability is a weekly instrument, not a promise.
 - duration: 5.333s
 - poster: 7s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/frames/07-red-twice.html
 - type: benefit_highlight
 - persuasion: Causal chain + Counterexample
@@ -254,7 +254,7 @@ keyMessage: When it goes wrong, the owner arrives with the fix; nobody has to ch
 - duration: 8.427s
 - poster: 6s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/frames/08-own-pl.html
 - type: social_proof
 - persuasion: Demonstration + Callback
@@ -282,7 +282,7 @@ keyMessage: BA is an operator running the same system on itself, not a consultan
 - duration: 5.568s
 - poster: 6s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/09-who-owns.html
 - type: branding
 - persuasion: Callback + Distillation
