@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "preferences": {
+    "style_preset.faceless-explainer": {
+      "value": "cobalt-grid",
+      "confirmed_in": [
+        "ba-operating-system"
+      ],
+      "updated_at": "2026-09-07T19:03:34.682Z"
+    },
+    "destination": {
+      "value": "youtube",
+      "confirmed_in": [
+        "ba-operating-system"
+      ],
+      "updated_at": "2026-09-07T19:03:34.741Z"
+    },
+    "aspect": {
+      "value": "1920x1080",
+      "confirmed_in": [
+        "ba-operating-system"
+      ],
+      "updated_at": "2026-09-07T19:03:34.798Z"
+    },
+    "language": {
+      "value": "en",
+      "confirmed_in": [
+        "ba-operating-system"
+      ],
+      "updated_at": "2026-09-07T19:03:34.855Z"
+    },
+    "flow": {
+      "value": "automation",
+      "confirmed_in": [
+        "ba-operating-system"
+      ],
+      "updated_at": "2026-09-07T19:03:34.914Z"
+    },
+    "storyboard": {
+      "value": "no",
+      "confirmed_in": [
+        "ba-operating-system"
+      ],
+      "updated_at": "2026-09-07T19:03:34.972Z"
+    }
+  },
+  "sightings": {}
+}

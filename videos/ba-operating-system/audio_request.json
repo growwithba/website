@@ -1,0 +1,46 @@
+{
+  "provider": "auto",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "Every month the report arrives. Every month it says the work got done. Posts shipped. Ads live. Rankings up."
+    },
+    {
+      "id": "02",
+      "text": "And the number still doesn't move. Because nobody on that side ever agreed to own it."
+    },
+    {
+      "id": "03",
+      "text": "Every agency sells the same menu. Same posts, same ads, same S E O. So you compare the only thing left — the price."
+    },
+    {
+      "id": "04",
+      "text": "An operating system is different. It answers who owns what — and what happens on a bad month."
+    },
+    {
+      "id": "05",
+      "text": "Five verticals. Social and creative. Digital. Business development. Ecommerce. Growth and A I. Each one has a lead who owns their numbers — not their to-do list."
+    },
+    {
+      "id": "06",
+      "text": "Every Friday, each lead fills their own row. Green, amber, red."
+    },
+    {
+      "id": "07",
+      "text": "Red two weeks running, and the lead calls the meeting — carrying a fix, not a problem."
+    },
+    {
+      "id": "08",
+      "text": "We run our own brands on this system. The same five verticals. The same Friday. The same red that has to arrive with a fix."
+    },
+    {
+      "id": "09",
+      "text": "Anyone can send a report. The question is who owns the number. Bridging Associates."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "bm_george"
+}
