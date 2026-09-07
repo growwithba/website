@@ -354,6 +354,15 @@
       // growth block scaleY as the wall gains height (bottom-anchored)
       var GROWTH = [0.23, 0.419, 0.609, 0.798, 0.988];
 
+      // ---- build-time pre-states (nothing on screen before its spoken cue) ----
+      gsap.set(bars, { x: -620, opacity: 0 });
+      gsap.set(caps, { scaleY: 0, transformOrigin: "50% 50%" });
+      gsap.set(nums, { opacity: 0, x: -26 });
+      gsap.set("#fw03-eyebrow", { opacity: 0, x: -22 });
+      gsap.set("#fw03-accent", { scaleX: 0, transformOrigin: "0% 50%" });
+      gsap.set("#fw03-rail", { opacity: 0, y: 20 });
+      gsap.set("#fw03-ticks", { opacity: 0 });
+
       // ---- header chrome ----
       tl.fromTo(
         "#fw03-accent",

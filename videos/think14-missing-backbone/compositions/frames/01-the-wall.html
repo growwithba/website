@@ -197,15 +197,13 @@
       window.__timelines = window.__timelines || {};
       var tl = gsap.timeline({ paused: true });
 
-      var root = document.currentScript
-        ? document.currentScript.closest("[data-composition-id]") ||
-          document.querySelector('[data-composition-id="01-the-wall"]')
-        : document.querySelector('[data-composition-id="01-the-wall"]');
-      var q = function (sel) {
-        return root ? root.querySelectorAll(sel) : document.querySelectorAll(sel);
+      var scope =
+        document.querySelector('[data-composition-id="01-the-wall"]') || document;
+      var all = function (sel) {
+        return scope.querySelectorAll(sel);
       };
       var one = function (sel) {
-        return q(sel)[0];
+        return all(sel)[0];
       };
 
       /* ── Scene 1 (0.0–1.5s) — ground settles, eyebrow parks, line one lands ── */
@@ -241,9 +239,7 @@
 
       var WORD_TIMELINE = [];
       LINES.forEach(function (line) {
-        var words = root
-          ? root.querySelectorAll(line.sel + " .the-wall-w")
-          : document.querySelectorAll(line.sel + " .the-wall-w");
+        var words = all(line.sel + " .the-wall-w");
         for (var i = 0; i < words.length; i++) {
           WORD_TIMELINE.push({
             el: words[i],

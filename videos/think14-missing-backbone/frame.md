@@ -124,8 +124,10 @@ This is the **blue-professional** preset remixed onto the captured brand. The YA
 - **Fonts** — already set to **Helvetica Neue** (display) / **Arial** (body); ignore any preset font name lingering in prose.
 - **Colors** — use the frontmatter hex; preset color NAMES in prose (e.g. "cobalt", "cream") mean the remapped brand values.
 - **"cobalt" in prose = `{colors.primary}` #5B1FC7 (Think14 purple).** `primary-2` #7C3AED is the softer
-  secondary purple for nodes, arrows and chips. `lavender` #B79CF5 is for ALL-CAPS section eyebrows;
-  `lavender-bg` #DDD0FB for soft panel fills.
+  secondary purple for nodes, arrows and chips.
+- **`lavender` #B79CF5 is never TEXT on white** — it measures ~2.3:1 and fails the contrast gate. Set
+  ALL-CAPS section eyebrows in `primary` #5B1FC7 (frame.md's own `h4-eyebrow` color). Lavender is a
+  GRAPHIC color only: hairline rules, accent bars, tick marks. `lavender-bg` #DDD0FB for soft panel fills.
 - **The wedge — Think14 orange `wedge` #F97A4D — is the one exception to "a single accent".**
   It is loud and rare: **≤8% of any frame's surface**, and at most **one wedge moment per frame** —
   the single most important number, the one check/badge, or one underline bar. `wedge-soft` #FDE7DF
