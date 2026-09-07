@@ -142,20 +142,31 @@
       color: #1f2be0;
     }
 
-    /* --- status column (carried from frame 06) --- */
+    /* ============================================================
+       STATUS COLUMN — geometry carried verbatim from frame 06
+       (x 1320 -> 1680; cells centred on x=1500, in the same
+       horizontal band as the lead markers: centres 336 / 440 /
+       544 / 648 / 752, so cell top = centre - 12)
+       ============================================================ */
     #f07r-colrule {
       position: absolute;
-      left: 1340px;
+      left: 1319px;
       top: 300px;
-      width: 2px;
+      width: 4px;
       height: 512px;
-      background: #1f2be0;
+      overflow: visible;
     }
-    #f07r-colhead {
+    #f07r-colrule path {
+      fill: none;
+      stroke: #1f2be0;
+      stroke-width: 2;
+      stroke-linecap: butt;
+    }
+    #f07r-friday {
       position: absolute;
-      left: 1340px;
+      left: 1350px;
       top: 271px;
-      width: 160px;
+      width: 300px;
       text-align: center;
       font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
       font-size: 20px;
@@ -165,24 +176,31 @@
     }
     .f07r-cell {
       position: absolute;
-      left: 1384px;
-      width: 72px;
-      height: 48px;
+      left: 1400px;
+      width: 200px;
+      height: 24px;
       box-sizing: border-box;
-      border: 1.5px solid rgba(31, 43, 224, 0.18);
-      overflow: hidden;
+      border: 2px solid rgba(31, 43, 224, 0.18);
+      background: transparent;
     }
-    .f07r-cell-2 { left: 1468px; }
+    /* the SECOND red mark — beside the first, flush with the board's right rule */
+    #f07r-cell-second {
+      left: 1612px;
+      width: 64px;
+    }
     .f07r-fill {
       position: absolute;
-      inset: 0;
-      transform-origin: left center;
+      top: -2px;
+      right: -2px;
+      bottom: -2px;
+      left: -2px;
+      transform-origin: 0% 50%;
     }
-    .f07r-g { background: #15803d; }
-    .f07r-a { background: #b45309; }
-    .f07r-r { background: #b3261e; }
+    .f07r-fill.is-green { background: #15803d; }
+    .f07r-fill.is-amber { background: #b45309; }
+    .f07r-fill.is-red { background: #b3261e; }
 
-    /* --- groups: the board recedes, one row stays lit --- */
+    /* --- grouping layers: the board recedes, one row stays lit --- */
     #f07r-dim,
     #f07r-heads,
     #f07r-row5 {
@@ -203,15 +221,9 @@
       overflow: visible;
     }
     #f07r-vec path { fill: none; }
-    #f07r-connector {
-      stroke: #1f2be0;
-      stroke-width: 3;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
     .f07r-arrow {
-      stroke: rgba(31, 43, 224, 0.28);
-      stroke-width: 13;
+      stroke: rgba(31, 43, 224, 0.3);
+      stroke-width: 14;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
@@ -220,13 +232,20 @@
       stroke-width: 10;
       stroke-linecap: round;
     }
+    #f07r-connector {
+      stroke: #1f2be0;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
-    /* --- the fix card --- */
+    /* --- the fix card: below-right of the lit row, clear of the board,
+           clear of the bottom hairline and the y=896 keep-out --- */
     #f07r-card {
       position: absolute;
-      left: 1340px;
-      top: 786px;
-      width: 400px;
+      left: 1266px;
+      top: 790px;
+      width: 520px;
       height: 80px;
       box-sizing: border-box;
       background: #f0ebde;
@@ -246,32 +265,32 @@
     }
   </style>
 
-  <div id="root" data-composition-id="07-red-twice" data-width="1920" data-height="1080" data-duration="5.333">
+  <div id="root" data-composition-id="07-red-twice" data-width="1920" data-height="1080" data-duration="5.833">
     <div
       id="f07r-ground"
       class="clip"
       data-start="0"
-      data-duration="5.333"
+      data-duration="5.833"
       data-track-index="0"
     ></div>
 
-    <div id="f07r-board" class="clip" data-start="0" data-duration="5.333" data-track-index="1">
+    <!-- ==== the board: inherited from frame 06 fully formed and filled ==== -->
+    <div id="f07r-board" class="clip" data-start="0" data-duration="5.833" data-track-index="1">
       <div id="f07r-hairline-top" class="f07r-hairline"></div>
       <div id="f07r-hairline-bottom" class="f07r-hairline"></div>
 
       <div id="f07r-chrome-left" class="f07r-chrome">BRIDGING ASSOCIATES</div>
-      <div id="f07r-chrome-right" class="f07r-chrome">007</div>
+      <div id="f07r-chrome-right" class="f07r-chrome">005</div>
 
-      <div id="f07r-eyebrow">Red Twice</div>
+      <div id="f07r-eyebrow">Five Verticals</div>
 
       <div id="f07r-axis"></div>
       <div id="f07r-axis-progress"></div>
-      <div id="f07r-colrule"></div>
 
-      <!-- row 5's rule stays board structure; only the row's content pulls forward -->
+      <!-- row 005's rule is board structure and stays lit with its row -->
       <div class="f07r-rowrule" style="top: 764px"></div>
 
-      <!-- the four rows that recede -->
+      <!-- the four rows that recede to a wash -->
       <div id="f07r-dim">
         <div class="f07r-rowrule" style="top: 348px"></div>
         <div class="f07r-rowrule" style="top: 452px"></div>
@@ -293,37 +312,43 @@
         <div class="f07r-marker" style="top: 534px"></div>
         <div class="f07r-marker" style="top: 638px"></div>
 
-        <div class="f07r-cell" style="top: 312px"><i class="f07r-fill f07r-g"></i></div>
-        <div class="f07r-cell" style="top: 416px"><i class="f07r-fill f07r-g"></i></div>
-        <div class="f07r-cell" style="top: 520px"><i class="f07r-fill f07r-a"></i></div>
-        <div class="f07r-cell" style="top: 624px"><i class="f07r-fill f07r-g"></i></div>
+        <div class="f07r-cell" style="top: 324px"><div class="f07r-fill is-green"></div></div>
+        <div class="f07r-cell" style="top: 428px"><div class="f07r-fill is-green"></div></div>
+        <div class="f07r-cell" style="top: 532px"><div class="f07r-fill is-amber"></div></div>
+        <div class="f07r-cell" style="top: 636px"><div class="f07r-fill is-green"></div></div>
       </div>
 
-      <!-- the column headers -->
+      <!-- the two column headers + the status column rule -->
       <div id="f07r-heads">
         <div id="f07r-owns">OWNS</div>
-        <div id="f07r-colhead">FRIDAY</div>
+
+        <svg id="f07r-colrule" viewBox="0 0 4 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M 2 0 L 2 512" />
+        </svg>
+
+        <div id="f07r-friday">FRIDAY</div>
       </div>
 
-      <!-- the one row that stays lit, and pulls forward -->
+      <!-- the one row that stays lit, and pulls forward one depth step -->
       <div id="f07r-row5">
         <div class="f07r-ord" style="top: 745px">005</div>
         <div class="f07r-label" style="top: 727px">GROWTH + AI</div>
         <div class="f07r-marker" id="f07r-marker5" style="top: 742px"></div>
-        <div class="f07r-cell" style="top: 728px"><i class="f07r-fill f07r-r"></i></div>
-        <div class="f07r-cell f07r-cell-2" id="f07r-cell-second" style="top: 728px">
-          <i class="f07r-fill f07r-r" id="f07r-fill-second"></i>
+
+        <div class="f07r-cell" style="top: 740px"><div class="f07r-fill is-red"></div></div>
+        <div class="f07r-cell" id="f07r-cell-second" style="top: 740px">
+          <div class="f07r-fill is-red" id="f07r-fill-second"></div>
         </div>
       </div>
 
       <!-- the fix leaves the row sideways; the escalation upward is struck out -->
       <svg id="f07r-vec" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g id="f07r-arrow-group">
-          <path class="f07r-arrow" d="M 1650 292 L 1650 104"></path>
-          <path class="f07r-arrow" d="M 1592 166 L 1650 104 L 1708 166"></path>
+          <path class="f07r-arrow" d="M 1690 288 L 1690 108"></path>
+          <path class="f07r-arrow" d="M 1632 168 L 1690 106 L 1748 168"></path>
         </g>
-        <path id="f07r-strike" d="M 1548 252 L 1752 146"></path>
-        <path id="f07r-connector" d="M 1580 752 L 1700 752 L 1700 786"></path>
+        <path id="f07r-strike" d="M 1586 250 L 1794 142"></path>
+        <path id="f07r-connector" d="M 1712 752 L 1786 752 L 1786 790"></path>
       </svg>
 
       <div id="f07r-card">
@@ -342,22 +367,25 @@
       var ROOT = document.querySelector('[data-composition-id="07-red-twice"]');
       var one = function (sel) { return ROOT.querySelector(sel); };
 
-      /* --- svg-path-draw setup: measure real geometry, dash it out --- */
-      var measure = function (el, fallback) {
+      /* --- svg-path-draw setup: dash patterns come from measured geometry,
+         never a magic number. Both drawn strokes land on real elements —
+         the connector runs row 005 -> the fix card, the strike crosses the
+         escalation arrow. --- */
+      var dashOut = function (el, fallback) {
         var len = fallback;
         if (el && typeof el.getTotalLength === "function") {
           var m = el.getTotalLength();
           if (m && m > 1) { len = m; }
         }
-        el.style.strokeDasharray = len;
-        el.style.strokeDashoffset = len;
+        el.style.strokeDasharray = String(len);
+        el.style.strokeDashoffset = String(len);
         return len;
       };
 
       var connector = one("#f07r-connector");
       var strike = one("#f07r-strike");
-      var connLen = measure(connector, 154);
-      var strikeLen = measure(strike, 230);
+      var connLen = dashOut(connector, 112);
+      var strikeLen = dashOut(strike, 234);
 
       var arrowGroup = one("#f07r-arrow-group");
       var secondCell = one("#f07r-cell-second");
@@ -365,36 +393,37 @@
       var card = one("#f07r-card");
       var cardText = one("#f07r-card-text");
 
-      /* --- t=0 state: the board arrives fully formed from frame 06 ---
-         five named rows, gutter numerals, lead markers, a filled FRIDAY
-         column. Only what this shot adds starts hidden. */
+      /* --- t = 0 — the board arrives from frame 06 fully formed AND fully
+         filled: five serif row labels, gutter numerals, lead markers, the
+         FRIDAY column with rows 001/002/004 green, 003 amber, 005 red. It is
+         never built or tweened in. Only what THIS shot adds starts hidden. */
       gsap.set(arrowGroup, { opacity: 0 });
       gsap.set(secondCell, { opacity: 0 });
       gsap.set(secondFill, { scaleX: 0 });
       gsap.set(card, { opacity: 0 });
       gsap.set(cardText, { clipPath: "inset(0 100% 0 0)" });
 
-      /* --- Scene 1 (0.0-1.5s) "Red two weeks running" — the board recedes
-         to a wash, one row stays lit, and its status cell takes a SECOND
-         red mark beside the first. --- */
+      /* --- Scene 1 (0.0-1.5s) "Red two weeks running" — the board holds but
+         recedes to a wash; row 005 stays lit. Its status cell then takes a
+         SECOND status-red mark beside the first: two reds, side by side. --- */
       tl.fromTo(
         "#f07r-dim",
         { opacity: 1 },
         { opacity: 0.22, duration: 0.7, ease: "power2.out" },
-        0.18
+        0.16
       );
       tl.fromTo(
         "#f07r-heads",
         { opacity: 1 },
         { opacity: 0.5, duration: 0.7, ease: "power2.out" },
-        0.18
+        0.16
       );
 
       tl.fromTo(
         secondCell,
-        { opacity: 0, x: -16 },
-        { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" },
-        0.86
+        { opacity: 0, x: -18 },
+        { opacity: 1, x: 0, duration: 0.32, ease: "power2.out" },
+        0.84
       );
       tl.fromTo(
         secondFill,
@@ -403,67 +432,69 @@
         1.04
       );
 
-      /* --- Scene 2 (1.5-2.7s) "and the lead calls the meeting" — the lit
-         row pulls forward one depth step, its lead marker scales up, and a
-         thin cobalt connector draws SIDEWAYS out of the row (svg-path-draw:
-         measured dasharray, power2.out, both ends on real elements). --- */
+      /* --- Scene 2 (1.5-2.7s) "and the lead calls the meeting" — the lit row
+         pulls forward one depth step, its lead marker scales up, and a thin
+         cobalt connector draws SIDEWAYS out of the row (svg-path-draw,
+         power2.out — a pen lifting at the end of the stroke). --- */
       tl.fromTo(
         "#f07r-row5",
         { scale: 1 },
-        { scale: 1.02, duration: 0.55, ease: "power2.out" },
+        { scale: 1.015, duration: 0.55, ease: "power2.out" },
         1.52
       );
       tl.fromTo(
         "#f07r-marker5",
         { scale: 1 },
-        { scale: 1.45, duration: 0.55, ease: "power3.out" },
+        { scale: 1.5, duration: 0.55, ease: "power3.out" },
         1.56
       );
       tl.fromTo(
         connector,
         { strokeDashoffset: connLen },
-        { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" },
+        { strokeDashoffset: 0, duration: 0.6, ease: "power2.out" },
         1.98
       );
 
       /* --- Scene 3 (2.7-4.3s) "carrying a fix, not a problem." — the card
-         lands at the end of the connector; the faint upward escalation
-         arrow surfaces above the board and is struck through in cobalt
-         (css-marker-patterns / sketchout: one decisive drawn line). --- */
+         lands at the end of the connector and takes its Newsreader line;
+         simultaneously the faint upward escalation arrow surfaces above the
+         board and is struck through in cobalt with one decisive drawn line
+         (css-marker-patterns / sketchout) — the escalation that does not
+         happen. --- */
       tl.fromTo(
         card,
-        { opacity: 0, y: -18 },
+        { opacity: 0, y: -20 },
         { opacity: 1, y: 0, duration: 0.42, ease: "power3.out" },
-        2.72
+        2.7
       );
       tl.fromTo(
         cardText,
         { clipPath: "inset(0 100% 0 0)" },
         { clipPath: "inset(0 0% 0 0)", duration: 0.46, ease: "power2.out" },
-        3.02
+        3.0
       );
 
       tl.fromTo(
         arrowGroup,
         { opacity: 0 },
         { opacity: 1, duration: 0.4, ease: "power1.out" },
-        2.9
+        2.88
       );
       tl.fromTo(
         strike,
         { strokeDashoffset: strikeLen },
         { strokeDashoffset: 0, duration: 0.44, ease: "power2.out" },
-        3.56
+        3.54
       );
       tl.fromTo(
         arrowGroup,
         { opacity: 1 },
-        { opacity: 0.62, duration: 0.35, ease: "power1.out" },
-        4.0
+        { opacity: 0.6, duration: 0.36, ease: "power1.out" },
+        4.02
       );
 
-      /* --- Scene 4 (4.3-5.333s): held. The row, the sideways connector,
-         the fix card. No drift. --- */
+      /* --- Scene 4 (4.3-5.333s): held. The lit row, the two reds, the
+         sideways connector, the fix card. No drift. --- */
       tl.to(card, { opacity: 1, duration: 0.01 }, 5.2);
     })();
   </script>
