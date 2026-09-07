@@ -32,7 +32,7 @@
       height: 1080px;
     }
 
-    /* --- frame furniture --- */
+    /* --- frame furniture (verbatim from frame 07) --- */
     .f08op-hairline {
       position: absolute;
       left: 80px;
@@ -54,14 +54,14 @@
     #f08op-chrome-left { left: 80px; top: 849px; }
     #f08op-chrome-right { left: 1540px; top: 849px; width: 300px; text-align: right; }
 
-    /* --- eyebrow: the ONE label that changes. Same treatment as frame 05 —
-           same left, same top, same size / weight / tracking / caps. Two
-           states stacked in a fixed-footprint wrapper for the scale-swap. --- */
+    /* --- eyebrow: frame 05/07's treatment exactly (x 240 / y 186, 24px,
+           600, 0.18em, uppercase, cobalt). Two states stacked in one
+           fixed-footprint wrapper so the scale-swap has one footprint. --- */
     #f08op-eyebrow {
       position: absolute;
       left: 240px;
       top: 186px;
-      width: 620px;
+      width: 640px;
       height: 24px;
     }
     .f08op-eyebrow-state {
@@ -138,7 +138,6 @@
       width: 20px;
       height: 20px;
       background: #1f2be0;
-      transform-origin: 50% 50%;
     }
     #f08op-owns {
       position: absolute;
@@ -153,52 +152,81 @@
       color: #1f2be0;
     }
 
-    /* --- status columns (carried from frames 06/07) --- */
-    .f08op-colrule {
+    /* ============================================================
+       STATUS COLUMN — geometry carried VERBATIM from frame 07.
+       The divider SVG at x 1319 (2px stroke -> 1320..1322), the
+       FRIDAY head centred on x=1500, and cells at left 1400 /
+       width 200 / height 24, tops 324 / 428 / 532 / 636 / 740.
+       At t = 0 this frame renders pixel-for-pixel as frame 07's
+       board. The narrowing to 96px is a MOVE, not a starting state.
+       ============================================================ */
+    #f08op-colrule {
       position: absolute;
+      left: 1319px;
       top: 300px;
-      width: 2px;
+      width: 4px;
       height: 512px;
-      background: #1f2be0;
+      overflow: visible;
     }
-    #f08op-colrule-a { left: 1340px; }
-    #f08op-colrule-b { left: 1476px; transform-origin: 50% 0%; }
-
+    #f08op-colrule path {
+      fill: none;
+      stroke: #1f2be0;
+      stroke-width: 2;
+      stroke-linecap: butt;
+    }
     .f08op-colhead {
       position: absolute;
       top: 271px;
-      width: 160px;
       text-align: center;
       font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
       font-size: 20px;
       line-height: 1;
       letter-spacing: 0.12em;
       color: #1f2be0;
+      white-space: nowrap;
     }
-    #f08op-colhead-a { left: 1340px; }
-    #f08op-colhead-b { left: 1452px; }
+    /* head A: left 1400 + width 200 centres the word on x = 1500 —
+       identical rendering to frame 07's left:1350 / width:300 box. */
+    #f08op-colhead-a { left: 1400px; width: 200px; }
+    #f08op-colhead-b { left: 1520px; width: 96px; }
 
     .f08op-cell {
       position: absolute;
-      width: 72px;
-      height: 48px;
+      height: 24px;
       box-sizing: border-box;
-      border: 1.5px solid rgba(31, 43, 224, 0.18);
-      overflow: hidden;
-      transform-origin: 50% 50%;
+      border: 2px solid rgba(31, 43, 224, 0.18);
+      background: transparent;
     }
-    .f08op-col-a { left: 1384px; }
-    .f08op-col-b { left: 1496px; }
+    /* week one — frame 07's cell exactly */
+    .f08op-cell-a { left: 1400px; width: 200px; }
+    /* week two — rules in beside it once week one has made room */
+    .f08op-cell-b { left: 1520px; width: 96px; }
+
     .f08op-fill {
       position: absolute;
-      inset: 0;
-      transform-origin: left center;
+      top: -2px;
+      right: -2px;
+      bottom: -2px;
+      left: -2px;
+      transform-origin: 0% 50%;
     }
-    .f08op-g { background: #15803d; }
-    .f08op-a { background: #b45309; }
-    .f08op-r { background: #b3261e; }
+    .f08op-fill.is-green { background: #15803d; }
+    .f08op-fill.is-amber { background: #b45309; }
+    .f08op-fill.is-red { background: #b3261e; }
 
-    /* --- the sideways connector, identical to frame 07's --- */
+    /* the divider that arrives WITH week two, in the 24px gutter
+       between the narrowed week one (…1496) and week two (1520…) */
+    #f08op-colrule-b {
+      position: absolute;
+      left: 1507px;
+      top: 300px;
+      width: 2px;
+      height: 512px;
+      background: #1f2be0;
+      transform-origin: 50% 0%;
+    }
+
+    /* --- the sideways connector: frame 07's treatment --- */
     #f08op-vec {
       position: absolute;
       left: 0;
@@ -215,12 +243,14 @@
       stroke-linejoin: round;
     }
 
-    /* --- the fix card, identical to frame 07's --- */
+    /* --- the fix card: frame 07's box exactly (1266,790 · 520x80),
+           clear of the board, clear of the bottom hairline at 884 and
+           of the y=896 keep-out --- */
     #f08op-card {
       position: absolute;
-      left: 1340px;
-      top: 786px;
-      width: 400px;
+      left: 1266px;
+      top: 790px;
+      width: 520px;
       height: 80px;
       box-sizing: border-box;
       background: #f0ebde;
@@ -249,6 +279,7 @@
       data-track-index="0"
     ></div>
 
+    <!-- ==== the board: inherited from frame 07, fully formed and filled ==== -->
     <div id="f08op-board" class="clip" data-start="0" data-duration="8.427" data-track-index="1">
       <div id="f08op-hairline-top" class="f08op-hairline"></div>
       <div id="f08op-hairline-bottom" class="f08op-hairline"></div>
@@ -256,6 +287,7 @@
       <div id="f08op-chrome-left" class="f08op-chrome">BRIDGING ASSOCIATES</div>
       <div id="f08op-chrome-right" class="f08op-chrome">008</div>
 
+      <!-- the one thing on the board that changes -->
       <div id="f08op-eyebrow">
         <div id="f08op-eyebrow-out" class="f08op-eyebrow-state">Client Verticals</div>
         <div id="f08op-eyebrow-in" class="f08op-eyebrow-state">Our Own Brands</div>
@@ -290,29 +322,32 @@
       <div class="f08op-marker" style="top: 638px"></div>
       <div class="f08op-marker" style="top: 742px"></div>
 
-      <!-- the first Friday column: inherited from frame 07 already filled -->
-      <div id="f08op-colrule-a" class="f08op-colrule"></div>
-      <div id="f08op-colhead-a" class="f08op-colhead">FRIDAY</div>
-      <div class="f08op-cell f08op-col-a" style="top: 312px"><i class="f08op-fill f08op-g"></i></div>
-      <div class="f08op-cell f08op-col-a" style="top: 416px"><i class="f08op-fill f08op-g"></i></div>
-      <div class="f08op-cell f08op-col-a" style="top: 520px"><i class="f08op-fill f08op-a"></i></div>
-      <div class="f08op-cell f08op-col-a" style="top: 624px"><i class="f08op-fill f08op-g"></i></div>
-      <div class="f08op-cell f08op-col-a" style="top: 728px"><i class="f08op-fill f08op-r"></i></div>
+      <svg id="f08op-colrule" viewBox="0 0 4 512" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M 2 0 L 2 512" />
+      </svg>
 
-      <!-- the SECOND Friday column: rules in and fills in scene 3 -->
-      <div id="f08op-colrule-b" class="f08op-colrule"></div>
+      <!-- ---- week one: arrives from frame 07 already filled ---- -->
+      <div id="f08op-colhead-a" class="f08op-colhead">FRIDAY</div>
+      <div class="f08op-cell f08op-cell-a" style="top: 324px"><div class="f08op-fill is-green"></div></div>
+      <div class="f08op-cell f08op-cell-a" style="top: 428px"><div class="f08op-fill is-green"></div></div>
+      <div class="f08op-cell f08op-cell-a" style="top: 532px"><div class="f08op-fill is-amber"></div></div>
+      <div class="f08op-cell f08op-cell-a" style="top: 636px"><div class="f08op-fill is-green"></div></div>
+      <div class="f08op-cell f08op-cell-a" style="top: 740px"><div class="f08op-fill is-red"></div></div>
+
+      <!-- ---- week two: rules in on "The same Friday" ---- -->
+      <div id="f08op-colrule-b"></div>
       <div id="f08op-colhead-b" class="f08op-colhead">FRIDAY</div>
-      <div class="f08op-cell f08op-col-b f08op-b-cell" style="top: 312px"><i class="f08op-fill f08op-b-fill f08op-g"></i></div>
-      <div class="f08op-cell f08op-col-b f08op-b-cell" style="top: 416px"><i class="f08op-fill f08op-b-fill f08op-g"></i></div>
-      <div class="f08op-cell f08op-col-b f08op-b-cell" style="top: 520px"><i class="f08op-fill f08op-b-fill f08op-g"></i></div>
-      <div class="f08op-cell f08op-col-b f08op-b-cell" style="top: 624px"><i class="f08op-fill f08op-b-fill f08op-a"></i></div>
-      <div class="f08op-cell f08op-col-b f08op-b-cell" id="f08op-red2" style="top: 728px">
-        <i class="f08op-fill f08op-b-fill f08op-r"></i>
+      <div class="f08op-cell f08op-cell-b" style="top: 324px"><div class="f08op-fill f08op-fill-b is-green"></div></div>
+      <div class="f08op-cell f08op-cell-b" style="top: 428px"><div class="f08op-fill f08op-fill-b is-green"></div></div>
+      <div class="f08op-cell f08op-cell-b" style="top: 532px"><div class="f08op-fill f08op-fill-b is-green"></div></div>
+      <div class="f08op-cell f08op-cell-b" style="top: 636px"><div class="f08op-fill f08op-fill-b is-amber"></div></div>
+      <div class="f08op-cell f08op-cell-b" id="f08op-red2" style="top: 740px">
+        <div class="f08op-fill f08op-fill-b is-red"></div>
       </div>
 
-      <!-- the fix leaves the new red cell sideways, exactly as in frame 07 -->
+      <!-- the fix leaves week two's red row sideways, exactly as in frame 07 -->
       <svg id="f08op-vec" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path id="f08op-connector" d="M 1592 752 L 1700 752 L 1700 786"></path>
+        <path id="f08op-connector" d="M 1652 752 L 1786 752 L 1786 790"></path>
       </svg>
 
       <div id="f08op-card">
@@ -333,49 +368,56 @@
       var one = function (sel) { return ROOT.querySelector(sel); };
 
       var labels = q(".f08op-label");
-      var colBCells = q(".f08op-b-cell");
-      var colBFills = q(".f08op-b-fill");
+      var cellsA = q(".f08op-cell-a");
+      var cellsB = q(".f08op-cell-b");
+      var fillsB = q(".f08op-fill-b");
 
-      /* --- svg-path-draw setup: measure the real geometry, dash it out --- */
+      /* --- svg-path-draw setup: the dash pattern comes from measured
+         geometry, never a magic number. --- */
       var connector = one("#f08op-connector");
-      var connLen = 142;
+      var connLen = 172;
       if (connector && typeof connector.getTotalLength === "function") {
         var m = connector.getTotalLength();
         if (m && isFinite(m) && m > 1) { connLen = m; }
       }
-      connector.style.strokeDasharray = connLen;
-      connector.style.strokeDashoffset = connLen;
+      connector.style.strokeDasharray = String(connLen);
+      connector.style.strokeDashoffset = String(connLen);
 
       /* =================================================================
-         t = 0 — THE BOARD IS ALREADY BUILT AND ALREADY FILLED.
-         Inherited from frame 07 fully formed: five serif row labels, the
-         gutter numerals, the lead markers, the OWNS head, and a filled
-         first FRIDAY column. Nothing about the board constructs on screen;
-         only what THIS shot adds starts hidden.
+         t = 0 — THE BOARD ARRIVES ALREADY BUILT AND ALREADY FILLED.
+         Five serif row labels, the gutter numerals, the lead markers, the
+         OWNS head, the status divider at x=1320, and week one's FRIDAY
+         column at frame 07's exact geometry: left 1400, width 200,
+         height 24, tops 324 / 428 / 532 / 636 / 740, rows 1/2/4 green,
+         row 3 amber, row 5 red. Nothing about it is tweened in — the cut
+         from frame 07 lands on the identical picture. Only what THIS shot
+         adds starts hidden.
          ================================================================= */
-      gsap.set("#f08op-axis-progress", { scaleY: 1 });
 
-      /* the swap pair — one shared transform-origin, anchored on the
-         board's left margin so the header never leaves x = 240 */
+      /* the swap pair shares one transform-origin, pinned to the left
+         margin so the header never leaves x = 240 */
       gsap.set(["#f08op-eyebrow-out", "#f08op-eyebrow-in"], { transformOrigin: "0% 50%" });
       gsap.set("#f08op-eyebrow-in", { opacity: 0, scale: 0.72 });
 
-      /* the second Friday column has not arrived yet */
-      gsap.set("#f08op-colrule-b", { scaleY: 0 });
-      gsap.set("#f08op-colhead-b", { clipPath: "inset(0 100% 0 0)", opacity: 0 });
-      gsap.set(colBCells, { opacity: 0, y: -14 });
-      gsap.set(colBFills, { scaleX: 0 });
+      /* week one narrows in place: the left edge is the anchor */
+      gsap.set(cellsA, { transformOrigin: "0% 50%" });
 
-      /* the fix has not been proposed yet */
+      /* week two has not arrived */
+      gsap.set("#f08op-colrule-b", { scaleY: 0 });
+      gsap.set("#f08op-colhead-b", { opacity: 0, clipPath: "inset(0 100% 0 0)" });
+      gsap.set(cellsB, { opacity: 0, y: -14 });
+      gsap.set(fillsB, { scaleX: 0 });
+
+      /* the fix has not been proposed */
       gsap.set("#f08op-card", { opacity: 0 });
       gsap.set("#f08op-card-text", { clipPath: "inset(0 100% 0 0)" });
 
       /* =================================================================
          SCENE 1 (0.0-2.0s) — "We run our own brands on this system."
-         The board holds, geometry unchanged. The header block alone swaps
-         (scale-swap-transition): the outgoing rushes away on power2.in,
-         the incoming arrives with weight on back.out, overlapping by
-         0.15s so the two read as one label morphing rather than two.
+         The board holds; its geometry does not move. The header block
+         alone swaps (scale-swap-transition): the outgoing rushes away on
+         power2.in, the incoming arrives with weight on back.out, the two
+         overlapping by 0.15s so it reads as one label morphing.
          ================================================================= */
       var TRIGGER = 0.55;
       var EXIT_DUR = 0.4;
@@ -388,7 +430,6 @@
         { scale: 0.72, opacity: 0, duration: EXIT_DUR, ease: "power2.in" },
         TRIGGER
       );
-
       tl.fromTo(
         "#f08op-eyebrow-in",
         { scale: 0.72, opacity: 0 },
@@ -399,11 +440,13 @@
       /* =================================================================
          SCENE 2 (2.0-4.0s) — "The same five verticals."
          A staggered pass down the five EXISTING row labels: each dips and
-         returns to full ink on its own beat, from one flat pre-computed
-         lane list with absolute starts (dynamic-content-sequencing).
-         Nothing is drawn — the board is only being re-read.
+         returns to full ink on its own beat. Absolute starts are computed
+         once into a flat lane list (dynamic-content-sequencing); nothing
+         is drawn — the board is only being re-read.
          ================================================================= */
-      var PULSE = [2.05, 2.3, 2.55, 2.8, 3.05];
+      var PULSE_START = 2.05;
+      var PULSE_STEP = 0.25;
+      var PULSE = labels.map(function (_, i) { return PULSE_START + i * PULSE_STEP; });
 
       PULSE.forEach(function (at, i) {
         tl.fromTo(
@@ -422,52 +465,71 @@
 
       /* =================================================================
          SCENE 3 (4.0-6.0s) — "The same Friday."
-         A second Friday column rules itself in beside the first, takes the
-         same mono head, and populates: five cells cascade down and their
-         status fills wipe left-to-right. Two books kept on one system.
+         The board makes room for a second week. Week one's five status
+         cells NARROW in place — scaleX 1 -> 0.48 (200px -> 96px) off a
+         left transform-origin, so their left edge stays pinned at x=1400
+         and only the right edge travels; the FRIDAY head slides with them
+         to stay centred. Then week two's divider rules down the new
+         gutter, its head wipes in, its five cells cascade into place and
+         their status fills wipe left-to-right. Two books, one system.
          ================================================================= */
+      var NARROW = 96 / 200; /* 0.48 — 200px cell -> 96px cell */
+
       tl.fromTo(
-        "#f08op-colrule-b",
-        { scaleY: 0 },
-        { scaleY: 1, duration: 0.5, ease: "power2.out" },
+        cellsA,
+        { scaleX: 1 },
+        { scaleX: NARROW, duration: 0.62, ease: "power2.inOut", stagger: 0.03 },
+        4.0
+      );
+      /* head A: 200px box at x=1400 centres on 1500; the narrowed column
+         centres on 1448, so the head travels -52px with it */
+      tl.fromTo(
+        "#f08op-colhead-a",
+        { x: 0 },
+        { x: -52, duration: 0.62, ease: "power2.inOut" },
         4.0
       );
 
       tl.fromTo(
+        "#f08op-colrule-b",
+        { scaleY: 0 },
+        { scaleY: 1, duration: 0.5, ease: "power2.out" },
+        4.34
+      );
+      tl.fromTo(
         "#f08op-colhead-b",
-        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-        { clipPath: "inset(0 0% 0 0)", opacity: 1, duration: 0.45, ease: "power2.out" },
-        4.28
+        { opacity: 0, clipPath: "inset(0 100% 0 0)" },
+        { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 0.45, ease: "power2.out" },
+        4.62
       );
 
-      colBCells.forEach(function (el, i) {
+      cellsB.forEach(function (el, i) {
         tl.fromTo(
           el,
           { opacity: 0, y: -14 },
-          { opacity: 1, y: 0, duration: 0.36, ease: "power3.out" },
-          4.4 + i * 0.11
+          { opacity: 1, y: 0, duration: 0.34, ease: "power3.out" },
+          4.72 + i * 0.1
         );
       });
-
-      colBFills.forEach(function (el, i) {
+      fillsB.forEach(function (el, i) {
         tl.fromTo(
           el,
           { scaleX: 0 },
           { scaleX: 1, duration: 0.34, ease: "power2.out" },
-          4.78 + i * 0.12
+          5.05 + i * 0.11
         );
       });
 
       /* =================================================================
          SCENE 4 (6.0-7.6s) — "The same red that has to arrive with a fix."
-         The one red cell in the new column takes emphasis, the same
-         sideways connector frame 07 drew comes out of it, and the same
-         PROPOSED FIX card lands at the end of it. The callback completes.
+         Week two's row-005 cell — the red one — takes a short emphasis
+         pop, and the same sideways connector frame 07 drew comes out of
+         it and lands the same PROPOSED FIX card. The callback completes.
          ================================================================= */
       tl.fromTo(
         "#f08op-red2",
         { scale: 1 },
-        { scale: 1.12, duration: 0.26, ease: "back.out(2.2)" },
+        { scale: 1.12, duration: 0.26, ease: "back.out(2.2)", immediateRender: false },
         6.0
       );
       tl.fromTo(
@@ -477,8 +539,9 @@
         6.26
       );
 
-      tl.to(
-        "#f08op-connector",
+      tl.fromTo(
+        connector,
+        { strokeDashoffset: connLen },
         { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" },
         6.22
       );
@@ -497,12 +560,10 @@
       );
 
       /* =================================================================
-         SCENE 5 (7.6-8.427s) — held. The same board, re-titled; two Friday
-         columns; the red with its fix beside it. No drift. The timeline is
-         padded to the full frame duration so the hold is real, not a
-         truncated tail.
+         SCENE 5 (7.6-8.427s) — held. The re-titled board, two Friday
+         columns, the red with its fix beside it. No drift, no exit.
          ================================================================= */
-      tl.to({}, { duration: 0.7 }, 7.727);
+      tl.to("#f08op-card", { opacity: 1, duration: 0.01 }, 8.2);
     })();
   </script>
 </template>
