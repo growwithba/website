@@ -7,6 +7,10 @@
          row labels from x=268 · lead column x=1180
          status col A x=1420 · status col B x=1560 · cell 72×48
     ------------------------------------------------------------------------ */
+    #root,
+    #root * {
+      box-sizing: border-box;
+    }
     #root {
       position: relative;
       width: 1920px;
@@ -236,11 +240,11 @@
 
     <!-- track 1 · the board -->
     <div class="clip f08own-board" data-start="0" data-duration="8.427" data-track-index="1">
-      <div class="f08own-eyebrow">Weekly Scorecard</div>
+      <div class="f08own-eyebrow">WEEKLY SCORECARD</div>
 
       <div class="f08own-swapwrap">
-        <div class="f08own-htitle f08own-hout">Client Verticals</div>
-        <div class="f08own-htitle f08own-hin">Our Own Brands</div>
+        <div class="f08own-htitle f08own-hout">CLIENT VERTICALS</div>
+        <div class="f08own-htitle f08own-hin">OUR OWN BRANDS</div>
       </div>
 
       <div class="f08own-axis"></div>
@@ -251,9 +255,9 @@
       <div class="f08own-rowrule" style="top: 660px"></div>
       <div class="f08own-rowrule" style="top: 764px"></div>
 
-      <div class="f08own-colhead f08own-colhead-lead">Lead</div>
-      <div class="f08own-colhead f08own-colhead-a">Friday</div>
-      <div class="f08own-colhead f08own-colhead-b">Friday</div>
+      <div class="f08own-colhead f08own-colhead-lead">LEAD</div>
+      <div class="f08own-colhead f08own-colhead-a">FRIDAY</div>
+      <div class="f08own-colhead f08own-colhead-b">FRIDAY</div>
 
       <div class="f08own-tick" style="top: 399px"></div>
       <div class="f08own-tick" style="top: 503px"></div>
@@ -261,11 +265,11 @@
       <div class="f08own-tick" style="top: 711px"></div>
       <div class="f08own-tick" style="top: 815px"></div>
 
-      <div class="f08own-rowlabel" style="top: 384px">SMM / Creative</div>
-      <div class="f08own-rowlabel" style="top: 488px">Digital</div>
-      <div class="f08own-rowlabel" style="top: 592px">Business Development</div>
-      <div class="f08own-rowlabel" style="top: 696px">Ecommerce</div>
-      <div class="f08own-rowlabel" style="top: 800px">Growth + AI</div>
+      <div class="f08own-rowlabel" style="top: 384px">SMM / CREATIVE</div>
+      <div class="f08own-rowlabel" style="top: 488px">DIGITAL</div>
+      <div class="f08own-rowlabel" style="top: 592px">BUSINESS DEVELOPMENT</div>
+      <div class="f08own-rowlabel" style="top: 696px">ECOMMERCE</div>
+      <div class="f08own-rowlabel" style="top: 800px">GROWTH + AI</div>
 
       <div class="f08own-leadmark" style="top: 389px"></div>
       <div class="f08own-leadmark" style="top: 493px"></div>
@@ -298,7 +302,7 @@
         <path class="f08own-conn" d="M 1596 816 L 1676 816" />
       </svg>
       <div class="f08own-card">
-        <div class="f08own-cardtext">Proposed Fix</div>
+        <div class="f08own-cardtext">PROPOSED FIX</div>
       </div>
     </div>
   </div>
@@ -357,7 +361,7 @@
         tl.fromTo(leads, { opacity: 0, scale: 0.55 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)", stagger: 0.05 }, 0.24);
         tl.fromTo(cellsA, { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.36, ease: "back.out(1.4)", stagger: 0.07 }, 0.28);
 
-        /* scale-swap-transition: CLIENT VERTICALS → OUR OWN BRANDS */
+        /* scale-swap swap — CLIENT VERTICALS becomes OUR OWN BRANDS */
         var SWAP = 0.95, EXIT_DUR = 0.4, ENTER_DUR = 0.58, OVERLAP = 0.15, EXIT_SCALE = 0.72;
         tl.set(hIn, { opacity: 0, scale: EXIT_SCALE }, 0);
         tl.fromTo(hOut, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.34, ease: "power3.out" }, 0.16);
