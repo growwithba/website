@@ -1,0 +1,426 @@
+<template>
+  <style>
+    /* ── 08-own-pl · Cobalt Grid frame layer ───────────────────────────────
+       paper #F0EBDE · ink #1F2BE0 · grid 10% · status green/amber/red
+       Shared board geometry (identical to frames 04–07):
+         axis x=240 (y 300→812) · row rules y=348/452/556/660/764 (x 240→1680)
+         row labels from x=268 · lead column x=1180
+         status col A x=1420 · status col B x=1560 · cell 72×48
+    ------------------------------------------------------------------------ */
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Liberation Sans", Arial, sans-serif;
+      color: #1f2be0;
+    }
+
+    .f08own-ground {
+      position: absolute;
+      inset: 0;
+      background-color: #f0ebde;
+      background-image:
+        linear-gradient(to right, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%);
+      background-size: 38.4px 38.4px;
+    }
+
+    /* ── permanent furniture ── */
+    .f08own-hair {
+      position: absolute;
+      left: 80px;
+      width: 1760px;
+      height: 2px;
+      background: #1f2be0;
+      transform-origin: 0 50%;
+    }
+    .f08own-hair-top { top: 64px; }
+    .f08own-hair-bot { top: 884px; }
+
+    .f08own-chrome {
+      position: absolute;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 15px;
+      letter-spacing: 0.06em;
+      color: #1f2be0;
+    }
+    .f08own-chrome-tl { left: 80px; top: 88px; }
+    .f08own-chrome-bl { left: 80px; top: 852px; }
+
+    /* ── header block ── */
+    .f08own-eyebrow {
+      position: absolute;
+      left: 240px;
+      top: 138px;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1f2be0;
+    }
+    .f08own-swapwrap {
+      position: absolute;
+      left: 240px;
+      top: 176px;
+      width: 1000px;
+      height: 108px;
+    }
+    .f08own-htitle {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      font-family: "Liberation Serif", "DejaVu Serif", serif;
+      font-weight: 400;
+      font-size: 86px;
+      line-height: 1;
+      letter-spacing: -0.008em;
+      color: #1f2be0;
+      transform-origin: 50% 50%;
+      white-space: nowrap;
+    }
+    .f08own-hout { z-index: 1; }
+    .f08own-hin { z-index: 2; }
+
+    /* ── board geometry ── */
+    .f08own-axis {
+      position: absolute;
+      left: 240px;
+      top: 300px;
+      width: 2px;
+      height: 512px;
+      background: #1f2be0;
+      transform-origin: 50% 0;
+    }
+    .f08own-rowrule {
+      position: absolute;
+      left: 240px;
+      width: 1440px;
+      height: 2px;
+      background: #1f2be0;
+      transform-origin: 0 50%;
+    }
+    .f08own-tick {
+      position: absolute;
+      left: 224px;
+      width: 18px;
+      height: 2px;
+      background: #1f2be0;
+      transform-origin: 100% 50%;
+    }
+
+    .f08own-rowlabel {
+      position: absolute;
+      left: 268px;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #1f2be0;
+      white-space: nowrap;
+    }
+
+    .f08own-colhead {
+      position: absolute;
+      top: 316px;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1f2be0;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .f08own-colhead-lead { left: 1080px; width: 200px; }
+    .f08own-colhead-a { left: 1320px; width: 200px; }
+    .f08own-colhead-b { left: 1460px; width: 200px; }
+
+    .f08own-leadmark {
+      position: absolute;
+      left: 1169px;
+      width: 22px;
+      height: 22px;
+      background: #1f2be0;
+      transform-origin: 50% 50%;
+    }
+
+    .f08own-cell {
+      position: absolute;
+      width: 72px;
+      height: 48px;
+      transform-origin: 50% 50%;
+    }
+    .f08own-cell-a { left: 1384px; }
+    .f08own-cell-b { left: 1524px; }
+    .f08own-green { background: #15803d; }
+    .f08own-amber { background: #b45309; }
+    .f08own-red { background: #b3261e; }
+    .f08own-open {
+      background: transparent;
+      border: 2px solid rgba(31, 43, 224, 0.18);
+    }
+    .f08own-fill {
+      position: absolute;
+      inset: 0;
+      background: #b3261e;
+      transform-origin: 0 50%;
+    }
+
+    .f08own-divider {
+      position: absolute;
+      left: 1489px;
+      top: 310px;
+      width: 2px;
+      height: 558px;
+      background: rgba(31, 43, 224, 0.18);
+      transform-origin: 50% 0;
+    }
+
+    /* ── fix card layer ── */
+    .f08own-svg {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: visible;
+    }
+    .f08own-conn {
+      fill: none;
+      stroke: #1f2be0;
+      stroke-width: 2.5;
+      stroke-dasharray: 84;
+      stroke-dashoffset: 84;
+    }
+    .f08own-card {
+      position: absolute;
+      left: 1676px;
+      top: 768px;
+      width: 164px;
+      height: 96px;
+      background: #f0ebde;
+      border: 2px solid #1f2be0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 0% 50%;
+    }
+    .f08own-cardtext {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.3;
+      text-align: center;
+      color: #1f2be0;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="08-own-pl"
+    data-width="1920"
+    data-height="1080"
+    data-start="0"
+    data-duration="8.427"
+  >
+    <!-- track 0 · full-bleed ground + permanent furniture -->
+    <div class="clip f08own-ground-clip" data-start="0" data-duration="8.427" data-track-index="0">
+      <div class="f08own-ground"></div>
+      <div class="f08own-hair f08own-hair-top"></div>
+      <div class="f08own-hair f08own-hair-bot"></div>
+      <div class="f08own-chrome f08own-chrome-tl">FIG. 08</div>
+      <div class="f08own-chrome f08own-chrome-bl">08</div>
+    </div>
+
+    <!-- track 1 · the board -->
+    <div class="clip f08own-board" data-start="0" data-duration="8.427" data-track-index="1">
+      <div class="f08own-eyebrow">Weekly Scorecard</div>
+
+      <div class="f08own-swapwrap">
+        <div class="f08own-htitle f08own-hout">Client Verticals</div>
+        <div class="f08own-htitle f08own-hin">Our Own Brands</div>
+      </div>
+
+      <div class="f08own-axis"></div>
+
+      <div class="f08own-rowrule" style="top: 348px"></div>
+      <div class="f08own-rowrule" style="top: 452px"></div>
+      <div class="f08own-rowrule" style="top: 556px"></div>
+      <div class="f08own-rowrule" style="top: 660px"></div>
+      <div class="f08own-rowrule" style="top: 764px"></div>
+
+      <div class="f08own-colhead f08own-colhead-lead">Lead</div>
+      <div class="f08own-colhead f08own-colhead-a">Friday</div>
+      <div class="f08own-colhead f08own-colhead-b">Friday</div>
+
+      <div class="f08own-tick" style="top: 399px"></div>
+      <div class="f08own-tick" style="top: 503px"></div>
+      <div class="f08own-tick" style="top: 607px"></div>
+      <div class="f08own-tick" style="top: 711px"></div>
+      <div class="f08own-tick" style="top: 815px"></div>
+
+      <div class="f08own-rowlabel" style="top: 384px">SMM / Creative</div>
+      <div class="f08own-rowlabel" style="top: 488px">Digital</div>
+      <div class="f08own-rowlabel" style="top: 592px">Business Development</div>
+      <div class="f08own-rowlabel" style="top: 696px">Ecommerce</div>
+      <div class="f08own-rowlabel" style="top: 800px">Growth + AI</div>
+
+      <div class="f08own-leadmark" style="top: 389px"></div>
+      <div class="f08own-leadmark" style="top: 493px"></div>
+      <div class="f08own-leadmark" style="top: 597px"></div>
+      <div class="f08own-leadmark" style="top: 701px"></div>
+      <div class="f08own-leadmark" style="top: 805px"></div>
+
+      <!-- carried-in Friday column A -->
+      <div class="f08own-cell f08own-cell-a f08own-green" style="top: 376px"></div>
+      <div class="f08own-cell f08own-cell-a f08own-green" style="top: 480px"></div>
+      <div class="f08own-cell f08own-cell-a f08own-amber" style="top: 584px"></div>
+      <div class="f08own-cell f08own-cell-a f08own-green" style="top: 688px"></div>
+      <div class="f08own-cell f08own-cell-a f08own-red" style="top: 792px"></div>
+
+      <div class="f08own-divider"></div>
+
+      <!-- second Friday column B -->
+      <div class="f08own-cell f08own-cell-b f08own-green" style="top: 376px"></div>
+      <div class="f08own-cell f08own-cell-b f08own-green" style="top: 480px"></div>
+      <div class="f08own-cell f08own-cell-b f08own-green" style="top: 584px"></div>
+      <div class="f08own-cell f08own-cell-b f08own-amber" style="top: 688px"></div>
+      <div class="f08own-cell f08own-cell-b f08own-open" style="top: 792px">
+        <div class="f08own-fill"></div>
+      </div>
+    </div>
+
+    <!-- track 2 · the fix leaving the row sideways -->
+    <div class="clip f08own-fixlayer" data-start="0" data-duration="8.427" data-track-index="2">
+      <svg class="f08own-svg" viewBox="0 0 1920 1080" preserveAspectRatio="none">
+        <path class="f08own-conn" d="M 1596 816 L 1676 816" />
+      </svg>
+      <div class="f08own-card">
+        <div class="f08own-cardtext">Proposed Fix</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var FRAME_ID = "08-own-pl";
+
+      function build() {
+        var root = document.querySelector('[data-composition-id="' + FRAME_ID + '"]');
+        if (!root) return;
+        var q = function (sel) { return root.querySelector(sel); };
+        var qa = function (sel) { return Array.prototype.slice.call(root.querySelectorAll(sel)); };
+
+        var hairs = qa(".f08own-hair");
+        var chrome = qa(".f08own-chrome");
+        var eyebrow = q(".f08own-eyebrow");
+        var hOut = q(".f08own-hout");
+        var hIn = q(".f08own-hin");
+        var axis = q(".f08own-axis");
+        var rules = qa(".f08own-rowrule");
+        var ticks = qa(".f08own-tick");
+        var labels = qa(".f08own-rowlabel");
+        var leads = qa(".f08own-leadmark");
+        var headLead = q(".f08own-colhead-lead");
+        var headA = q(".f08own-colhead-a");
+        var headB = q(".f08own-colhead-b");
+        var cellsA = qa(".f08own-cell-a");
+        var cellsB = qa(".f08own-cell-b");
+        var divider = q(".f08own-divider");
+        var openCell = q(".f08own-open");
+        var redFill = q(".f08own-fill");
+        var conn = q(".f08own-conn");
+        var card = q(".f08own-card");
+        var cardText = q(".f08own-cardtext");
+
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+        window.__timelines[FRAME_ID] = tl;
+
+        /* hold the full frame duration */
+        tl.to({}, { duration: 8.427 }, 0);
+
+        /* ══ SCENE 1 (0.0–2.0) — the same board returns; the header swaps ══ */
+
+        tl.fromTo(hairs, { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: "power3.out", stagger: 0.05 }, 0.02);
+        tl.fromTo(chrome, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "none" }, 0.12);
+        tl.fromTo(eyebrow, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" }, 0.06);
+
+        /* board geometry — identical to frames 04–07 */
+        tl.fromTo(axis, { scaleY: 0 }, { scaleY: 1, duration: 0.34, ease: "power3.out" }, 0.10);
+        tl.fromTo(rules, { scaleX: 0 }, { scaleX: 1, duration: 0.34, ease: "power3.out", stagger: 0.06 }, 0.14);
+        tl.fromTo([headLead, headA], { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.05 }, 0.18);
+        tl.fromTo(labels, { opacity: 0, x: -12 }, { opacity: 0.62, x: 0, duration: 0.32, ease: "power3.out", stagger: 0.055 }, 0.20);
+        tl.fromTo(leads, { opacity: 0, scale: 0.55 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.6)", stagger: 0.05 }, 0.24);
+        tl.fromTo(cellsA, { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 0.36, ease: "back.out(1.4)", stagger: 0.07 }, 0.28);
+
+        /* scale-swap-transition: CLIENT VERTICALS → OUR OWN BRANDS */
+        var SWAP = 0.95, EXIT_DUR = 0.4, ENTER_DUR = 0.58, OVERLAP = 0.15, EXIT_SCALE = 0.72;
+        tl.set(hIn, { opacity: 0, scale: EXIT_SCALE }, 0);
+        tl.fromTo(hOut, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.34, ease: "power3.out" }, 0.16);
+        tl.to(hOut, { scale: EXIT_SCALE, opacity: 0, duration: EXIT_DUR, ease: "power2.in" }, SWAP);
+        tl.to(hIn, { scale: 1, opacity: 1, duration: ENTER_DUR, ease: "back.out(1.6)" }, SWAP + EXIT_DUR - OVERLAP);
+
+        /* ══ SCENE 2 (2.0–3.75) — the same five verticals, confirmed one by one ══
+           dynamic-content-sequencing: each row's window is computed from its
+           own label length, then normalised into the 1.72s scene window.      */
+        var TEXTS = ["SMM / CREATIVE", "DIGITAL", "BUSINESS DEVELOPMENT", "ECOMMERCE", "GROWTH + AI"];
+        var BASE = 0.18, SEC_PER_CHAR = 0.012, WINDOW = 1.72, SCENE2 = 2.0;
+        var raw = TEXTS.map(function (t) { return BASE + t.length * SEC_PER_CHAR; });
+        var total = raw.reduce(function (a, b) { return a + b; }, 0);
+        var k = WINDOW / total;
+        var cumulative = 0;
+        var PASS = raw.map(function (d) {
+          var start = SCENE2 + cumulative * k;
+          cumulative += d;
+          return { start: start, dur: d * k };
+        });
+
+        PASS.forEach(function (slot, i) {
+          tl.to(labels[i], { opacity: 1, duration: Math.min(0.26, slot.dur), ease: "power2.out" }, slot.start);
+          tl.fromTo(ticks[i], { scaleX: 0 }, { scaleX: 1, duration: 0.22, ease: "back.out(1.8)" }, slot.start);
+          tl.to(leads[i], { scale: 1.2, duration: 0.12, ease: "power2.out" }, slot.start);
+          tl.to(leads[i], { scale: 1, duration: 0.2, ease: "power2.inOut" }, slot.start + 0.12);
+        });
+
+        /* ══ SCENE 3 (4.0–5.9) — the same Friday, kept twice ══ */
+        tl.fromTo(divider, { scaleY: 0 }, { scaleY: 1, duration: 0.42, ease: "power3.out" }, 4.0);
+        tl.fromTo(headB, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.34, ease: "power2.out" }, 4.2);
+        tl.set(openCell, { borderColor: "rgba(31,43,224,0.18)" }, 0);
+        tl.set(redFill, { scaleX: 0 }, 0);
+        cellsB.forEach(function (cell, i) {
+          tl.fromTo(
+            cell,
+            { opacity: 0, scale: 0.7 },
+            { opacity: 1, scale: 1, duration: 0.34, ease: "back.out(1.5)" },
+            4.42 + i * 0.24
+          );
+        });
+
+        /* ══ SCENE 4 (6.0–7.6) — the same red, arriving with a fix ══ */
+        tl.to(redFill, { scaleX: 1, duration: 0.3, ease: "power2.out" }, 6.0);
+        tl.to(openCell, { borderColor: "#b3261e", duration: 0.3, ease: "none" }, 6.0);
+        tl.to(openCell, { scale: 1.07, duration: 0.12, ease: "power2.out" }, 6.34);
+        tl.to(openCell, { scale: 1, duration: 0.2, ease: "power2.inOut" }, 6.46);
+
+        /* the fix leaves the row sideways — never upward */
+        tl.set(conn, { strokeDashoffset: 84 }, 0);
+        tl.to(conn, { strokeDashoffset: 0, duration: 0.5, ease: "power2.inOut" }, 6.55);
+        tl.fromTo(card, { opacity: 0, scale: 0.78, x: -18 }, { opacity: 1, scale: 1, x: 0, duration: 0.42, ease: "back.out(1.55)" }, 7.0);
+        tl.fromTo(cardText, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" }, 7.3);
+
+        /* ══ SCENE 5 (7.6–8.427) — held ══ */
+      }
+
+      if (window.gsap) {
+        build();
+      } else {
+        var s = document.querySelector('script[src$="assets/vendor/gsap.min.js"]');
+        if (s) s.addEventListener("load", build);
+      }
+    })();
+  </script>
+</template>

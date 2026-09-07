@@ -294,7 +294,7 @@
               aria-hidden="true"
             >
               <path
-                d="M 405 20 L 405 160 L 290 160 L 290 300 L 195 300"
+                d="M 405 30 L 405 170 L 290 170 L 290 310 L 195 310"
                 fill="none"
                 stroke="#1F2BE0"
                 stroke-width="2"
@@ -354,7 +354,7 @@
           BASE_DURATION = 0.95,
           SEC_PER_CHAR = 0.035,
           HOLD_MID = 0.03;
-        var CONTENT = [{ label: "Social Posts" }, { label: "Paid Ads" }, { label: "SEO" }];
+        var CONTENT = [{ label: "SOCIAL POSTS" }, { label: "PAID ADS" }, { label: "SEO" }];
         var cumulative = ROWS_START;
         var TIMELINE = CONTENT.map(function (entry) {
           var dur = BASE_DURATION + entry.label.length * SEC_PER_CHAR + HOLD_MID;
@@ -388,13 +388,6 @@
         gsap.set(bars, { scaleX: 0 });
         gsap.set(hairs, { scaleX: 0, transformOrigin: "center center" });
         gsap.set([headrule, pricerule], { scaleX: 0 });
-        gsap.set(
-          [agencies, pricehead, wash, steptags, qrCells, q(".f03-the-menu-eyebrow"), q(".f03-the-menu-figtag"), q(".f03-the-menu-chrome-l"), q(".f03-the-menu-chrome-r")].flat
-            ? []
-            : [],
-          {},
-        );
-
         window.__timelines = window.__timelines || {};
         var tl = gsap.timeline({ paused: true });
 

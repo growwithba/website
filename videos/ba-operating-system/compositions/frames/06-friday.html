@@ -1,0 +1,234 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      container-type: size;
+    }
+
+    /* ---- ground: cream paper + permanent graph-paper grid ---- */
+    .f06-ground {
+      position: absolute;
+      inset: 0;
+      background-color: #F0EBDE;
+      background-image:
+        linear-gradient(to right, rgba(31, 43, 224, 0.10) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, rgba(31, 43, 224, 0.10) 0 1px, transparent 1px 100%);
+      background-size: 2cqw 2cqw;
+      background-position: 0 0;
+    }
+
+    .f06-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- persistent cobalt hairlines + page chrome ---- */
+    .f06-hair {
+      position: absolute;
+      left: 4cqw;
+      right: 4cqw;
+      height: 0.12cqw;
+      background: #1F2BE0;
+    }
+    .f06-hair-top { top: 3.020833cqw; }
+    .f06-hair-bot { top: 45.833333cqw; }
+
+    .f06-pagenum {
+      position: absolute;
+      right: 4cqw;
+      top: 43.125cqw;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 1cqw;
+      letter-spacing: 0.06em;
+      color: #1F2BE0;
+      text-align: right;
+    }
+
+    /* ---- board rules (axis + row rules + the new column rule) ---- */
+    .f06-rules {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .f06-rules line,
+    .f06-rules path {
+      fill: none;
+      stroke: #1F2BE0;
+    }
+    .f06-axis { stroke-width: 2; }
+    .f06-row  { stroke-width: 1.5; }
+    .f06-col  { stroke-width: 2; }
+
+    /* ---- row labels ---- */
+    .f06-label {
+      position: absolute;
+      left: 13.958333cqw;
+      height: 2.5cqw;
+      display: flex;
+      align-items: center;
+      font-family: "Liberation Serif", "DejaVu Serif", serif;
+      font-weight: 400;
+      font-size: 1.75cqw;
+      letter-spacing: 0.012em;
+      line-height: 1.05;
+      color: #1F2BE0;
+      white-space: nowrap;
+    }
+
+    /* ---- lead markers (the column carried from frames 04/05) ---- */
+    .f06-lead {
+      position: absolute;
+      left: 60.833333cqw;
+      width: 1.25cqw;
+      height: 1.25cqw;
+      background: #1F2BE0;
+    }
+
+    /* ---- the new FRIDAY status column ---- */
+    .f06-colhead {
+      position: absolute;
+      left: 69.791667cqw;
+      top: 15.625cqw;
+      width: 8.333333cqw;
+      height: 2.5cqw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 1.4cqw;
+      letter-spacing: 0.08em;
+      color: #1F2BE0;
+      white-space: nowrap;
+    }
+
+    .f06-cell {
+      position: absolute;
+      left: 72.083333cqw;
+      width: 3.75cqw;
+      height: 2.5cqw;
+      box-sizing: border-box;
+      border: 0.08cqw solid rgba(31, 43, 224, 0.18);
+      overflow: hidden;
+    }
+
+    .f06-fill {
+      position: absolute;
+      inset: 0;
+      transform-origin: left center;
+    }
+    .f06-g { background: #15803D; }
+    .f06-a { background: #B45309; }
+    .f06-r { background: #B3261E; }
+  </style>
+
+  <div id="root" data-composition-id="06-friday">
+    <!-- full-bleed ground -->
+    <div class="clip f06-ground" data-start="0" data-duration="4.8" data-track-index="0"></div>
+
+    <!-- board -->
+    <div class="clip f06-stage" data-start="0" data-duration="4.8" data-track-index="1">
+      <div class="f06-hair f06-hair-top"></div>
+      <div class="f06-hair f06-hair-bot"></div>
+      <div class="f06-pagenum">06</div>
+
+      <svg class="f06-rules" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <line class="f06-axis" x1="240" y1="300" x2="240" y2="812"></line>
+        <line class="f06-row" x1="240" y1="348" x2="1680" y2="348"></line>
+        <line class="f06-row" x1="240" y1="452" x2="1680" y2="452"></line>
+        <line class="f06-row" x1="240" y1="556" x2="1680" y2="556"></line>
+        <line class="f06-row" x1="240" y1="660" x2="1680" y2="660"></line>
+        <line class="f06-row" x1="240" y1="764" x2="1680" y2="764"></line>
+        <path id="f06-colrule" class="f06-col" d="M 1340 300 L 1340 812"></path>
+      </svg>
+
+      <!-- row labels -->
+      <div class="f06-label" style="top:18.125cqw;">SMM / CREATIVE</div>
+      <div class="f06-label" style="top:23.541667cqw;">DIGITAL</div>
+      <div class="f06-label" style="top:28.958333cqw;">BUSINESS DEVELOPMENT</div>
+      <div class="f06-label" style="top:34.375cqw;">ECOMMERCE</div>
+      <div class="f06-label" style="top:39.791667cqw;">GROWTH + AI</div>
+
+      <!-- lead markers -->
+      <div class="f06-lead" style="top:18.75cqw;"></div>
+      <div class="f06-lead" style="top:24.166667cqw;"></div>
+      <div class="f06-lead" style="top:29.583333cqw;"></div>
+      <div class="f06-lead" style="top:35cqw;"></div>
+      <div class="f06-lead" style="top:40.416667cqw;"></div>
+
+      <!-- FRIDAY column header -->
+      <div class="f06-colhead" id="f06-colhead">FRIDAY</div>
+
+      <!-- status cells -->
+      <div class="f06-cell" style="top:18.125cqw;"><i class="f06-fill f06-g"></i></div>
+      <div class="f06-cell" style="top:23.541667cqw;"><i class="f06-fill f06-g"></i></div>
+      <div class="f06-cell" style="top:28.958333cqw;"><i class="f06-fill f06-a" id="f06-fill-amber"></i></div>
+      <div class="f06-cell" style="top:34.375cqw;"><i class="f06-fill f06-g"></i></div>
+      <div class="f06-cell" style="top:39.791667cqw;"><i class="f06-fill f06-r" id="f06-fill-red"></i></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="06-friday"]');
+      var q = function (sel) { return root.querySelectorAll(sel); };
+
+      // svg-path-draw setup: measure the new column rule, dash it out.
+      var colrule = root.querySelector("#f06-colrule");
+      var colLen = 512;
+      if (colrule && typeof colrule.getTotalLength === "function") {
+        var measured = colrule.getTotalLength();
+        if (measured && measured > 1) { colLen = measured; }
+      }
+      colrule.style.strokeDasharray = colLen;
+      colrule.style.strokeDashoffset = colLen;
+
+      var cells = q(".f06-cell");
+      var greens = q(".f06-g");
+      var amber = root.querySelector("#f06-fill-amber");
+      var red = root.querySelector("#f06-fill-red");
+      var colhead = root.querySelector("#f06-colhead");
+
+      // Initial states — the board is already built; only the column is new.
+      gsap.set(cells, { opacity: 0, y: -14 });
+      var allFills = Array.prototype.slice.call(greens).concat([amber, red]);
+      gsap.set(allFills, { scaleX: 0 });
+      gsap.set(colhead, { clipPath: "inset(0% 100% 0% 0%)" });
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["06-friday"] = tl;
+
+      // Scene 1 (0.0-1.4s) — "Every Friday": the new column rules itself in, takes its mono header.
+      tl.fromTo(colrule,
+        { strokeDashoffset: colLen },
+        { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" }, 0.18);
+      tl.fromTo(colhead,
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.46, ease: "power2.out" }, 0.86);
+
+      // Scene 2 (1.4-2.6s) — "each lead fills their own row": five empty cells cascade down the column.
+      tl.fromTo(cells,
+        { opacity: 0, y: -14 },
+        { opacity: 1, y: 0, duration: 0.38, ease: "power2.out", stagger: 0.14 }, 1.42);
+
+      // Scene 3 (2.6-4.1s) — "Green, amber, red.": each word lands its status marks.
+      tl.fromTo(greens,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.34, ease: "power2.out", stagger: 0.1 }, 2.64);
+      tl.fromTo(amber,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.34, ease: "power2.out" }, 3.24);
+      tl.fromTo(red,
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.34, ease: "power2.out" }, 3.72);
+
+      // Scene 4 (4.1-4.8s) — held. A filled board, read at a glance.
+    })();
+  </script>
+</template>
