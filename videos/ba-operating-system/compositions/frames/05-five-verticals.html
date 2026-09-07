@@ -1,0 +1,305 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      color: #1f2be0;
+      font-family: "Liberation Sans", Arial, sans-serif;
+    }
+
+    /* --- ground: paper + permanent graph-paper grid (full-bleed clip layer) --- */
+    #f05v-ground {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background-color: #f0ebde;
+      background-image:
+        linear-gradient(to right, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%);
+      background-size: 38.4px 38.4px;
+      background-position: 0 0;
+    }
+
+    #f05v-board {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    /* --- frame furniture --- */
+    .f05v-hairline {
+      position: absolute;
+      left: 80px;
+      width: 1760px;
+      height: 2px;
+      background: #1f2be0;
+    }
+    #f05v-hairline-top { top: 58px; }
+    #f05v-hairline-bottom { top: 884px; }
+
+    .f05v-chrome {
+      position: absolute;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #1f2be0;
+    }
+    #f05v-chrome-left { left: 80px; top: 849px; }
+    #f05v-chrome-right { left: 1540px; top: 849px; width: 300px; text-align: right; }
+
+    /* --- eyebrow --- */
+    #f05v-eyebrow {
+      position: absolute;
+      left: 240px;
+      top: 186px;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1f2be0;
+      white-space: nowrap;
+      clip-path: inset(0 100% 0 0);
+    }
+
+    /* --- board geometry (SHARED with frames 04-08) --- */
+    #f05v-axis {
+      position: absolute;
+      left: 240px;
+      top: 300px;
+      width: 2px;
+      height: 512px;
+      background: #1f2be0;
+    }
+    #f05v-axis-progress {
+      position: absolute;
+      left: 238px;
+      top: 300px;
+      width: 6px;
+      height: 466px; /* 300 -> 766, the last row rule */
+      background: #1f2be0;
+      transform-origin: 50% 0%;
+    }
+    .f05v-rowrule {
+      position: absolute;
+      left: 240px;
+      width: 1440px; /* 240 -> 1680 */
+      height: 2px;
+      background: #1f2be0;
+    }
+
+    /* --- row ordinals (left gutter, mono, baseline on the rule) --- */
+    .f05v-ord {
+      position: absolute;
+      left: 96px;
+      width: 120px;
+      text-align: right;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #1f2be0;
+    }
+
+    /* --- row labels (serif, left-aligned at x=268, baseline on the rule) --- */
+    .f05v-label {
+      position: absolute;
+      left: 268px;
+      font-family: "Liberation Serif", "DejaVu Serif", serif;
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: 0.005em;
+      color: #1f2be0;
+      white-space: nowrap;
+      clip-path: inset(0 100% 0 0);
+    }
+
+    /* --- lead-marker column, centred on x=1180 --- */
+    .f05v-marker {
+      position: absolute;
+      left: 1170px;
+      width: 20px;
+      height: 20px;
+      background: #1f2be0;
+      transform-origin: 50% 50%;
+    }
+    #f05v-owns {
+      position: absolute;
+      left: 1030px;
+      top: 271px;
+      width: 300px;
+      text-align: center;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      color: #1f2be0;
+      clip-path: inset(0 100% 0 0);
+    }
+  </style>
+
+  <div id="root" data-composition-id="05-five-verticals">
+    <div
+      id="f05v-ground"
+      class="clip"
+      data-start="0"
+      data-duration="10.923"
+      data-track-index="0"
+    ></div>
+
+    <div id="f05v-board" class="clip" data-start="0" data-duration="10.923" data-track-index="1">
+      <div id="f05v-hairline-top" class="f05v-hairline"></div>
+      <div id="f05v-hairline-bottom" class="f05v-hairline"></div>
+
+      <div id="f05v-chrome-left" class="f05v-chrome">BRIDGING ASSOCIATES</div>
+      <div id="f05v-chrome-right" class="f05v-chrome">005</div>
+
+      <div id="f05v-eyebrow">Five Verticals</div>
+
+      <div id="f05v-axis"></div>
+      <div id="f05v-axis-progress"></div>
+
+      <div class="f05v-rowrule" style="top: 348px"></div>
+      <div class="f05v-rowrule" style="top: 452px"></div>
+      <div class="f05v-rowrule" style="top: 556px"></div>
+      <div class="f05v-rowrule" style="top: 660px"></div>
+      <div class="f05v-rowrule" style="top: 764px"></div>
+
+      <div class="f05v-ord" style="top: 329px">001</div>
+      <div class="f05v-ord" style="top: 433px">002</div>
+      <div class="f05v-ord" style="top: 537px">003</div>
+      <div class="f05v-ord" style="top: 641px">004</div>
+      <div class="f05v-ord" style="top: 745px">005</div>
+
+      <div class="f05v-label" style="top: 311px">SMM / CREATIVE</div>
+      <div class="f05v-label" style="top: 415px">DIGITAL</div>
+      <div class="f05v-label" style="top: 519px">BUSINESS DEVELOPMENT</div>
+      <div class="f05v-label" style="top: 623px">ECOMMERCE</div>
+      <div class="f05v-label" style="top: 727px">GROWTH + AI</div>
+
+      <div id="f05v-owns">OWNS</div>
+
+      <div class="f05v-marker" style="top: 326px"></div>
+      <div class="f05v-marker" style="top: 430px"></div>
+      <div class="f05v-marker" style="top: 534px"></div>
+      <div class="f05v-marker" style="top: 638px"></div>
+      <div class="f05v-marker" style="top: 742px"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["05-five-verticals"] = tl;
+
+      var ROOT = document.querySelector('[data-composition-id="05-five-verticals"]');
+      var q = function (sel) {
+        return gsap.utils.toArray(ROOT.querySelectorAll(sel));
+      };
+
+      /* Pre-computed lane sequence (dynamic-content-sequencing: the flat
+         TIMELINE is built once at author time; every start is absolute). */
+      var AXIS_TOP = 300;
+      var AXIS_SPAN = 466;
+      var LANES = [
+        { row: 348, at: 1.55 },
+        { row: 452, at: 3.05 },
+        { row: 556, at: 4.35 },
+        { row: 660, at: 6.05 },
+        { row: 764, at: 7.25 }
+      ].map(function (lane) {
+        return {
+          at: lane.at,
+          progress: (lane.row + 2 - AXIS_TOP) / AXIS_SPAN
+        };
+      });
+
+      var labels = q(".f05v-label");
+      var ords = q(".f05v-ord");
+      var markers = q(".f05v-marker");
+
+      /* --- Scene 1 (0.0-1.5s): the framework is already on screen, carried
+         from frame 4. Only the chrome settles; no lane has a name yet. --- */
+      tl.set("#f05v-axis-progress", { scaleY: 0 }, 0);
+
+      tl.fromTo(
+        "#f05v-eyebrow",
+        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+        { clipPath: "inset(0 0% 0 0)", opacity: 1, duration: 0.6, ease: "power2.out" },
+        0.1
+      );
+
+      tl.fromTo(
+        ["#f05v-chrome-left", "#f05v-chrome-right"],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: "power1.out" },
+        0.25
+      );
+
+      ords.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { opacity: 0, x: -10 },
+          { opacity: 1, x: 0, duration: 0.45, ease: "power2.out" },
+          0.35 + i * 0.08
+        );
+      });
+
+      /* --- Scenes 2-6 (1.5-8.5s): each lane takes its name on its voiceover
+         cue — a left-to-right mask wipe with a short settle, and the axis
+         progress rail steps down to the newly named row. --- */
+      LANES.forEach(function (lane, i) {
+        tl.fromTo(
+          labels[i],
+          { clipPath: "inset(0 100% 0 0)", opacity: 0, x: -18 },
+          {
+            clipPath: "inset(0 0% 0 0)",
+            opacity: 1,
+            x: 0,
+            duration: 0.58,
+            ease: "power3.out"
+          },
+          lane.at
+        );
+
+        tl.to(
+          "#f05v-axis-progress",
+          { scaleY: lane.progress, duration: 0.5, ease: "power2.out" },
+          lane.at
+        );
+      });
+
+      /* --- Scene 7 (8.5-10.1s): the OWNS column header reveals and a filled
+         cobalt lead marker springs onto every lane in one staggered pass
+         (spring-pop-entrance, smooth power3 settle, no overshoot). --- */
+      tl.fromTo(
+        "#f05v-owns",
+        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+        { clipPath: "inset(0 0% 0 0)", opacity: 1, duration: 0.5, ease: "power2.out" },
+        8.5
+      );
+
+      markers.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { scale: 0, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
+          8.62 + i * 0.09
+        );
+      });
+
+      /* --- Scene 8 (10.1-10.923s): held. Five named lanes, five owners. --- */
+      tl.to("#f05v-owns", { opacity: 1, duration: 0.01 }, 10.9);
+    })();
+  </script>
+</template>
