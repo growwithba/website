@@ -1,0 +1,221 @@
+<template>
+  <style>
+    /* ---- Cobalt Grid — frame 02 · "Nobody owns it" -----------------------
+       Palette + type roles from frame.md (paper #F0EBDE ground, cobalt #1F2BE0
+       as the only ink, ink-soft #5560E5 for the de-emphasised state, 10% grid).
+       No status colours in this frame — those belong to frames 6/7/8.
+       Families are the render machine's shipped faces (no @font-face, since no
+       font files ship with this project); the ROLE distinctions are preserved:
+       serif = display ramp, mono = chrome.                                   */
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      color: #1f2be0;
+      font-family: "Liberation Sans", Arial, sans-serif;
+    }
+
+    /* --- background: paper + permanent graph-paper grid (full-bleed clip) -- */
+    .f02-nobody-ground {
+      position: absolute;
+      inset: 0;
+      background-color: #f0ebde;
+      background-image:
+        linear-gradient(to right, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%);
+      background-size: 38.4px 38.4px; /* ~2cqw cells */
+      background-position: 0 0;
+    }
+
+    /* --- persistent furniture: top + bottom cobalt hairlines, page chrome --- */
+    .f02-nobody-furniture {
+      position: absolute;
+      inset: 0;
+    }
+    .f02-nobody-hairline {
+      position: absolute;
+      left: 76.8px; /* edge = 4cqw */
+      right: 76.8px;
+      height: 2.3px; /* 0.12cqw */
+      background: #1f2be0;
+    }
+    .f02-nobody-hairline-top {
+      top: 57.6px;
+    }
+    /* bottom hairline pulled above the 896px keep-out line */
+    .f02-nobody-hairline-bottom {
+      top: 886px;
+    }
+    .f02-nobody-pagenum {
+      position: absolute;
+      right: 76.8px;
+      top: 843px;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: #1f2be0;
+    }
+
+    /* --- the word slot: one fixed-size wrapper, both words share its centre -- */
+    .f02-nobody-stage {
+      position: absolute;
+      inset: 0;
+    }
+    .f02-nobody-slot {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 314px;
+      height: 280px; /* optical centre y = 454 */
+    }
+    .f02-nobody-word {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+      font-family: "Liberation Serif", "DejaVu Serif", serif;
+      font-weight: 400;
+      font-size: 240px; /* 12.5cqw — display ramp, fit-to-measure */
+      line-height: 0.9;
+      letter-spacing: -0.012em;
+      color: #1f2be0;
+    }
+    .f02-nobody-word-out {
+      z-index: 1;
+    }
+    .f02-nobody-word-in {
+      z-index: 2;
+      opacity: 0;
+    }
+    .f02-nobody-mark {
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    /* strike-through marker (css-marker-patterns, sketchout/strike variant) */
+    .f02-nobody-strike {
+      position: absolute;
+      left: -10px;
+      right: -10px;
+      top: calc(50% - 3.5px);
+      height: 7px;
+      background: #1f2be0;
+      transform-origin: left center;
+      z-index: 3;
+    }
+    /* cobalt rule drawn beneath the arriving word */
+    .f02-nobody-rule {
+      position: absolute;
+      left: 260px;
+      width: 1400px;
+      top: 636px;
+      height: 2.3px;
+      background: #1f2be0;
+      transform-origin: left center;
+    }
+  </style>
+
+  <div id="root" data-composition-id="02-nobody-owns-it" data-width="1920" data-height="1080">
+    <!-- background -->
+    <div
+      class="clip f02-nobody-ground"
+      data-start="0"
+      data-duration="5.376"
+      data-track-index="0"
+    ></div>
+
+    <!-- frame furniture -->
+    <div
+      class="clip f02-nobody-furniture"
+      data-start="0"
+      data-duration="5.376"
+      data-track-index="1"
+    >
+      <div class="f02-nobody-hairline f02-nobody-hairline-top"></div>
+      <div class="f02-nobody-hairline f02-nobody-hairline-bottom"></div>
+      <div class="f02-nobody-pagenum">02</div>
+    </div>
+
+    <!-- the swap stage -->
+    <div
+      class="clip f02-nobody-stage"
+      data-start="0"
+      data-duration="5.376"
+      data-track-index="2"
+    >
+      <div class="f02-nobody-slot">
+        <div class="f02-nobody-word f02-nobody-word-out" id="f02-nobody-word-out">
+          <span class="f02-nobody-mark"
+            >OUTPUT<span class="f02-nobody-strike" id="f02-nobody-strike"></span
+          ></span>
+        </div>
+        <div class="f02-nobody-word f02-nobody-word-in" id="f02-nobody-word-in">
+          <span class="f02-nobody-mark">OWNERSHIP</span>
+        </div>
+      </div>
+      <div class="f02-nobody-rule" id="f02-nobody-rule"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      /* Scene 1 (0.0–1.6s) — "And the number still doesn't move":
+         OUTPUT sets alone at the optical centre, nothing but the grid. */
+      tl.fromTo(
+        "#f02-nobody-word-out",
+        { opacity: 0, scale: 1.06 },
+        { opacity: 1, scale: 1, duration: 0.72, ease: "power3.out" },
+        0.04,
+      );
+
+      /* Scene 2 (1.6–2.9s) — "Because nobody on that side":
+         a cobalt strike-through draws left→right across OUTPUT
+         (css-marker-patterns), then the struck word steps back to ink-soft. */
+      tl.fromTo(
+        "#f02-nobody-strike",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.55, ease: "power2.out" },
+        1.6,
+      );
+      tl.to(
+        "#f02-nobody-word-out",
+        { color: "#5560E5", duration: 0.36, ease: "power2.out" },
+        2.08,
+      );
+
+      /* Scene 3 (2.9–4.4s) — "ever agreed to own it":
+         scale-swap-transition at the shared centre — the struck word rushes
+         away as OWNERSHIP arrives, velocity-matched (same direction, same
+         speed; long-tail decel, no overshoot). Then the rule draws beneath. */
+      tl.to(
+        "#f02-nobody-word-out",
+        { scale: 0.74, opacity: 0, duration: 0.4, ease: "power2.in" },
+        2.9,
+      );
+      tl.fromTo(
+        "#f02-nobody-word-in",
+        { scale: 0.74, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.6, ease: "power3.out" },
+        3.15,
+      );
+      tl.fromTo(
+        "#f02-nobody-rule",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.62, ease: "power3.out" },
+        3.7,
+      );
+
+      /* Scene 4 (4.4–5.376s) — held still to the cut. No exit. */
+
+      window.__timelines["02-nobody-owns-it"] = tl;
+    })();
+  </script>
+</template>
