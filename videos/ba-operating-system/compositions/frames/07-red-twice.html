@@ -1,360 +1,333 @@
 <template>
   <style>
     #root {
-      position: relative;
+      position: absolute;
+      inset: 0;
       width: 1920px;
       height: 1080px;
       overflow: hidden;
-      font-kerning: normal;
-      -webkit-font-smoothing: antialiased;
+      container-type: size;
+      color: #1f2be0;
+      font-family: "Liberation Sans", Arial, sans-serif;
     }
 
-    /* ---- tokens (frame.md — Cobalt Grid) ---------------------------------
-       paper #F0EBDE · ink #1F2BE0 · ink-soft #5560E5
-       grid rgba(31,43,224,0.10) · ink-faint rgba(31,43,224,0.18)
-       status-green #15803D · status-amber #B45309 · status-red #B3261E
-       fonts: no files ship with this project -> generic families only
-    ---------------------------------------------------------------------- */
-
-    .f07rt-layer {
+    /* --- ground: paper + permanent graph-paper grid (full-bleed clip layer) --- */
+    #f07r-ground {
       position: absolute;
-      left: 0;
-      top: 0;
+      inset: 0;
       width: 1920px;
       height: 1080px;
-    }
-
-    /* ground: warm paper + permanent graph-paper grid */
-    .f07rt-ground {
       background-color: #f0ebde;
       background-image:
-        linear-gradient(to right, rgba(31, 43, 224, 0.1) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 1px, transparent 1px);
+        linear-gradient(to right, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%);
       background-size: 38.4px 38.4px;
       background-position: 0 0;
     }
 
-    /* frame furniture */
-    .f07rt-hair {
+    #f07r-board {
       position: absolute;
-      left: 77px;
-      width: 1766px;
-      height: 1.5px;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    /* --- frame furniture --- */
+    .f07r-hairline {
+      position: absolute;
+      left: 80px;
+      width: 1760px;
+      height: 2px;
       background: #1f2be0;
     }
-    .f07rt-kicker {
-      position: absolute;
-      left: 240px;
-      top: 126px;
-      font-family: "Liberation Sans", Arial, sans-serif;
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: #1f2be0;
-    }
-    .f07rt-mono {
+    #f07r-hairline-top { top: 58px; }
+    #f07r-hairline-bottom { top: 884px; }
+
+    .f07r-chrome {
       position: absolute;
       font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
       font-size: 18px;
+      line-height: 1;
       letter-spacing: 0.06em;
       color: #1f2be0;
     }
-    .f07rt-mono-r {
-      text-align: right;
+    #f07r-chrome-left { left: 80px; top: 849px; }
+    #f07r-chrome-right { left: 1540px; top: 849px; width: 300px; text-align: right; }
+
+    /* --- eyebrow --- */
+    #f07r-eyebrow {
+      position: absolute;
+      left: 240px;
+      top: 186px;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1f2be0;
+      white-space: nowrap;
     }
 
-    /* ---- board (shared geometry, frames 04-08) --------------------------- */
-    .f07rt-board {
-      transform-origin: 240px 556px;
-    }
-    .f07rt-axis {
+    /* --- board geometry (SHARED with frames 04-08) --- */
+    #f07r-axis {
       position: absolute;
       left: 240px;
       top: 300px;
-      width: 1.5px;
+      width: 2px;
       height: 512px;
       background: #1f2be0;
     }
-    .f07rt-colhead {
+    #f07r-axis-progress {
       position: absolute;
-      top: 306px;
-      height: 24px;
-      line-height: 24px;
-      text-align: center;
-      font-family: "Liberation Sans", Arial, sans-serif;
-      font-size: 20px;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #1f2be0;
+      left: 238px;
+      top: 300px;
+      width: 6px;
+      height: 466px; /* 300 -> 766, the last row rule */
+      background: #1f2be0;
+      transform-origin: 50% 0%;
     }
-    .f07rt-rule {
+    .f07r-rowrule {
       position: absolute;
       left: 240px;
-      width: 1440px;
-      height: 1.5px;
+      width: 1440px; /* 240 -> 1680 */
+      height: 2px;
       background: #1f2be0;
     }
-    .f07rt-label {
+
+    /* --- row ordinals (left gutter, mono, baseline on the rule) --- */
+    .f07r-ord {
       position: absolute;
-      left: 268px;
-      height: 48px;
-      line-height: 48px;
-      white-space: nowrap;
-      font-family: "Liberation Serif", "DejaVu Serif", serif;
-      font-weight: 400;
-      font-size: 34px;
-      letter-spacing: -0.005em;
+      left: 96px;
+      width: 120px;
+      text-align: right;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.06em;
       color: #1f2be0;
     }
-    .f07rt-lead {
+
+    /* --- row labels (serif, left-aligned at x=268, baseline on the rule) --- */
+    .f07r-label {
       position: absolute;
-      left: 1163px;
-      width: 34px;
-      height: 34px;
-      border: 1.5px solid #1f2be0;
+      left: 268px;
+      font-family: "Liberation Serif", "DejaVu Serif", serif;
+      font-weight: 400;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: 0.005em;
+      color: #1f2be0;
+      white-space: nowrap;
     }
-    .f07rt-lead span {
+
+    /* --- lead-marker column, centred on x=1180 --- */
+    .f07r-marker {
       position: absolute;
-      left: 8px;
-      top: 8px;
-      width: 15px;
-      height: 15px;
+      left: 1170px;
+      width: 20px;
+      height: 20px;
       background: #1f2be0;
-      display: block;
+      transform-origin: 50% 50%;
     }
-    .f07rt-cell {
+    #f07r-owns {
+      position: absolute;
+      left: 1030px;
+      top: 271px;
+      width: 300px;
+      text-align: center;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      color: #1f2be0;
+    }
+
+    /* --- status column (carried from frame 06) --- */
+    #f07r-colrule {
+      position: absolute;
+      left: 1340px;
+      top: 300px;
+      width: 2px;
+      height: 512px;
+      background: #1f2be0;
+    }
+    #f07r-colhead {
+      position: absolute;
+      left: 1340px;
+      top: 271px;
+      width: 160px;
+      text-align: center;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      color: #1f2be0;
+    }
+    .f07r-cell {
       position: absolute;
       left: 1384px;
       width: 72px;
       height: 48px;
+      box-sizing: border-box;
+      border: 1.5px solid rgba(31, 43, 224, 0.18);
+      overflow: hidden;
     }
-    .f07rt-cell2 {
-      left: 1472px;
-    }
-    .f07rt-green {
-      background: #15803d;
-    }
-    .f07rt-amber {
-      background: #b45309;
-    }
-    .f07rt-red {
-      background: #b3261e;
-    }
-
-    /* the lit row */
-    .f07rt-row5 {
-      transform-origin: 240px 788px;
-    }
-    .f07rt-plate {
+    .f07r-cell-2 { left: 1468px; }
+    .f07r-fill {
       position: absolute;
-      left: 240px;
-      top: 764px;
-      width: 1440px;
-      height: 48px;
-      background: rgba(31, 43, 224, 0.1);
+      inset: 0;
       transform-origin: left center;
     }
-    .f07rt-under {
-      position: absolute;
-      left: 268px;
-      top: 804px;
-      width: 208px;
-      height: 3px;
-      background: #1f2be0;
-      transform-origin: left center;
-    }
+    .f07r-g { background: #15803d; }
+    .f07r-a { background: #b45309; }
+    .f07r-r { background: #b3261e; }
 
-    /* ---- vector layer: escalation arrow + sideways connector ------------- */
-    .f07rt-svg {
+    /* --- groups: the board recedes, one row stays lit --- */
+    #f07r-dim,
+    #f07r-heads,
+    #f07r-row5 {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+    #f07r-row5 { transform-origin: 240px 752px; }
+
+    /* --- the sideways connector + the escalation that does not happen --- */
+    #f07r-vec {
       position: absolute;
       left: 0;
       top: 0;
       width: 1920px;
       height: 1080px;
+      overflow: visible;
     }
-    .f07rt-arrow path {
-      fill: none;
-      stroke: #5560e5;
-      stroke-width: 6;
-      stroke-linecap: butt;
-      stroke-linejoin: miter;
-    }
-    .f07rt-conn {
-      fill: none;
+    #f07r-vec path { fill: none; }
+    #f07r-connector {
       stroke: #1f2be0;
       stroke-width: 3;
-      stroke-linecap: butt;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .f07r-arrow {
+      stroke: rgba(31, 43, 224, 0.28);
+      stroke-width: 13;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    #f07r-strike {
+      stroke: #1f2be0;
+      stroke-width: 10;
+      stroke-linecap: round;
     }
 
-    /* struck-through escalation (css-marker-patterns — sketchout) */
-    .f07rt-strike {
+    /* --- the fix card --- */
+    #f07r-card {
       position: absolute;
-      left: 935px;
-      width: 150px;
-      height: 3px;
-      background: #1f2be0;
-    }
-
-    /* ---- the fix card ---------------------------------------------------- */
-    .f07rt-card {
-      position: absolute;
-      left: 1525px;
-      top: 678px;
-      width: 318px;
-      height: 164px;
+      left: 1340px;
+      top: 786px;
+      width: 400px;
+      height: 80px;
+      box-sizing: border-box;
       background: #f0ebde;
-      border: 1.5px solid #1f2be0;
-      padding: 22px;
+      border: 2px solid #1f2be0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .f07rt-card-line {
+    #f07r-card-text {
       font-family: "Liberation Serif", "DejaVu Serif", serif;
       font-weight: 400;
-      font-size: 48px;
-      line-height: 60px;
-      letter-spacing: -0.005em;
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: 0.005em;
       color: #1f2be0;
-    }
-    .f07rt-tick {
-      position: absolute;
-      left: 1513px;
-      top: 752px;
-      width: 16px;
-      height: 16px;
-      background: #1f2be0;
+      white-space: nowrap;
     }
   </style>
 
-  <div
-    id="root"
-    data-composition-id="07-red-twice"
-    data-width="1920"
-    data-height="1080"
-    data-start="0"
-    data-duration="5.333"
-  >
-    <!-- ground -->
+  <div id="root" data-composition-id="07-red-twice" data-width="1920" data-height="1080" data-duration="5.333">
     <div
-      class="clip f07rt-layer f07rt-ground"
+      id="f07r-ground"
+      class="clip"
       data-start="0"
       data-duration="5.333"
       data-track-index="0"
     ></div>
 
-    <!-- persistent furniture -->
-    <div
-      class="clip f07rt-layer"
-      data-start="0"
-      data-duration="5.333"
-      data-track-index="1"
-    >
-      <div class="f07rt-hair" style="top: 58px"></div>
-      <div class="f07rt-hair" style="top: 866px"></div>
-      <div class="f07rt-kicker">Weekly scorecard</div>
-      <div class="f07rt-mono f07rt-mono-r" style="left: 1443px; top: 128px; width: 400px">
-        FIG · 07
-      </div>
-      <div class="f07rt-mono" style="left: 240px; top: 836px">STATUS — WEEK OVER WEEK</div>
-      <div class="f07rt-mono f07rt-mono-r" style="left: 1543px; top: 836px; width: 300px">007</div>
-    </div>
+    <div id="f07r-board" class="clip" data-start="0" data-duration="5.333" data-track-index="1">
+      <div id="f07r-hairline-top" class="f07r-hairline"></div>
+      <div id="f07r-hairline-bottom" class="f07r-hairline"></div>
 
-    <!-- the board: built + filled at t=0, carried from frame 06 -->
-    <div
-      class="clip f07rt-layer f07rt-board"
-      id="f07rt-board"
-      data-start="0"
-      data-duration="5.333"
-      data-track-index="2"
-    >
-      <div class="f07rt-layer f07rt-ctx" id="f07rt-chrome">
-        <div class="f07rt-axis"></div>
-        <div class="f07rt-colhead" style="left: 1120px; width: 120px">Lead</div>
-        <div class="f07rt-colhead" style="left: 1350px; width: 140px">Status</div>
-      </div>
+      <div id="f07r-chrome-left" class="f07r-chrome">BRIDGING ASSOCIATES</div>
+      <div id="f07r-chrome-right" class="f07r-chrome">007</div>
 
-      <div class="f07rt-layer f07rt-ctx">
-        <div class="f07rt-rule" style="top: 348px"></div>
-        <div class="f07rt-label" style="top: 348px">SMM / CREATIVE</div>
-        <div class="f07rt-lead" style="top: 355px"><span></span></div>
-        <div class="f07rt-cell f07rt-green" style="top: 348px"></div>
-      </div>
+      <div id="f07r-eyebrow">Red Twice</div>
 
-      <div class="f07rt-layer f07rt-ctx">
-        <div class="f07rt-rule" style="top: 452px"></div>
-        <div class="f07rt-label" style="top: 452px">DIGITAL</div>
-        <div class="f07rt-lead" style="top: 459px"><span></span></div>
-        <div class="f07rt-cell f07rt-green" style="top: 452px"></div>
-      </div>
+      <div id="f07r-axis"></div>
+      <div id="f07r-axis-progress"></div>
+      <div id="f07r-colrule"></div>
 
-      <div class="f07rt-layer f07rt-ctx">
-        <div class="f07rt-rule" style="top: 556px"></div>
-        <div class="f07rt-label" style="top: 556px">BUSINESS DEVELOPMENT</div>
-        <div class="f07rt-lead" style="top: 563px"><span></span></div>
-        <div class="f07rt-cell f07rt-amber" style="top: 556px"></div>
+      <!-- row 5's rule stays board structure; only the row's content pulls forward -->
+      <div class="f07r-rowrule" style="top: 764px"></div>
+
+      <!-- the four rows that recede -->
+      <div id="f07r-dim">
+        <div class="f07r-rowrule" style="top: 348px"></div>
+        <div class="f07r-rowrule" style="top: 452px"></div>
+        <div class="f07r-rowrule" style="top: 556px"></div>
+        <div class="f07r-rowrule" style="top: 660px"></div>
+
+        <div class="f07r-ord" style="top: 329px">001</div>
+        <div class="f07r-ord" style="top: 433px">002</div>
+        <div class="f07r-ord" style="top: 537px">003</div>
+        <div class="f07r-ord" style="top: 641px">004</div>
+
+        <div class="f07r-label" style="top: 311px">SMM / CREATIVE</div>
+        <div class="f07r-label" style="top: 415px">DIGITAL</div>
+        <div class="f07r-label" style="top: 519px">BUSINESS DEVELOPMENT</div>
+        <div class="f07r-label" style="top: 623px">ECOMMERCE</div>
+
+        <div class="f07r-marker" style="top: 326px"></div>
+        <div class="f07r-marker" style="top: 430px"></div>
+        <div class="f07r-marker" style="top: 534px"></div>
+        <div class="f07r-marker" style="top: 638px"></div>
+
+        <div class="f07r-cell" style="top: 312px"><i class="f07r-fill f07r-g"></i></div>
+        <div class="f07r-cell" style="top: 416px"><i class="f07r-fill f07r-g"></i></div>
+        <div class="f07r-cell" style="top: 520px"><i class="f07r-fill f07r-a"></i></div>
+        <div class="f07r-cell" style="top: 624px"><i class="f07r-fill f07r-g"></i></div>
       </div>
 
-      <div class="f07rt-layer f07rt-ctx">
-        <div class="f07rt-rule" style="top: 660px"></div>
-        <div class="f07rt-label" style="top: 660px">ECOMMERCE</div>
-        <div class="f07rt-lead" style="top: 667px"><span></span></div>
-        <div class="f07rt-cell f07rt-green" style="top: 660px"></div>
+      <!-- the column headers -->
+      <div id="f07r-heads">
+        <div id="f07r-owns">OWNS</div>
+        <div id="f07r-colhead">FRIDAY</div>
       </div>
 
-      <!-- row 5 — the red row; stays lit, pulls forward, emits the fix -->
-      <div class="f07rt-layer f07rt-row5" id="f07rt-row5">
-        <div class="f07rt-plate" id="f07rt-plate"></div>
-        <div class="f07rt-rule" style="top: 764px"></div>
-        <div class="f07rt-label" style="top: 764px">GROWTH + AI</div>
-        <div class="f07rt-under" id="f07rt-under"></div>
-        <div class="f07rt-lead" id="f07rt-lead5" style="top: 771px">
-          <span id="f07rt-lead5in"></span>
+      <!-- the one row that stays lit, and pulls forward -->
+      <div id="f07r-row5">
+        <div class="f07r-ord" style="top: 745px">005</div>
+        <div class="f07r-label" style="top: 727px">GROWTH + AI</div>
+        <div class="f07r-marker" id="f07r-marker5" style="top: 742px"></div>
+        <div class="f07r-cell" style="top: 728px"><i class="f07r-fill f07r-r"></i></div>
+        <div class="f07r-cell f07r-cell-2" id="f07r-cell-second" style="top: 728px">
+          <i class="f07r-fill f07r-r" id="f07r-fill-second"></i>
         </div>
-        <div class="f07rt-cell f07rt-red" style="top: 764px"></div>
-        <div class="f07rt-cell f07rt-cell2 f07rt-red" id="f07rt-red2" style="top: 764px"></div>
       </div>
-    </div>
 
-    <!-- vectors: the escalation that does not happen + the sideways connector -->
-    <svg
-      class="clip f07rt-svg"
-      id="f07rt-vec"
-      viewBox="0 0 1920 1080"
-      xmlns="http://www.w3.org/2000/svg"
-      data-start="0"
-      data-duration="5.333"
-      data-track-index="3"
-    >
-      <g class="f07rt-arrow" id="f07rt-arrow">
-        <path d="M 1010 292 L 1010 152" />
-        <path d="M 982 182 L 1010 152 L 1038 182" />
-      </g>
-      <path class="f07rt-conn" id="f07rt-cap" d="M 1392 744 L 1392 776" />
-      <path class="f07rt-conn" id="f07rt-line" d="M 1392 760 L 1521 760" />
-    </svg>
+      <!-- the fix leaves the row sideways; the escalation upward is struck out -->
+      <svg id="f07r-vec" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g id="f07r-arrow-group">
+          <path class="f07r-arrow" d="M 1650 292 L 1650 104"></path>
+          <path class="f07r-arrow" d="M 1592 166 L 1650 104 L 1708 166"></path>
+        </g>
+        <path id="f07r-strike" d="M 1548 252 L 1752 146"></path>
+        <path id="f07r-connector" d="M 1580 752 L 1700 752 L 1700 786"></path>
+      </svg>
 
-    <!-- the strike over the upward arrow -->
-    <div
-      class="clip f07rt-layer"
-      data-start="0"
-      data-duration="5.333"
-      data-track-index="4"
-    >
-      <div class="f07rt-strike" id="f07rt-sk1" style="top: 201px"></div>
-      <div class="f07rt-strike" id="f07rt-sk2" style="top: 243px"></div>
-    </div>
-
-    <!-- the payoff: the fix, out of the row and sideways -->
-    <div
-      class="clip f07rt-layer"
-      data-start="0"
-      data-duration="5.333"
-      data-track-index="5"
-    >
-      <div class="f07rt-tick" id="f07rt-tick"></div>
-      <div class="f07rt-card" id="f07rt-card">
-        <div class="f07rt-card-line" id="f07rt-cw1">PROPOSED</div>
-        <div class="f07rt-card-line" id="f07rt-cw2">FIX</div>
+      <div id="f07r-card">
+        <div id="f07r-card-text">PROPOSED FIX</div>
       </div>
     </div>
   </div>
@@ -362,148 +335,136 @@
   <script src="assets/vendor/gsap.min.js"></script>
   <script>
     (function () {
-      var g = window.gsap;
       window.__timelines = window.__timelines || {};
-      var tl = g.timeline({ paused: true });
+      var tl = gsap.timeline({ paused: true });
       window.__timelines["07-red-twice"] = tl;
 
-      var root = document.querySelector('[data-composition-id="07-red-twice"]');
-      var q = function (sel) {
-        return root ? root.querySelectorAll(sel) : [];
+      var ROOT = document.querySelector('[data-composition-id="07-red-twice"]');
+      var one = function (sel) { return ROOT.querySelector(sel); };
+
+      /* --- svg-path-draw setup: measure real geometry, dash it out --- */
+      var measure = function (el, fallback) {
+        var len = fallback;
+        if (el && typeof el.getTotalLength === "function") {
+          var m = el.getTotalLength();
+          if (m && m > 1) { len = m; }
+        }
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len;
+        return len;
       };
 
-      /* ---- svg-path-draw setup: measured lengths, never guessed ---------- */
-      var conn = q("#f07rt-cap, #f07rt-line");
-      for (var i = 0; i < conn.length; i++) {
-        var p = conn[i];
-        var len = 200;
-        if (typeof p.getTotalLength === "function") {
-          var m = p.getTotalLength();
-          if (m && isFinite(m) && m > 0) len = m;
-        }
-        p.style.strokeDasharray = len;
-        p.style.strokeDashoffset = len;
-      }
+      var connector = one("#f07r-connector");
+      var strike = one("#f07r-strike");
+      var connLen = measure(connector, 154);
+      var strikeLen = measure(strike, 230);
 
-      /* strike geometry set through GSAP so no CSS transform is clobbered */
-      g.set("#f07rt-sk1", { rotation: 14, scaleX: 0, transformOrigin: "left center" });
-      g.set("#f07rt-sk2", { rotation: -14, scaleX: 0, transformOrigin: "left center" });
+      var arrowGroup = one("#f07r-arrow-group");
+      var secondCell = one("#f07r-cell-second");
+      var secondFill = one("#f07r-fill-second");
+      var card = one("#f07r-card");
+      var cardText = one("#f07r-card-text");
 
-      /* =================================================================
-         SCENE 1 (0.0-1.5) — the board recedes to context; one row stays
-         lit and takes a SECOND red mark beside the first.
-         ================================================================= */
-      tl.to(
-        q(".f07rt-ctx"),
-        { opacity: 0.28, duration: 0.62, ease: "power2.inOut", stagger: 0.085 },
-        0.2,
+      /* --- t=0 state: the board arrives fully formed from frame 06 ---
+         five named rows, gutter numerals, lead markers, a filled FRIDAY
+         column. Only what this shot adds starts hidden. */
+      gsap.set(arrowGroup, { opacity: 0 });
+      gsap.set(secondCell, { opacity: 0 });
+      gsap.set(secondFill, { scaleX: 0 });
+      gsap.set(card, { opacity: 0 });
+      gsap.set(cardText, { clipPath: "inset(0 100% 0 0)" });
+
+      /* --- Scene 1 (0.0-1.5s) "Red two weeks running" — the board recedes
+         to a wash, one row stays lit, and its status cell takes a SECOND
+         red mark beside the first. --- */
+      tl.fromTo(
+        "#f07r-dim",
+        { opacity: 1 },
+        { opacity: 0.22, duration: 0.7, ease: "power2.out" },
+        0.18
+      );
+      tl.fromTo(
+        "#f07r-heads",
+        { opacity: 1 },
+        { opacity: 0.5, duration: 0.7, ease: "power2.out" },
+        0.18
       );
 
       tl.fromTo(
-        "#f07rt-plate",
-        { scaleX: 0, opacity: 0 },
-        { scaleX: 1, opacity: 1, duration: 0.45, ease: "power2.out" },
-        0.55,
-      );
-
-      /* the second red cell — two reds, side by side */
-      tl.fromTo(
-        "#f07rt-red2",
-        { scaleX: 0.18, opacity: 0, transformOrigin: "left center" },
-        { scaleX: 1, opacity: 1, duration: 0.34, ease: "back.out(2.2)" },
-        0.8,
-      );
-
-      /* board steps back — asymmetric 60/40, board left, space right */
-      tl.fromTo(
-        "#f07rt-board",
-        { scale: 1, x: 0 },
-        { scale: 0.88, x: -60, duration: 0.66, ease: "power2.inOut" },
-        1.1,
-      );
-
-      /* =================================================================
-         SCENE 2 (1.5-2.7) — the lit row pulls forward one depth step,
-         its lead marker scales up, and a thin cobalt connector draws
-         SIDEWAYS out of the row (svg-path-draw).
-         ================================================================= */
-      tl.fromTo(
-        "#f07rt-row5",
-        { scale: 1 },
-        { scale: 1.05, duration: 0.6, ease: "power2.out" },
-        1.55,
-      );
-
-      tl.fromTo(
-        "#f07rt-lead5",
-        { scale: 1, transformOrigin: "center center" },
-        { scale: 1.4, duration: 0.42, ease: "back.out(1.7)" },
-        1.7,
+        secondCell,
+        { opacity: 0, x: -16 },
+        { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" },
+        0.86
       );
       tl.fromTo(
-        "#f07rt-lead5in",
-        { scale: 1, transformOrigin: "center center" },
-        { scale: 1.5, duration: 0.36, ease: "back.out(2)" },
-        1.82,
-      );
-
-      tl.to("#f07rt-cap", { strokeDashoffset: 0, duration: 0.18, ease: "power2.out" }, 2.02);
-      tl.to("#f07rt-line", { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" }, 2.14);
-
-      /* =================================================================
-         SCENE 3 (2.7-4.3) — the fix lands at the end of the connector;
-         the upward escalation is struck through (css-marker-patterns).
-         ================================================================= */
-      tl.fromTo(
-        "#f07rt-tick",
-        { scale: 0, opacity: 0, transformOrigin: "center center" },
-        { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.4)" },
-        2.7,
-      );
-
-      tl.fromTo(
-        "#f07rt-card",
-        { x: -58, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.44, ease: "power3.out" },
-        2.76,
-      );
-      tl.fromTo(
-        "#f07rt-cw1",
-        { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.34, ease: "power2.out" },
-        3.06,
-      );
-      tl.fromTo(
-        "#f07rt-cw2",
-        { y: 16, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.34, ease: "power2.out" },
-        3.22,
-      );
-
-      /* the escalation that does not happen */
-      tl.fromTo(
-        "#f07rt-arrow",
-        { opacity: 0 },
-        { opacity: 0.45, duration: 0.36, ease: "power1.out" },
-        3.0,
-      );
-      tl.to("#f07rt-sk1", { scaleX: 1, duration: 0.3, ease: "power2.out" }, 3.5);
-      tl.to("#f07rt-sk2", { scaleX: 1, duration: 0.3, ease: "power2.out" }, 3.66);
-
-      /* the row named as the origin of the fix */
-      tl.fromTo(
-        "#f07rt-under",
+        secondFill,
         { scaleX: 0 },
-        { scaleX: 1, duration: 0.44, ease: "power2.out" },
-        3.98,
+        { scaleX: 1, duration: 0.34, ease: "power2.out" },
+        1.04
       );
 
-      /* =================================================================
-         SCENE 4 (4.3-5.333) — held. The row, the sideways connector,
-         the fix card. No drift. The timeline is padded to the full
-         frame duration so the hold is real, not a truncated tail.
-         ================================================================= */
-      tl.to({}, { duration: 0.9 }, 4.433);
+      /* --- Scene 2 (1.5-2.7s) "and the lead calls the meeting" — the lit
+         row pulls forward one depth step, its lead marker scales up, and a
+         thin cobalt connector draws SIDEWAYS out of the row (svg-path-draw:
+         measured dasharray, power2.out, both ends on real elements). --- */
+      tl.fromTo(
+        "#f07r-row5",
+        { scale: 1 },
+        { scale: 1.02, duration: 0.55, ease: "power2.out" },
+        1.52
+      );
+      tl.fromTo(
+        "#f07r-marker5",
+        { scale: 1 },
+        { scale: 1.45, duration: 0.55, ease: "power3.out" },
+        1.56
+      );
+      tl.fromTo(
+        connector,
+        { strokeDashoffset: connLen },
+        { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" },
+        1.98
+      );
+
+      /* --- Scene 3 (2.7-4.3s) "carrying a fix, not a problem." — the card
+         lands at the end of the connector; the faint upward escalation
+         arrow surfaces above the board and is struck through in cobalt
+         (css-marker-patterns / sketchout: one decisive drawn line). --- */
+      tl.fromTo(
+        card,
+        { opacity: 0, y: -18 },
+        { opacity: 1, y: 0, duration: 0.42, ease: "power3.out" },
+        2.72
+      );
+      tl.fromTo(
+        cardText,
+        { clipPath: "inset(0 100% 0 0)" },
+        { clipPath: "inset(0 0% 0 0)", duration: 0.46, ease: "power2.out" },
+        3.02
+      );
+
+      tl.fromTo(
+        arrowGroup,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power1.out" },
+        2.9
+      );
+      tl.fromTo(
+        strike,
+        { strokeDashoffset: strikeLen },
+        { strokeDashoffset: 0, duration: 0.44, ease: "power2.out" },
+        3.56
+      );
+      tl.fromTo(
+        arrowGroup,
+        { opacity: 1 },
+        { opacity: 0.62, duration: 0.35, ease: "power1.out" },
+        4.0
+      );
+
+      /* --- Scene 4 (4.3-5.333s): held. The row, the sideways connector,
+         the fix card. No drift. --- */
+      tl.to(card, { opacity: 1, duration: 0.01 }, 5.2);
     })();
   </script>
 </template>
