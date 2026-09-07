@@ -1,0 +1,182 @@
+<template>
+  <style>
+    /* ── Frame 04 · A backbone ─────────────────────────────────────────────
+       Blue Professional (frame.md) · white ground, single purple accent.
+       The deliberate breather: a void, one drawn spine, one word.        */
+
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #root .clip {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    /* background · the white void (full-bleed ground on its own clip) */
+    .bb-void {
+      background: #ffffff;
+    }
+
+    /* foreground subject · the spine */
+    .bb-spine-layer {
+      display: block;
+    }
+    #bb-spine {
+      fill: none;
+      stroke: #5b1fc7;
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+
+    /* type layer · label + hero word, left-aligned to the spine */
+    .bb-type {
+      pointer-events: none;
+    }
+
+    /* supporting · lavender caps label (h4-eyebrow, video-legible step) */
+    #bb-label {
+      position: absolute;
+      left: 1028px;
+      top: 356px;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: #b79cf5;
+      white-space: nowrap;
+      opacity: 0;
+    }
+
+    /* foreground subject · BACKBONE (h1 · 4.2cqw of 1920 = 80.6px) */
+    #bb-word {
+      position: absolute;
+      left: 1028px;
+      top: 410px;
+      font-size: 81px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.08;
+      color: #111111;
+      white-space: nowrap;
+    }
+    #bb-word span {
+      display: inline-block;
+      opacity: 0;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="04-a-backbone"
+    data-start="0"
+    data-duration="2.453"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- background · white void -->
+    <div class="clip bb-void" data-start="0" data-duration="2.453" data-track-index="0"></div>
+
+    <!-- focal · the vertical spine (carried into frames 05 / 06) -->
+    <svg
+      class="clip bb-spine-layer"
+      data-start="0"
+      data-duration="2.453"
+      data-track-index="1"
+      viewBox="0 0 1920 1080"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path id="bb-spine" d="M 960 214 L 960 694" />
+    </svg>
+
+    <!-- foreground · label + hero word -->
+    <div class="clip bb-type" data-start="0" data-duration="2.453" data-track-index="2">
+      <div id="bb-label">THE MISSING PIECE</div>
+      <div id="bb-word"><span class="bb-ch-0">B</span><span class="bb-ch-1">A</span><span class="bb-ch-2">C</span><span class="bb-ch-3">K</span><span class="bb-ch-4">B</span><span class="bb-ch-5">O</span><span class="bb-ch-6">N</span><span class="bb-ch-7">E</span></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+      window.__timelines["04-a-backbone"] = tl;
+
+      var DURATION = 2.453;
+
+      /* ── Scene 1 (0.0–1.2s) · svg-path-draw ──────────────────────────────
+         Measured geometry, never a magic number. Dash = full path length,
+         offset tweened length → 0 so the pen traces DOWNWARD from the top.
+         power2.out — a hand lifting at the end of the stroke.            */
+      var spine = document.getElementById("bb-spine");
+      var len = 480; /* authored geometry, used if measurement is unavailable */
+      if (spine) {
+        try {
+          var measured = spine.getTotalLength();
+          if (measured > 0) len = measured;
+        } catch (e) {}
+        spine.style.strokeDasharray = String(len);
+        spine.style.strokeDashoffset = String(len);
+
+        tl.fromTo(
+          spine,
+          { strokeDashoffset: len },
+          { strokeDashoffset: 0, duration: 0.85, ease: "power2.out" },
+          0.12
+        );
+      }
+
+      /* ── Scene 2 (1.2–2.0s) ──────────────────────────────────────────────
+         The lavender label lands first, then BACKBONE sets itself beside
+         the spine via a staggered reveal whose cadence is pre-computed
+         from content (dynamic-content-sequencing): a flat TIMELINE array
+         built ONCE at author time, each entry carrying absolute start/end;
+         the sequencer only orchestrates timing, each entry's entrance is
+         its own tween scheduled at that absolute start.                  */
+      tl.fromTo(
+        "#bb-label",
+        { opacity: 0, yPercent: 40 },
+        { opacity: 1, yPercent: 0, duration: 0.34, ease: "power2.out" },
+        1.16
+      );
+
+      var LETTERS = "BACKBONE".split("");
+      var BASE_DURATION = 0.03; /* minimum window per entry */
+      var SEC_PER_CHAR = 0.025; /* content-driven term */
+      var HOLD = 0;
+      var WORD_START = 1.24;
+
+      var cumulative = 0;
+      var TIMELINE = LETTERS.map(function (ch, i) {
+        var dur = BASE_DURATION + ch.length * SEC_PER_CHAR + HOLD;
+        var start = cumulative;
+        cumulative += dur;
+        return { ch: ch, index: i, start: start, end: cumulative };
+      });
+
+      TIMELINE.forEach(function (entry) {
+        tl.fromTo(
+          "#bb-word .bb-ch-" + entry.index,
+          { opacity: 0, yPercent: 22 },
+          { opacity: 1, yPercent: 0, duration: 0.3, ease: "power2.out" },
+          WORD_START + entry.start
+        );
+      });
+
+      /* ── Scene 3 (2.0–2.453s) · held read ────────────────────────────────
+         Absolute stillness. No drift, no jitter, no glow — an inert hold
+         that carries the timeline to full duration.                      */
+      var HOLD_FROM = 1.94;
+      tl.to({}, { duration: DURATION - HOLD_FROM }, HOLD_FROM);
+    })();
+  </script>
+</template>
