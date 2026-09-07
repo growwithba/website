@@ -1,0 +1,46 @@
+{
+  "provider": "auto",
+  "speed": 1,
+  "lines": [
+    {
+      "id": "01",
+      "text": "A great product. A working India business. And still — zero sales in America."
+    },
+    {
+      "id": "02",
+      "text": "Here's what nobody tells you. The product was never the problem — the infrastructure was."
+    },
+    {
+      "id": "03",
+      "text": "No US entity. Capital stuck at the border. No inventory on American soil. Compliance nobody warned you about. And five vendors holding it together."
+    },
+    {
+      "id": "04",
+      "text": "What's missing has a name. A backbone."
+    },
+    {
+      "id": "05",
+      "text": "One spine that carries all five — entity, capital, a warehouse on US soil, compliance, and the channel."
+    },
+    {
+      "id": "06",
+      "text": "That's Think14. A US company, a Texas warehouse, forty-five people in India — running the whole US side for you."
+    },
+    {
+      "id": "07",
+      "text": "Twenty-one seller LLCs live. Eighteen crore in 2025 — twenty-nine crore in seven months of 2026. Onboarding to first ship: twenty-one days."
+    },
+    {
+      "id": "08",
+      "text": "One counterparty instead of five. Your brand. Your margin."
+    },
+    {
+      "id": "09",
+      "text": "Think14. The US backbone for cross-border ecommerce."
+    }
+  ],
+  "bgm": {
+    "mode": "none"
+  },
+  "voice": "am_michael"
+}

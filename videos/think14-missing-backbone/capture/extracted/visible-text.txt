@@ -1,0 +1,41 @@
+TOPIC: Why Indian sellers stall in the US market — and what a "US backbone" actually is.
+
+THE GAP
+An Indian seller with a good product and a working India business tries to sell in the USA and hits a wall that has nothing to do with the product:
+
+1. No US legal entity. Marketplaces (Amazon, Walmart, Newegg, Backmarket, Etsy, eBay) want a US LLC, an EIN, an ITIN, a US bank account and marketplace approvals. Each is a separate months-long process in a foreign system.
+2. Capital friction. Moving money out under LRS is slow, capped and paperwork-heavy. Working capital sits in the wrong country while inventory sits in the wrong warehouse.
+3. No node on US soil. Without inventory physically inside the United States there is no Prime-speed delivery, no FBA prep, no returns handling, no QC. Cross-border shipping every order kills margin and delivery promise.
+4. No compliance stack. Sales-tax registrations, IRS filings, bookkeeping, customs, duty, Section 321 — all ongoing, all US-specific, none of it optional.
+5. Fragmentation. Sellers solve this with five different vendors — an incorporation agent, a freight forwarder, a 3PL, a CA, a marketplace consultant — and own all the integration risk themselves.
+
+The result: the product was never the problem. The infrastructure was.
+
+THE IDEA — A BACKBONE, NOT A VENDOR
+A backbone is a single load-bearing spine that carries all of it: entity, capital, physical node, compliance, channel. One counterparty instead of five. The seller keeps their own brand and their own margin; the backbone carries the US-side weight.
+
+WHAT THINK14 IS
+Think14 LLC — a US-registered company, Austin TX registered, operational warehouse and US team in Spring TX, three India offices (two Nagpur, one Bhilai) with 45+ team. Tagline: "The US Backbone for Cross-Border Ecommerce."
+
+The stack, end to end:
+- US LLC enablement — entity formation, EIN, ITIN, banking, marketplace approvals
+- Spring TX warehousing and SCM — receiving, QC, FBA prep, kitting, pick-pack-ship, returns
+- Cross-border trade — India-USA and China-USA sourcing, customs, freight, duty optimization, the Section 321 lane
+- Multi-channel selling — Amazon, Walmart, Newegg, Backmarket, Etsy, eBay, Shopify, B2B distribution
+- Seller financing — broker model, plus monthly retainer for ops
+- Compliance — bookkeeping, IRS filings, sales-tax registrations
+- White-label and private-label product development from India and China
+
+PROOF
+- 21+ active seller LLCs running on the stack
+- Client top-line ₹18 Cr in 2025
+- ₹29 Cr in Jan–Jul 2026 alone — 1.6x the full prior year in seven months
+- 21 days from onboarding to first ship
+- 11,500+ units shipped
+- Under 2% defect rate
+- 30–45 day inventory cycle, ~2.5x capital turn
+- Spring TX live; NC, NY and FL warehouses in pipeline
+
+THE CLOSE
+Indian sellers do not lose the US market on product quality. They lose it on infrastructure they were never set up to build. Think14 is that infrastructure.
+thinkfourteen.com
