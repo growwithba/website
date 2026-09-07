@@ -1,234 +1,359 @@
 <template>
   <style>
     #root {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      container-type: size;
-    }
-
-    /* ---- ground: cream paper + permanent graph-paper grid ---- */
-    .f06-ground {
       position: absolute;
       inset: 0;
-      background-color: #F0EBDE;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      color: #1f2be0;
+      font-family: "Liberation Sans", Arial, sans-serif;
+    }
+
+    /* --- ground: paper + permanent graph-paper grid (full-bleed clip layer) --- */
+    #f06f-ground {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      background-color: #f0ebde;
       background-image:
-        linear-gradient(to right, rgba(31, 43, 224, 0.10) 0 1px, transparent 1px 100%),
-        linear-gradient(to bottom, rgba(31, 43, 224, 0.10) 0 1px, transparent 1px 100%);
-      background-size: 2cqw 2cqw;
+        linear-gradient(to right, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%);
+      background-size: 38.4px 38.4px;
       background-position: 0 0;
     }
 
-    .f06-stage {
+    #f06f-board {
       position: absolute;
       inset: 0;
+      width: 1920px;
+      height: 1080px;
     }
 
-    /* ---- persistent cobalt hairlines + page chrome ---- */
-    .f06-hair {
+    /* --- frame furniture --- */
+    .f06f-hairline {
       position: absolute;
-      left: 4cqw;
-      right: 4cqw;
-      height: 0.12cqw;
-      background: #1F2BE0;
+      left: 80px;
+      width: 1760px;
+      height: 2px;
+      background: #1f2be0;
     }
-    .f06-hair-top { top: 3.020833cqw; }
-    .f06-hair-bot { top: 45.833333cqw; }
+    #f06f-hairline-top { top: 58px; }
+    #f06f-hairline-bottom { top: 884px; }
 
-    .f06-pagenum {
+    .f06f-chrome {
       position: absolute;
-      right: 4cqw;
-      top: 43.125cqw;
       font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
-      font-size: 1cqw;
+      font-size: 18px;
+      line-height: 1;
       letter-spacing: 0.06em;
-      color: #1F2BE0;
+      color: #1f2be0;
+    }
+    #f06f-chrome-left { left: 80px; top: 849px; }
+    #f06f-chrome-right { left: 1540px; top: 849px; width: 300px; text-align: right; }
+
+    /* --- eyebrow --- */
+    #f06f-eyebrow {
+      position: absolute;
+      left: 240px;
+      top: 186px;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #1f2be0;
+      white-space: nowrap;
+    }
+
+    /* --- board geometry (SHARED with frames 04-08) --- */
+    #f06f-axis {
+      position: absolute;
+      left: 240px;
+      top: 300px;
+      width: 2px;
+      height: 512px;
+      background: #1f2be0;
+    }
+    #f06f-axis-progress {
+      position: absolute;
+      left: 238px;
+      top: 300px;
+      width: 6px;
+      height: 466px; /* 300 -> 766, the last row rule */
+      background: #1f2be0;
+      transform-origin: 50% 0%;
+    }
+    .f06f-rowrule {
+      position: absolute;
+      left: 240px;
+      width: 1440px; /* 240 -> 1680 */
+      height: 2px;
+      background: #1f2be0;
+    }
+
+    /* --- row ordinals (left gutter, mono, baseline on the rule) --- */
+    .f06f-ord {
+      position: absolute;
+      left: 96px;
+      width: 120px;
       text-align: right;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: #1f2be0;
     }
 
-    /* ---- board rules (axis + row rules + the new column rule) ---- */
-    .f06-rules {
+    /* --- row labels (serif, left-aligned at x=268, baseline on the rule) --- */
+    .f06f-label {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .f06-rules line,
-    .f06-rules path {
-      fill: none;
-      stroke: #1F2BE0;
-    }
-    .f06-axis { stroke-width: 2; }
-    .f06-row  { stroke-width: 1.5; }
-    .f06-col  { stroke-width: 2; }
-
-    /* ---- row labels ---- */
-    .f06-label {
-      position: absolute;
-      left: 13.958333cqw;
-      height: 2.5cqw;
-      display: flex;
-      align-items: center;
+      left: 268px;
       font-family: "Liberation Serif", "DejaVu Serif", serif;
       font-weight: 400;
-      font-size: 1.75cqw;
-      letter-spacing: 0.012em;
-      line-height: 1.05;
-      color: #1F2BE0;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: 0.005em;
+      color: #1f2be0;
       white-space: nowrap;
     }
 
-    /* ---- lead markers (the column carried from frames 04/05) ---- */
-    .f06-lead {
+    /* --- lead-marker column, centred on x=1180 --- */
+    .f06f-marker {
       position: absolute;
-      left: 60.833333cqw;
-      width: 1.25cqw;
-      height: 1.25cqw;
-      background: #1F2BE0;
+      left: 1170px;
+      width: 20px;
+      height: 20px;
+      background: #1f2be0;
+      transform-origin: 50% 50%;
     }
-
-    /* ---- the new FRIDAY status column ---- */
-    .f06-colhead {
+    #f06f-owns {
       position: absolute;
-      left: 69.791667cqw;
-      top: 15.625cqw;
-      width: 8.333333cqw;
-      height: 2.5cqw;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      left: 1030px;
+      top: 271px;
+      width: 300px;
+      text-align: center;
       font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
-      font-size: 1.4cqw;
-      letter-spacing: 0.08em;
-      color: #1F2BE0;
-      white-space: nowrap;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      color: #1f2be0;
     }
 
-    .f06-cell {
+    /* ============================================================
+       NEW IN THIS SHOT — the status column (x 1320 -> 1680)
+       cells centred on x=1500, in the same horizontal band as the
+       lead markers (marker centres 336 / 440 / 544 / 648 / 752)
+       ============================================================ */
+    #f06f-colrule {
       position: absolute;
-      left: 72.083333cqw;
-      width: 3.75cqw;
-      height: 2.5cqw;
+      left: 1319px;
+      top: 300px;
+      width: 4px;
+      height: 512px;
+      overflow: visible;
+    }
+    #f06f-colrule path {
+      fill: none;
+      stroke: #1f2be0;
+      stroke-width: 2;
+      stroke-linecap: butt;
+    }
+    #f06f-friday {
+      position: absolute;
+      left: 1350px;
+      top: 271px;
+      width: 300px;
+      text-align: center;
+      font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 0.12em;
+      color: #1f2be0;
+      clip-path: inset(0 100% 0 0);
+    }
+    .f06f-cell {
+      position: absolute;
+      left: 1400px;
+      width: 200px;
+      height: 24px;
       box-sizing: border-box;
-      border: 0.08cqw solid rgba(31, 43, 224, 0.18);
-      overflow: hidden;
+      border: 2px solid rgba(31, 43, 224, 0.18);
+      background: transparent;
     }
-
-    .f06-fill {
+    .f06f-fill {
       position: absolute;
-      inset: 0;
-      transform-origin: left center;
+      top: -2px;
+      right: -2px;
+      bottom: -2px;
+      left: -2px;
+      transform-origin: 0% 50%;
     }
-    .f06-g { background: #15803D; }
-    .f06-a { background: #B45309; }
-    .f06-r { background: #B3261E; }
+    .f06f-fill.is-green { background: #15803d; }
+    .f06f-fill.is-amber { background: #b45309; }
+    .f06f-fill.is-red { background: #b3261e; }
   </style>
 
-  <div id="root" data-composition-id="06-friday" data-width="1920" data-height="1080" data-duration="5.3">
-    <!-- full-bleed ground -->
-    <div class="clip f06-ground" data-start="0" data-duration="5.3" data-track-index="0"></div>
+  <div id="root" data-composition-id="06-friday" data-width="1920" data-height="1080" data-duration="4.8">
+    <div
+      id="f06f-ground"
+      class="clip"
+      data-start="0"
+      data-duration="4.8"
+      data-track-index="0"
+    ></div>
 
-    <!-- board -->
-    <div class="clip f06-stage" data-start="0" data-duration="5.3" data-track-index="1">
-      <div class="f06-hair f06-hair-top"></div>
-      <div class="f06-hair f06-hair-bot"></div>
-      <div class="f06-pagenum">06</div>
+    <!-- ==== the board: inherited from frame 05 fully formed and static ==== -->
+    <div id="f06f-board" class="clip" data-start="0" data-duration="4.8" data-track-index="1">
+      <div id="f06f-hairline-top" class="f06f-hairline"></div>
+      <div id="f06f-hairline-bottom" class="f06f-hairline"></div>
 
-      <svg class="f06-rules" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <line class="f06-axis" x1="240" y1="300" x2="240" y2="812"></line>
-        <line class="f06-row" x1="240" y1="348" x2="1680" y2="348"></line>
-        <line class="f06-row" x1="240" y1="452" x2="1680" y2="452"></line>
-        <line class="f06-row" x1="240" y1="556" x2="1680" y2="556"></line>
-        <line class="f06-row" x1="240" y1="660" x2="1680" y2="660"></line>
-        <line class="f06-row" x1="240" y1="764" x2="1680" y2="764"></line>
-        <path id="f06-colrule" class="f06-col" d="M 1340 300 L 1340 812"></path>
+      <div id="f06f-chrome-left" class="f06f-chrome">BRIDGING ASSOCIATES</div>
+      <div id="f06f-chrome-right" class="f06f-chrome">005</div>
+
+      <div id="f06f-eyebrow">Five Verticals</div>
+
+      <div id="f06f-axis"></div>
+      <div id="f06f-axis-progress"></div>
+
+      <div class="f06f-rowrule" style="top: 348px"></div>
+      <div class="f06f-rowrule" style="top: 452px"></div>
+      <div class="f06f-rowrule" style="top: 556px"></div>
+      <div class="f06f-rowrule" style="top: 660px"></div>
+      <div class="f06f-rowrule" style="top: 764px"></div>
+
+      <div class="f06f-ord" style="top: 329px">001</div>
+      <div class="f06f-ord" style="top: 433px">002</div>
+      <div class="f06f-ord" style="top: 537px">003</div>
+      <div class="f06f-ord" style="top: 641px">004</div>
+      <div class="f06f-ord" style="top: 745px">005</div>
+
+      <div class="f06f-label" style="top: 311px">SMM / CREATIVE</div>
+      <div class="f06f-label" style="top: 415px">DIGITAL</div>
+      <div class="f06f-label" style="top: 519px">BUSINESS DEVELOPMENT</div>
+      <div class="f06f-label" style="top: 623px">ECOMMERCE</div>
+      <div class="f06f-label" style="top: 727px">GROWTH + AI</div>
+
+      <div id="f06f-owns">OWNS</div>
+
+      <div class="f06f-marker" style="top: 326px"></div>
+      <div class="f06f-marker" style="top: 430px"></div>
+      <div class="f06f-marker" style="top: 534px"></div>
+      <div class="f06f-marker" style="top: 638px"></div>
+      <div class="f06f-marker" style="top: 742px"></div>
+    </div>
+
+    <!-- ==== the only new thing in this shot: the FRIDAY status column ==== -->
+    <div id="f06f-status" class="clip" data-start="0" data-duration="4.8" data-track-index="2">
+      <svg id="f06f-colrule" viewBox="0 0 4 512" xmlns="http://www.w3.org/2000/svg">
+        <path id="f06f-colrule-path" d="M 2 0 L 2 512" />
       </svg>
 
-      <!-- row labels -->
-      <div class="f06-label" style="top:18.125cqw;">SMM / CREATIVE</div>
-      <div class="f06-label" style="top:23.541667cqw;">DIGITAL</div>
-      <div class="f06-label" style="top:28.958333cqw;">BUSINESS DEVELOPMENT</div>
-      <div class="f06-label" style="top:34.375cqw;">ECOMMERCE</div>
-      <div class="f06-label" style="top:39.791667cqw;">GROWTH + AI</div>
+      <div id="f06f-friday">FRIDAY</div>
 
-      <!-- lead markers -->
-      <div class="f06-lead" style="top:18.75cqw;"></div>
-      <div class="f06-lead" style="top:24.166667cqw;"></div>
-      <div class="f06-lead" style="top:29.583333cqw;"></div>
-      <div class="f06-lead" style="top:35cqw;"></div>
-      <div class="f06-lead" style="top:40.416667cqw;"></div>
-
-      <!-- FRIDAY column header -->
-      <div class="f06-colhead" id="f06-colhead">FRIDAY</div>
-
-      <!-- status cells -->
-      <div class="f06-cell" style="top:18.125cqw;"><i class="f06-fill f06-g"></i></div>
-      <div class="f06-cell" style="top:23.541667cqw;"><i class="f06-fill f06-g"></i></div>
-      <div class="f06-cell" style="top:28.958333cqw;"><i class="f06-fill f06-a" id="f06-fill-amber"></i></div>
-      <div class="f06-cell" style="top:34.375cqw;"><i class="f06-fill f06-g"></i></div>
-      <div class="f06-cell" style="top:39.791667cqw;"><i class="f06-fill f06-r" id="f06-fill-red"></i></div>
+      <div class="f06f-cell" style="top: 324px"><div class="f06f-fill is-green"></div></div>
+      <div class="f06f-cell" style="top: 428px"><div class="f06f-fill is-green"></div></div>
+      <div class="f06f-cell" style="top: 532px"><div class="f06f-fill is-amber"></div></div>
+      <div class="f06f-cell" style="top: 636px"><div class="f06f-fill is-green"></div></div>
+      <div class="f06f-cell" style="top: 740px"><div class="f06f-fill is-red"></div></div>
     </div>
   </div>
 
   <script src="assets/vendor/gsap.min.js"></script>
   <script>
     (function () {
-      var root = document.querySelector('[data-composition-id="06-friday"]');
-      var q = function (sel) { return root.querySelectorAll(sel); };
-
-      // svg-path-draw setup: measure the new column rule, dash it out.
-      var colrule = root.querySelector("#f06-colrule");
-      var colLen = 512;
-      if (colrule && typeof colrule.getTotalLength === "function") {
-        var measured = colrule.getTotalLength();
-        if (measured && measured > 1) { colLen = measured; }
-      }
-      colrule.style.strokeDasharray = colLen;
-      colrule.style.strokeDashoffset = colLen;
-
-      var cells = q(".f06-cell");
-      var greens = q(".f06-g");
-      var amber = root.querySelector("#f06-fill-amber");
-      var red = root.querySelector("#f06-fill-red");
-      var colhead = root.querySelector("#f06-colhead");
-
-      // Initial states — the board is already built; only the column is new.
-      gsap.set(cells, { opacity: 0, y: -14 });
-      var allFills = Array.prototype.slice.call(greens).concat([amber, red]);
-      gsap.set(allFills, { scaleX: 0 });
-      gsap.set(colhead, { clipPath: "inset(0% 100% 0% 0%)" });
-
       window.__timelines = window.__timelines || {};
       var tl = gsap.timeline({ paused: true });
       window.__timelines["06-friday"] = tl;
 
-      // Scene 1 (0.0-1.4s) — "Every Friday": the new column rules itself in, takes its mono header.
-      tl.fromTo(colrule,
+      var ROOT = document.querySelector('[data-composition-id="06-friday"]');
+      var q = function (sel) {
+        return gsap.utils.toArray(ROOT.querySelectorAll(sel));
+      };
+
+      var cells = q(".f06f-cell");
+      var fills = q(".f06f-fill");
+
+      /* --- The board (axis, five rules, five serif labels, gutter numerals,
+         lead markers, hairlines, chrome) is INHERITED from frame 05 fully
+         formed. It is never tweened here: it is present and at full strength
+         from the first rendered frame. The axis progress rail already stands
+         at its frame-05 landed height (row 005). --- */
+
+      /* --- svg-path-draw setup: the column rule is measured, never guessed. --- */
+      var colPath = ROOT.querySelector("#f06f-colrule-path");
+      var colLen = 512;
+      if (colPath && typeof colPath.getTotalLength === "function") {
+        var measured = colPath.getTotalLength();
+        if (measured > 0) colLen = measured;
+      }
+      if (colPath) {
+        colPath.style.strokeDasharray = String(colLen);
+        colPath.style.strokeDashoffset = String(colLen);
+      }
+
+      /* --- Scene 1 (0.0-1.4s): "Every Friday" — a new column rules itself in
+         on the right of the lead-marker column (svg-path-draw, constant-rate
+         pen trace), then takes its mono FRIDAY header via a clip wipe. --- */
+      tl.fromTo(
+        "#f06f-colrule-path",
         { strokeDashoffset: colLen },
-        { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" }, 0.18);
-      tl.fromTo(colhead,
-        { clipPath: "inset(0% 100% 0% 0%)" },
-        { clipPath: "inset(0% 0% 0% 0%)", duration: 0.46, ease: "power2.out" }, 0.86);
+        { strokeDashoffset: 0, duration: 0.72, ease: "none" },
+        0.15
+      );
 
-      // Scene 2 (1.4-2.6s) — "each lead fills their own row": five empty cells cascade down the column.
-      tl.fromTo(cells,
-        { opacity: 0, y: -14 },
-        { opacity: 1, y: 0, duration: 0.38, ease: "power2.out", stagger: 0.14 }, 1.42);
+      tl.fromTo(
+        "#f06f-friday",
+        { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+        { clipPath: "inset(0 0% 0 0)", opacity: 1, duration: 0.5, ease: "power2.out" },
+        0.78
+      );
 
-      // Scene 3 (2.6-4.1s) — "Green, amber, red.": each word lands its status marks.
-      tl.fromTo(greens,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.34, ease: "power2.out", stagger: 0.1 }, 2.64);
-      tl.fromTo(amber,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.34, ease: "power2.out" }, 3.24);
-      tl.fromTo(red,
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.34, ease: "power2.out" }, 3.72);
+      /* --- Scene 2 (1.4-2.6s): "each lead fills their own row." — five empty
+         ink-faint cells cascade DOWN the column, one per row, sliding a short
+         distance directly into their own slot (grid-card-assemble stagger). --- */
+      cells.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { opacity: 0, y: -10 },
+          { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" },
+          1.45 + i * 0.14
+        );
+      });
 
-      // Scene 4 (4.1-4.8s) — held. A filled board, read at a glance.
+      /* --- Scene 3 (2.6-4.1s): "Green, amber, red." — the cells take their
+         status marks on the three spoken words. Each fill wipes across its
+         cell from the left; the colour IS the status, no text inside.
+         rows 1, 2, 4 = status-green · row 3 = status-amber · row 5 = status-red
+         (row 5, GROWTH + AI, is the red one frames 07/08 drive). --- */
+      tl.set(fills, { scaleX: 0, opacity: 1 }, 0);
+
+      var FILL_CUES = [
+        { i: 0, at: 2.7 },  /* "Green" — SMM / CREATIVE */
+        { i: 1, at: 2.79 }, /* "Green" — DIGITAL */
+        { i: 3, at: 2.88 }, /* "Green" — ECOMMERCE */
+        { i: 2, at: 3.3 },  /* "amber" — BUSINESS DEVELOPMENT */
+        { i: 4, at: 3.78 }  /* "red"   — GROWTH + AI */
+      ];
+
+      FILL_CUES.forEach(function (cue) {
+        tl.fromTo(
+          fills[cue.i],
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.3, ease: "power2.out" },
+          cue.at
+        );
+        tl.to(
+          cells[cue.i],
+          { borderColor: "rgba(31, 43, 224, 0)", duration: 0.24, ease: "power1.out" },
+          cue.at + 0.06
+        );
+      });
+
+      /* --- Scene 4 (4.1-4.8s): held. A filled board, read at a glance. --- */
+      tl.to("#f06f-friday", { opacity: 1, duration: 0.01 }, 4.72);
     })();
   </script>
 </template>
