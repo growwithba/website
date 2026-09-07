@@ -58,7 +58,7 @@ centered hero anchors at y ≈ 454, not 540. Background and ambient layers stay 
 - duration: 5.547s
 - poster: 4s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/01-the-wall.html
 - type: hook
 - persuasion: Counterintuitive claim + Pain validation
@@ -83,7 +83,7 @@ keyMessage: Having a good product is not enough to sell in the US.
 - duration: 5.461s
 - poster: 4.5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/02-never-the-product.html
 - type: pain_point
 - persuasion: Common-belief vs reality + Distillation
@@ -108,7 +108,7 @@ keyMessage: The blocker is infrastructure, not the product.
 - duration: 10.923s
 - poster: 7s
 - transition_in: push-slide UP
-- status: outline
+- status: animated
 - src: compositions/frames/03-five-walls.html
 - type: pain_point
 - persuasion: Numbered enumeration + Frame-then-fill
@@ -135,7 +135,7 @@ keyMessage: The US wall is five specific, separate problems — and solving four
 - duration: 2.453s
 - poster: 4s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/frames/04-a-backbone.html
 - type: product_intro
 - persuasion: Concretization + Coined term
@@ -159,7 +159,7 @@ keyMessage: The missing piece is a single load-bearing spine, not another vendor
 - duration: 6.955s
 - poster: 6s
 - transition_in: push-slide UP
-- status: outline
+- status: animated
 - src: compositions/frames/05-spine-carries.html
 - type: feature_showcase
 - persuasion: Callback + Progressive disclosure
@@ -187,7 +187,7 @@ keyMessage: A backbone carries all five at once; that is what makes it a backbon
 - duration: 8.725s
 - poster: 6s
 - transition_in: push-slide UP
-- status: outline
+- status: animated
 - src: compositions/frames/06-think14.html
 - type: feature_showcase
 - persuasion: Anchoring on a familiar referent + Demonstration
@@ -213,7 +213,7 @@ keyMessage: Think14 is that backbone, and it is physically real on both sides.
 - duration: 12.949s
 - poster: 7s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/frames/07-the-proof.html
 - type: social_proof
 - persuasion: Statistical proof + Worked example with real numbers
@@ -239,7 +239,7 @@ keyMessage: The backbone already exists and is compounding.
 - duration: 4.139s
 - poster: 4s
 - transition_in: crossfade
-- status: outline
+- status: animated
 - src: compositions/frames/08-what-you-keep.html
 - type: benefit_highlight
 - persuasion: Before/after + Distillation
@@ -264,7 +264,7 @@ keyMessage: The seller gives up integration risk, not ownership.
 - duration: 4.245s
 - poster: 5s
 - transition_in: cut
-- status: outline
+- status: animated
 - src: compositions/frames/09-lockup.html
 - type: branding
 - persuasion: Callback + Distillation

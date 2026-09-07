@@ -18,6 +18,7 @@ colors:
   lavender-bg: "#DDD0FB"
   wedge: "#F97A4D"
   wedge-soft: "#FDE7DF"
+  wedge-ink: "#D9542A"
   text: "#111111"
   text-muted: "#6B6B6B"
   text-light: "#9A9A9A"
@@ -133,6 +134,12 @@ This is the **blue-professional** preset remixed onto the captured brand. The YA
   the single most important number, the one check/badge, or one underline bar. `wedge-soft` #FDE7DF
   is its light fill (metric strips, info bands). Never wedge a headline, never wedge body copy,
   never two wedge elements in one frame.
+- **Orange as TEXT uses `wedge-ink` #D9542A, not #F97A4D.** The brand orange measures 2.65:1 on white
+  and 2.23:1 on `wedge-soft` peach — both fail the 3:1 gate. #D9542A reads as the same orange and
+  clears it in both (4.00:1 / 3.36:1). #F97A4D stays the fill/stroke color for bars, bands and rules,
+  where contrast does not apply. The "14" of the wordmark is text, so it is `wedge-ink`.
+- **`text-light` #9A9A9A is chrome only, never body copy** — 2.81:1 on white fails the gate. Muted
+  reading copy is `text-muted` #6B6B6B.
 - **Ground is WHITE #FFFFFF, not cream** — white holds 70%+ of every frame. Purple is the structural
   anchor (rules, eyebrows, numerals, the bottom band); orange is the wedge.
 
