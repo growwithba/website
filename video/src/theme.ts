@@ -18,8 +18,11 @@ export const VIDEO = {
   width: 1080,
   height: 1920,
   fps: 30,
-  durationInFrames: 1020,
+  durationInFrames: 1290,
 } as const;
+
+// Frame the voiceover starts on — the hook holds silent before the first line.
+export const VO_START = 24;
 
 // Horizontal safe padding for all content.
 export const PAD = 88;
