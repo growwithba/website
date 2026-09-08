@@ -10,7 +10,7 @@ const STEPS = [
   ['EIN + ITIN', 'Federal tax IDs filed with the IRS'],
   ['US bank account', 'Business banking and payment rails live'],
   ['Marketplace approvals', 'Amazon, Walmart, Newegg, Backmarket'],
-  ['Warehouse + first ship', 'Spring, TX node — receive, prep, pick-pack-ship'],
+  ['Warehouse + first ship', 'Owned Texas warehouse — receive, prep, pick-pack-ship'],
 ];
 
 const NODE = 62;
@@ -53,7 +53,9 @@ export const Steps: React.FC = () => {
           <Eyebrow>How it works</Eyebrow>
         </Rise>
         <Rise delay={5}>
-          <Headline size={72}>Five steps. One partner.</Headline>
+          <Headline size={76} serif>
+            Five steps. One partner.
+          </Headline>
         </Rise>
         <div style={{height: 14}} />
 

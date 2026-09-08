@@ -33,7 +33,7 @@ const Tile: React.FC<{
       style={{
         fontFamily: SANS,
         fontWeight: 700,
-        fontSize: 76,
+        fontSize: 72,
         lineHeight: 1,
         color: accent ? C.purple : C.orange,
         letterSpacing: -2,
@@ -56,9 +56,8 @@ const Tile: React.FC<{
 );
 
 export const Proof: React.FC = () => {
-  const llcs = useCount(21, 20);
-  const cr = useCount(29, 26);
-  const units = useCount(11500, 32, 34);
+  const llcs = useCount(12, 20);
+  const gmv = useCount(2.14, 26);
 
   return (
     <Scene>
@@ -69,24 +68,23 @@ export const Proof: React.FC = () => {
           <Eyebrow>Proof</Eyebrow>
         </Rise>
         <Rise delay={5}>
-          <Headline size={72}>Already running at scale.</Headline>
+          <Headline size={76} serif>
+            Already running at scale.
+          </Headline>
         </Rise>
         <div style={{height: 16}} />
 
         <Rise delay={16}>
           <div style={{display: 'flex', gap: 26}}>
-            <Tile value={`${Math.round(llcs)}+`} label="Active seller LLCs on the stack" accent />
-            <Tile value={`₹${Math.round(cr)} Cr`} label="Client top-line, Jan–Jul 2026" />
+            <Tile value={`${Math.round(llcs)}`} label="Active seller LLCs on the stack" accent />
+            <Tile value={`$${gmv.toFixed(2)}M`} label="Verified 2025 GMV" />
           </div>
         </Rise>
 
         <Rise delay={30}>
           <div style={{display: 'flex', gap: 26}}>
-            <Tile
-              value={`${Math.round(units).toLocaleString('en-US')}+`}
-              label="Units shipped through Spring, TX"
-            />
-            <Tile value="<2%" label="Defect rate across the book" accent />
+            <Tile value="48h" label="FBA prep turnaround SLA" />
+            <Tile value="$2M" label="Insured, owned TX warehouse" accent />
           </div>
         </Rise>
 
@@ -104,7 +102,7 @@ export const Proof: React.FC = () => {
               lineHeight: 1.35,
             }}
           >
-            45+ team across Nagpur & Bhilai · warehouse live in Spring, TX
+            45+ team across India and the US · one American team runs it
           </div>
         </Rise>
       </AbsoluteFill>

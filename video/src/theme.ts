@@ -11,14 +11,22 @@ export const C = {
   line: '#D9DDE3',
 } as const;
 
-export const SANS = "'Liberation Sans', Arial, Helvetica, sans-serif";
-export const MONO = "'Liberation Mono', 'Courier New', monospace";
+// Matches thinkfourteen.com: Inter for UI/body, Fraunces for editorial
+// headlines, JetBrains Mono for the footer band. Loaded in ./fonts.
+export const SANS = "Inter, 'Liberation Sans', Arial, Helvetica, sans-serif";
+export const SERIF = "Fraunces, Georgia, 'Times New Roman', serif";
+export const MONO = "'JetBrains Mono', 'Liberation Mono', monospace";
 
 export const VIDEO = {
   width: 1080,
   height: 1920,
   fps: 30,
-  durationInFrames: 1290,
+} as const;
+
+/** Runtime of each composition, in frames, cut to its voiceover. */
+export const DURATION = {
+  usLlcEnablement: 1350,
+  ownAUsaBusiness: 2475,
 } as const;
 
 // Frame the voiceover starts on — the hook holds silent before the first line.

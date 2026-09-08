@@ -1,19 +1,17 @@
 import React from 'react';
 import {AbsoluteFill, interpolate} from 'remotion';
-import {C, PAD, SANS} from '../theme';
-import {Scene} from '../components/Scene';
-import {Rise, useReveal} from '../components/anim';
-import {Headline, Sub} from '../components/type';
-import {Wordmark} from '../components/Chrome';
+import {C, PAD, SANS} from '../../theme';
+import {Scene} from '../../components/Scene';
+import {Rise, useReveal} from '../../components/anim';
+import {Headline, Sub} from '../../components/type';
+import {Wordmark} from '../../components/Chrome';
 
-export const Cta: React.FC = () => {
-  const rule = useReveal(20, 220);
+export const OwnCta: React.FC = () => {
+  const rule = useReveal(18, 220);
   return (
     <Scene background={C.purple}>
       <AbsoluteFill
-        style={{
-          background: `linear-gradient(160deg, ${C.purple} 0%, #43169A 100%)`,
-        }}
+        style={{background: `linear-gradient(160deg, ${C.purple} 0%, #43169A 100%)`}}
       />
       <AbsoluteFill
         style={{
@@ -22,13 +20,12 @@ export const Cta: React.FC = () => {
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          gap: 36,
+          gap: 34,
         }}
       >
         <Rise delay={0}>
-          <Wordmark size={104} onDark />
+          <Wordmark size={100} onDark />
         </Rise>
-
         <div
           style={{
             height: 12,
@@ -37,16 +34,14 @@ export const Cta: React.FC = () => {
             borderRadius: 6,
           }}
         />
-
-        <Rise delay={14}>
+        <Rise delay={12}>
           <Headline size={62} onDark serif>
-            The US Backbone for
+            Own a USA business.
             <br />
-            Cross-Border Ecommerce.
+            A real one.
           </Headline>
         </Rise>
-
-        <Rise delay={30}>
+        <Rise delay={26}>
           <div
             style={{
               backgroundColor: C.orange,
@@ -61,10 +56,9 @@ export const Cta: React.FC = () => {
             thinkfourteen.com
           </div>
         </Rise>
-
-        <Rise delay={42}>
-          <Sub size={32} onDark>
-            Austin, TX · Spring, TX · Nagpur, India
+        <Rise delay={38}>
+          <Sub size={30} onDark>
+            Now onboarding · 4 new seller LLCs for Q3 2026
           </Sub>
         </Rise>
       </AbsoluteFill>

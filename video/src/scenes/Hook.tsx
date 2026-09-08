@@ -27,7 +27,7 @@ export const Hook: React.FC = () => {
         </Rise>
 
         <Rise delay={14}>
-          <Headline size={104}>
+          <Headline size={112} serif>
             Sell on Amazon
             <br />
             USA — without

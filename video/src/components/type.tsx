@@ -1,5 +1,5 @@
 import React from 'react';
-import {C, SANS} from '../theme';
+import {C, SANS, SERIF} from '../theme';
 
 export const Eyebrow: React.FC<{children: React.ReactNode; onDark?: boolean}> = ({
   children,
@@ -22,11 +22,13 @@ export const Eyebrow: React.FC<{children: React.ReactNode; onDark?: boolean}> = 
 export const Headline: React.FC<{
   size?: number;
   onDark?: boolean;
+  /** Fraunces, as the site uses for editorial headlines. */
+  serif?: boolean;
   children: React.ReactNode;
-}> = ({size = 92, onDark = false, children}) => (
+}> = ({size = 92, onDark = false, serif = false, children}) => (
   <div
     style={{
-      fontFamily: SANS,
+      fontFamily: serif ? SERIF : SANS,
       fontWeight: 700,
       fontSize: size,
       lineHeight: 1.06,

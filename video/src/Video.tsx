@@ -15,12 +15,12 @@ import {Cta} from './scenes/Cta';
  * through the white composition background.
  */
 const TIMELINE = [
-  {id: 'hook', from: 0, duration: 128, node: <Hook />},
-  {id: 'blockers', from: 120, duration: 203, node: <Blockers />},
-  {id: 'solution', from: 315, duration: 176, node: <Solution />},
-  {id: 'steps', from: 483, duration: 359, node: <Steps />},
-  {id: 'proof', from: 834, duration: 293, node: <Proof />},
-  {id: 'cta', from: 1119, duration: 171, node: <Cta />},
+  {id: 'hook', from: 0, duration: 134, node: <Hook />},
+  {id: 'blockers', from: 126, duration: 221, node: <Blockers />},
+  {id: 'solution', from: 339, duration: 190, node: <Solution />},
+  {id: 'steps', from: 521, duration: 365, node: <Steps />},
+  {id: 'proof', from: 878, duration: 330, node: <Proof />},
+  {id: 'cta', from: 1200, duration: 150, node: <Cta />},
 ];
 
 export const UsLlcEnablement: React.FC = () => (

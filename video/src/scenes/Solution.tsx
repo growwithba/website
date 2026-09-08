@@ -29,7 +29,7 @@ export const Solution: React.FC = () => {
           <Eyebrow onDark>The solution</Eyebrow>
         </Rise>
         <Rise delay={12}>
-          <Headline size={108} onDark>
+          <Headline size={110} onDark serif>
             US LLC
             <br />
             Enablement

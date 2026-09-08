@@ -71,7 +71,9 @@ export const Blockers: React.FC = () => (
         <Eyebrow>The blockers</Eyebrow>
       </Rise>
       <Rise delay={6}>
-        <Headline size={72}>Every seller hits the same wall.</Headline>
+        <Headline size={76} serif>
+          Every seller hits the same wall.
+        </Headline>
       </Rise>
       <div style={{height: 12}} />
       {BLOCKERS.map((text, i) => (
