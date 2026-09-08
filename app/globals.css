@@ -3,21 +3,106 @@
 @tailwind utilities;
 
 :root {
-  --bg: #ffffff;
-  --fg: #0f172a;
-  --muted: #64748b;
+  --bg: #050609;
+  --fg: #FAFAFC;
+  color-scheme: dark;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
-  scroll-behavior: smooth;
+  background: var(--bg);
 }
 
 body {
   color: var(--fg);
   background: var(--bg);
-  font-feature-settings: 'cv11', 'ss01', 'ss03';
 }
 
-.prose-clean p {
-  margin-bottom: 0.75rem;
+::selection {
+  background: #5B8CFF;
+  color: #050609;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #050609;
+}
+::-webkit-scrollbar-thumb {
+  background: #232839;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #363c52;
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-6 md:px-10;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-chalk-300;
+  }
+
+  .display {
+    @apply font-sans font-medium tracking-tightest text-chalk-50;
+    text-wrap: balance;
+  }
+
+  .hairline {
+    @apply border-t border-white/[0.08];
+  }
+
+  .card {
+    @apply relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.02];
+  }
+
+  .card-hover {
+    @apply transition-[transform,border-color,background-color] duration-500 ease-out hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.04];
+  }
+}
+
+/* Scroll-reveal. Elements stay visible unless the inline boot script has
+   confirmed JS + motion are available, so no-JS never gets a blank page. */
+html.js-reveal [data-reveal],
+html.js-reveal [data-reveal-stagger] > * {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.js-reveal [data-reveal].is-revealed,
+html.js-reveal [data-reveal-stagger] > .is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html [data-reveal],
+  html [data-reveal-stagger] > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .animate-marquee,
+  .animate-fade-up {
+    animation: none !important;
+  }
+}
+
+.grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
 }

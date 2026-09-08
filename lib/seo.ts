@@ -1,8 +1,5 @@
 import type { Metadata } from 'next';
 import { SITE } from './site';
-import type { Category } from '@/data/categories';
-import type { City } from '@/data/cities';
-import type { Business } from '@/data/businesses';
 
 interface BuildMetadataInput {
   title: string;
@@ -24,65 +21,62 @@ export function buildMetadata({ title, description, path }: BuildMetadataInput):
       type: 'website',
       locale: 'en_US',
     },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-    },
+    twitter: { card: 'summary_large_image', title, description },
     robots: { index: true, follow: true },
   };
 }
 
-export function localBusinessJsonLd(business: Business, category: Category, city: City) {
+export function organizationJsonLd() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'LocalBusiness',
-    '@id': `${SITE.url}/${category.slug}/${city.slug}/#${business.id}`,
-    name: business.name,
-    description: business.tagline,
-    telephone: business.phone,
-    url: business.website,
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: business.address.split(',')[0],
-      addressLocality: city.name,
-      addressRegion: city.stateCode,
-      postalCode: business.zip,
-      addressCountry: 'US',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: city.lat,
-      longitude: city.lng,
-    },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: business.rating,
-      reviewCount: business.reviewCount,
-    },
-    openingHours: business.hours,
+    '@type': 'ProfessionalService',
+    '@id': `${SITE.url}/#organization`,
+    name: SITE.name,
+    alternateName: 'GrowWithBA',
+    url: SITE.url,
+    email: SITE.email,
+    description: SITE.description,
+    knowsAbout: [
+      'Search Engine Optimization',
+      'Answer Engine Optimization',
+      'Generative Engine Optimization',
+      'Technical SEO',
+      'Content strategy',
+      'Ecommerce growth',
+    ],
+    sameAs: [`https://twitter.com/${SITE.twitter.replace('@', '')}`],
   };
 }
 
-export function itemListJsonLd(
-  businesses: Business[],
-  category: Category,
-  city: City,
-) {
+export function websiteJsonLd() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    itemListElement: businesses.map((b, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      item: localBusinessJsonLd(b, category, city),
-    })),
+    '@type': 'WebSite',
+    '@id': `${SITE.url}/#website`,
+    url: SITE.url,
+    name: SITE.name,
+    description: SITE.description,
+    publisher: { '@id': `${SITE.url}/#organization` },
   };
 }
 
-export function breadcrumbJsonLd(
-  items: { name: string; path: string }[],
-) {
+export function serviceJsonLd(service: {
+  name: string;
+  slug: string;
+  summary: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.name,
+    description: service.summary,
+    url: `${SITE.url}/services/${service.slug}/`,
+    provider: { '@id': `${SITE.url}/#organization` },
+    areaServed: 'Worldwide',
+  };
+}
+
+export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

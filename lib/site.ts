@@ -1,10 +1,17 @@
 export const SITE = {
-  name: 'PrimeDirectory',
-  tagline: 'Find the best local pros in 100 cities',
-  url: 'https://primedirectory.example.com',
+  name: 'Bridging Associates',
+  short: 'BA',
+  tagline: 'SEO, AEO & GEO for brands that want to be the answer',
+  url: 'https://www.growwithba.com',
   description:
-    'PrimeDirectory connects homeowners and small businesses with vetted, top-rated local professionals across 10 high-stakes service categories in 100 US cities.',
-  email: 'hello@primedirectory.example.com',
-  phone: '(800) 555-0142',
-  twitter: '@primedirectory',
+    'Bridging Associates is a search and answer-engine growth agency. We build visibility across Google, AI assistants and generative search — SEO, AEO and GEO under one operating system.',
+  email: 'partner@growwithba.com',
+  twitter: '@growwithba',
 };
+
+export const NAV = [
+  { label: 'Services', href: '/services/' },
+  { label: 'Approach', href: '/approach/' },
+  { label: 'Work', href: '/work/' },
+  { label: 'About', href: '/about/' },
+];

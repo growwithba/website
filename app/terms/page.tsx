@@ -1,40 +1,57 @@
-import type { Metadata } from 'next';
-import { buildMetadata } from '@/lib/seo';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
+import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
+import { SITE } from '@/lib/site';
 
-export const metadata: Metadata = buildMetadata({
+export const metadata = buildMetadata({
   title: 'Terms of Service',
-  description: 'PrimeDirectory terms of service.',
+  description: `Terms governing use of the ${SITE.name} website.`,
   path: '/terms/',
 });
+
+const sections = [
+  {
+    title: 'Use of this site',
+    body: 'This website is provided for information about our services. You may read, link to and quote it with attribution. You may not republish it wholesale or present it as your own.',
+  },
+  {
+    title: 'No guarantee of results',
+    body: 'Search, answer-engine and generative-engine visibility depend on third-party systems we do not control. Nothing on this site is a guarantee of rankings, citations, traffic or revenue. Case study descriptions record what was done and what changed operationally, not a promise of the same outcome elsewhere.',
+  },
+  {
+    title: 'Engagements',
+    body: 'Client work is governed by the signed scope and contract for that engagement, which takes precedence over anything stated here.',
+  },
+  {
+    title: 'Third-party links',
+    body: 'Where we link to external sites or tools, we are not responsible for their content, availability or practices.',
+  },
+  {
+    title: 'Changes',
+    body: `We may update these terms. The current version always lives at this URL. Questions go to ${SITE.email}.`,
+  },
+];
 
 export default function TermsPage() {
   return (
     <>
-      <div className="border-b border-slate-200 bg-slate-50">
-        <div className="mx-auto max-w-6xl px-4 py-4">
-          <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Terms', path: '/terms/' }]} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Terms', path: '/terms/' },
+        ])}
+      />
+      <section className="shell max-w-3xl pb-24 pt-40 md:pt-48">
+        <h1 className="display text-[clamp(2.25rem,5vw,3.5rem)]">Terms of Service</h1>
+        <p className="mt-4 text-[14px] text-chalk-400">Last updated: September 2026</p>
+
+        <div className="mt-12 divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {sections.map((s) => (
+            <section key={s.title} className="py-8">
+              <h2 className="text-[20px] font-medium tracking-tight text-chalk-50">{s.title}</h2>
+              <p className="mt-4 text-[15px] leading-relaxed text-chalk-300">{s.body}</p>
+            </section>
+          ))}
         </div>
-      </div>
-      <section className="mx-auto max-w-3xl px-4 py-12 prose-clean">
-        <h1 className="text-4xl font-bold text-slate-900">Terms of Service</h1>
-        <p className="mt-4 text-slate-600">Last updated: April 2026</p>
-        <p className="mt-4 text-slate-600">
-          By using PrimeDirectory you agree to these terms. Listings are provided for
-          informational purposes only. Always verify credentials, license status,
-          and pricing directly with the listed business.
-        </p>
-        <h2 className="mt-8 text-xl font-bold text-slate-900">No professional advice</h2>
-        <p className="mt-3 text-slate-600">
-          Information on this site does not constitute legal, financial, medical, or
-          tax advice. Consult a qualified professional for advice on your situation.
-        </p>
-        <h2 className="mt-8 text-xl font-bold text-slate-900">Liability</h2>
-        <p className="mt-3 text-slate-600">
-          PrimeDirectory is provided "as is" without warranties of any kind. We are
-          not liable for transactions or interactions between users and listed
-          businesses.
-        </p>
       </section>
     </>
   );

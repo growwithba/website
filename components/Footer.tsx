@@ -1,59 +1,74 @@
 import Link from 'next/link';
 import { SITE } from '@/lib/site';
-import { categories } from '@/data/categories';
-import { cities } from '@/data/cities';
+import { services } from '@/data/services';
 
 export default function Footer() {
-  const topCities = cities.slice(0, 12);
-
   return (
-    <footer className="mt-24 border-t border-slate-200 bg-slate-50">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-4">
-        <div>
-          <div className="text-lg font-bold text-brand-700">{SITE.name}</div>
-          <p className="mt-3 text-sm text-slate-600">{SITE.tagline}</p>
-          <p className="mt-4 text-sm text-slate-600">{SITE.email}</p>
-          <p className="text-sm text-slate-600">{SITE.phone}</p>
+    <footer className="relative mt-8 overflow-hidden border-t border-white/[0.08] bg-ink-800">
+      <div className="shell grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:py-20">
+        <div className="max-w-sm">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-signal-blue via-signal-violet to-signal-teal text-[13px] font-semibold text-ink-900">
+              BA
+            </span>
+            <span className="text-[15px] font-medium text-chalk-50">{SITE.name}</span>
+          </div>
+          <p className="mt-5 text-[15px] leading-relaxed text-chalk-300">
+            Search, answer and generative-engine visibility run as one system.
+          </p>
+          <a
+            href={`mailto:${SITE.email}`}
+            className="mt-6 inline-block text-[15px] text-chalk-100 underline decoration-white/20 underline-offset-4 transition-colors hover:decoration-white/60"
+          >
+            {SITE.email}
+          </a>
         </div>
+
         <div>
-          <div className="text-sm font-semibold text-slate-900">Categories</div>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            {categories.slice(0, 8).map((c) => (
-              <li key={c.slug}>
-                <Link href={`/${c.slug}/`} className="hover:text-brand-700">
-                  {c.name}
+          <div className="eyebrow">Services</div>
+          <ul className="mt-5 space-y-3">
+            {services.map((s) => (
+              <li key={s.slug}>
+                <Link
+                  href={`/services/${s.slug}/`}
+                  className="text-[15px] text-chalk-300 transition-colors hover:text-chalk-50"
+                >
+                  {s.name}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
+
         <div>
-          <div className="text-sm font-semibold text-slate-900">Top Cities</div>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            {topCities.map((c) => (
-              <li key={c.slug}>
-                <Link href={`/cities/${c.slug}/`} className="hover:text-brand-700">
-                  {c.name}, {c.stateCode}
+          <div className="eyebrow">Company</div>
+          <ul className="mt-5 space-y-3">
+            {[
+              { label: 'Approach', href: '/approach/' },
+              { label: 'Work', href: '/work/' },
+              { label: 'About', href: '/about/' },
+              { label: 'Contact', href: '/contact/' },
+              { label: 'Privacy', href: '/privacy/' },
+              { label: 'Terms', href: '/terms/' },
+            ].map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="text-[15px] text-chalk-300 transition-colors hover:text-chalk-50"
+                >
+                  {item.label}
                 </Link>
               </li>
             ))}
-          </ul>
-        </div>
-        <div>
-          <div className="text-sm font-semibold text-slate-900">Company</div>
-          <ul className="mt-3 space-y-2 text-sm text-slate-600">
-            <li><Link href="/about/" className="hover:text-brand-700">About</Link></li>
-            <li><Link href="/contact/" className="hover:text-brand-700">Contact</Link></li>
-            <li><Link href="/privacy/" className="hover:text-brand-700">Privacy</Link></li>
-            <li><Link href="/terms/" className="hover:text-brand-700">Terms</Link></li>
-            <li><Link href="/categories/" className="hover:text-brand-700">All Categories</Link></li>
-            <li><Link href="/cities/" className="hover:text-brand-700">All Cities</Link></li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-slate-200 px-4 py-6 text-center text-xs text-slate-500">
-        © {new Date().getFullYear()} {SITE.name}. Listings are illustrative; verify
-        before contacting.
+
+      <div className="shell flex flex-col gap-2 border-t border-white/[0.06] py-8 text-[13px] text-chalk-400 sm:flex-row sm:items-center sm:justify-between">
+        <p>
+          © {new Date().getFullYear()} {SITE.name}. All rights reserved.
+        </p>
+        <p>SEO · AEO · GEO</p>
       </div>
     </footer>
   );

@@ -1,150 +1,202 @@
 import Link from 'next/link';
-import type { Metadata } from 'next';
-import { categories } from '@/data/categories';
-import { cities } from '@/data/cities';
-import { SITE } from '@/lib/site';
+import Hero from '@/components/Hero';
+import Reveal from '@/components/Reveal';
+import SurfaceDemo from '@/components/SurfaceDemo';
 import { JsonLd } from '@/components/JsonLd';
+import { ArrowLink, CtaBand, Marquee, SectionHeading } from '@/components/ui';
+import { coreServices, services } from '@/data/services';
+import { caseStudies } from '@/data/work';
+import { phases, faqs } from '@/data/approach';
+import { buildMetadata, faqJsonLd } from '@/lib/seo';
+import { SITE } from '@/lib/site';
 
-export const metadata: Metadata = {
-  title: `${SITE.name} — Find Trusted Local Pros in 100 Cities`,
+export const metadata = buildMetadata({
+  title: `${SITE.name} — ${SITE.tagline}`,
   description: SITE.description,
-  alternates: { canonical: SITE.url + '/' },
-};
-
-const websiteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: SITE.name,
-  url: SITE.url,
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${SITE.url}/search?q={search_term_string}`,
-    'query-input': 'required name=search_term_string',
-  },
-};
+  path: '/',
+});
 
 export default function HomePage() {
-  const featuredCities = cities.slice(0, 24);
-  const totalListings = categories.length * cities.length;
-
   return (
     <>
-      <JsonLd data={websiteJsonLd} />
+      <JsonLd data={faqJsonLd(faqs.slice(0, 3))} />
+      <Hero />
 
-      <section className="bg-gradient-to-b from-brand-50 to-white">
-        <div className="mx-auto max-w-6xl px-4 py-20 text-center">
-          <p className="text-sm font-semibold uppercase tracking-wider text-brand-700">
-            {totalListings.toLocaleString()}+ vetted local listings
-          </p>
-          <h1 className="mt-4 text-4xl font-bold tracking-tight text-slate-900 sm:text-6xl">
-            Find the best local pros in <span className="text-brand-700">100 US cities</span>
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600">
-            From personal injury attorneys to mortgage brokers, HVAC techs to CPAs —
-            connect with vetted, top-rated specialists in your city.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/categories/"
-              className="rounded-md bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700"
-            >
-              Browse all categories
-            </Link>
-            <Link
-              href="/cities/"
-              className="rounded-md border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-            >
-              Browse by city
-            </Link>
-          </div>
+      <div className="hairline">
+        <Marquee
+          items={[
+            'Technical SEO',
+            'Answer engine optimization',
+            'Generative engine optimization',
+            'Share of model tracking',
+            'Content systems',
+            'Ecommerce growth',
+            'Digital PR',
+            'Core Web Vitals',
+          ]}
+        />
+      </div>
+
+      {/* Three surfaces */}
+      <section className="shell py-24 md:py-36">
+        <div className="grid gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-20">
+          <Reveal>
+            <SectionHeading
+              eyebrow="The problem"
+              title="One query. Three places to win."
+              lead="The same search now resolves three different ways depending on where your customer asks it. Winning one surface and ignoring the other two is how brands quietly disappear."
+            />
+            <ul className="mt-10 space-y-5">
+              {coreServices.map((s) => (
+                <li key={s.slug} className="flex gap-4">
+                  <span
+                    aria-hidden
+                    className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ backgroundColor: s.accent }}
+                  />
+                  <p className="text-[15px] leading-relaxed text-chalk-300">
+                    <span className="font-medium text-chalk-50">{s.abbr}</span> — {s.summary}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <SurfaceDemo />
+          </Reveal>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="text-3xl font-bold text-slate-900">Top categories</h2>
-            <p className="mt-2 text-slate-600">
-              Hand-selected service categories with the highest commercial demand.
-            </p>
-          </div>
-          <Link href="/categories/" className="hidden text-sm font-semibold text-brand-700 hover:underline sm:inline">
-            View all →
-          </Link>
-        </div>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((c) => (
+      {/* Services */}
+      <section className="shell py-24 md:py-32">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Services"
+            title="Six disciplines, one backlog."
+            lead="Every engagement draws from the same practice. What changes is the sequence — set by what your diagnostic says is costing you most right now."
+          />
+        </Reveal>
+
+        <Reveal stagger className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((s) => (
             <Link
-              key={c.slug}
-              href={`/${c.slug}/`}
-              className="group rounded-xl border border-slate-200 bg-white p-6 transition hover:border-brand-200 hover:shadow-md"
+              key={s.slug}
+              href={`/services/${s.slug}/`}
+              className="card card-hover group flex flex-col p-8"
             >
-              <div className="flex items-center justify-between">
-                <span className="rounded-md bg-brand-50 px-2 py-1 text-xs font-semibold tracking-wider text-brand-700">
-                  {c.emoji}
-                </span>
-                <span className="text-xs text-slate-400">{cities.length} cities</span>
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-slate-900 group-hover:text-brand-700">
-                {c.name}
+              <span
+                aria-hidden
+                className="h-1 w-10 rounded-full"
+                style={{ backgroundColor: s.accent }}
+              />
+              <h3 className="mt-7 text-[22px] font-medium tracking-tight text-chalk-50">
+                {s.name}
               </h3>
-              <p className="mt-2 line-clamp-2 text-sm text-slate-600">{c.description}</p>
+              <p className="mt-4 flex-1 text-[15px] leading-relaxed text-chalk-300">{s.summary}</p>
+              <span className="mt-7 inline-flex items-center gap-2 text-[14px] text-chalk-200">
+                {s.kicker}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </span>
             </Link>
           ))}
-        </div>
+        </Reveal>
       </section>
 
-      <section className="bg-slate-50">
-        <div className="mx-auto max-w-6xl px-4 py-16">
-          <div className="flex items-end justify-between">
-            <div>
-              <h2 className="text-3xl font-bold text-slate-900">Popular cities</h2>
-              <p className="mt-2 text-slate-600">Browse local pros in major US metros.</p>
-            </div>
-            <Link href="/cities/" className="hidden text-sm font-semibold text-brand-700 hover:underline sm:inline">
-              View all →
-            </Link>
-          </div>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {featuredCities.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/cities/${c.slug}/`}
-                className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:border-brand-200 hover:text-brand-700"
-              >
-                {c.name}, {c.stateCode}
-              </Link>
+      {/* Approach */}
+      <section className="border-y border-white/[0.08] bg-ink-800/60">
+        <div className="shell py-24 md:py-32">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Approach"
+              title="Diagnose, sequence, ship, compound."
+              lead="No twelve-month strategy documents. A three-week diagnostic, one ordered backlog, and five numbers reported every Friday."
+            />
+          </Reveal>
+
+          <Reveal stagger className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.06] md:grid-cols-2 lg:grid-cols-4">
+            {phases.map((phase) => (
+              <div key={phase.id} className="bg-ink-800 p-8">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[13px] tabular-nums text-chalk-400">{phase.id}</span>
+                  <span className="text-[12px] uppercase tracking-[0.16em] text-chalk-400">
+                    {phase.duration}
+                  </span>
+                </div>
+                <h3 className="mt-6 text-[22px] font-medium tracking-tight text-chalk-50">
+                  {phase.name}
+                </h3>
+                <p className="mt-3 text-[15px] leading-relaxed text-chalk-300">{phase.summary}</p>
+              </div>
             ))}
-          </div>
+          </Reveal>
+
+          <Reveal className="mt-10">
+            <ArrowLink href="/approach/">Read the full method</ArrowLink>
+          </Reveal>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-16">
-        <h2 className="text-3xl font-bold text-slate-900">Why PrimeDirectory</h2>
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 p-6">
-            <div className="text-2xl font-bold text-brand-700">10</div>
-            <div className="mt-2 font-semibold text-slate-900">High-stakes categories</div>
-            <p className="mt-2 text-sm text-slate-600">
-              Curated specifically for the services where finding the right pro matters most.
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-200 p-6">
-            <div className="text-2xl font-bold text-brand-700">100</div>
-            <div className="mt-2 font-semibold text-slate-900">US cities covered</div>
-            <p className="mt-2 text-sm text-slate-600">
-              Local listings spanning every major metro from coast to coast.
-            </p>
-          </div>
-          <div className="rounded-xl border border-slate-200 p-6">
-            <div className="text-2xl font-bold text-brand-700">1,000+</div>
-            <div className="mt-2 font-semibold text-slate-900">Curated guides</div>
-            <p className="mt-2 text-sm text-slate-600">
-              Every city × category page is its own buyer’s guide with FAQs and pricing.
-            </p>
-          </div>
-        </div>
+      {/* Work */}
+      <section className="shell py-24 md:py-32">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Work"
+            title="Systems we run, not slides we present."
+            lead="A sample of engagements across ecommerce, retail and hospitality."
+          />
+        </Reveal>
+
+        <Reveal stagger className="mt-16 grid gap-4 md:grid-cols-2">
+          {caseStudies.slice(0, 4).map((c) => (
+            <Link
+              key={c.slug}
+              href={`/work/#${c.slug}`}
+              className="card card-hover flex flex-col p-8 md:p-10"
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                {c.disciplines.map((d) => (
+                  <span
+                    key={d}
+                    className="rounded-full border border-white/10 px-3 py-1 text-[12px] text-chalk-400"
+                  >
+                    {d}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-8 text-[13px] uppercase tracking-[0.18em] text-chalk-400">
+                {c.client}
+              </div>
+              <h3 className="mt-3 text-[24px] font-medium leading-snug tracking-tight text-chalk-50">
+                {c.headline}
+              </h3>
+              <p className="mt-4 text-[15px] leading-relaxed text-chalk-300">{c.outcome}</p>
+            </Link>
+          ))}
+        </Reveal>
       </section>
+
+      {/* FAQ */}
+      <section className="shell pb-8 md:pb-16">
+        <Reveal>
+          <SectionHeading eyebrow="Questions" title="The ones we get asked first." />
+        </Reveal>
+        <Reveal stagger className="mt-14 divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {faqs.slice(0, 3).map((f) => (
+            <div key={f.q} className="grid gap-4 py-8 md:grid-cols-[0.9fr_1.1fr] md:gap-12">
+              <h3 className="text-[19px] font-medium tracking-tight text-chalk-50">{f.q}</h3>
+              <p className="text-[15px] leading-relaxed text-chalk-300">{f.a}</p>
+            </div>
+          ))}
+        </Reveal>
+      </section>
+
+      <CtaBand />
     </>
   );
 }
