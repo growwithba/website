@@ -13,6 +13,7 @@
   "dependencies": {
     "@remotion/cli": "^4.0.522",
     "@remotion/player": "^4.0.522",
+    "@remotion/transitions": "^4.0.522",
     "next": "15.1.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
