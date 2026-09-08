@@ -1,43 +1,80 @@
-import type { Metadata } from 'next';
-import { buildMetadata } from '@/lib/seo';
-import Breadcrumbs from '@/components/Breadcrumbs';
+import { JsonLd } from '@/components/JsonLd';
+import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo';
+import { SITE } from '@/lib/site';
 
-export const metadata: Metadata = buildMetadata({
+export const metadata = buildMetadata({
   title: 'Privacy Policy',
-  description: 'PrimeDirectory privacy policy.',
+  description: `How ${SITE.name} handles personal data collected through this website and client engagements.`,
   path: '/privacy/',
 });
+
+const sections = [
+  {
+    title: 'What we collect',
+    body: [
+      'Aggregated analytics such as page views, referrers and device class.',
+      'Any information you send us directly by email, including your name, company and the details of your enquiry.',
+      'For client engagements, the access you grant us to analytics, search console and advertising accounts.',
+    ],
+  },
+  {
+    title: 'How we use it',
+    body: [
+      'To respond to enquiries and scope work.',
+      'To deliver and report on engagements you have contracted us for.',
+      'To understand which pages of this site are useful, in aggregate.',
+    ],
+  },
+  {
+    title: 'What we do not do',
+    body: [
+      'We do not sell personal data.',
+      'We do not use client account access for anything outside the agreed scope of work.',
+      'We do not share client data between engagements.',
+    ],
+  },
+  {
+    title: 'Retention and access',
+    body: [
+      'Enquiry correspondence is retained while a conversation is active and for a reasonable period afterwards.',
+      'Client account access is revoked at the end of an engagement on request.',
+      `To request access to, correction of, or deletion of your data, email ${SITE.email}.`,
+    ],
+  },
+];
 
 export default function PrivacyPage() {
   return (
     <>
-      <div className="border-b border-slate-200 bg-slate-50">
-        <div className="mx-auto max-w-6xl px-4 py-4">
-          <Breadcrumbs items={[{ name: 'Home', path: '/' }, { name: 'Privacy', path: '/privacy/' }]} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Privacy', path: '/privacy/' },
+        ])}
+      />
+      <section className="shell max-w-3xl pb-24 pt-40 md:pt-48">
+        <h1 className="display text-[clamp(2.25rem,5vw,3.5rem)]">Privacy Policy</h1>
+        <p className="mt-4 text-[14px] text-chalk-400">Last updated: September 2026</p>
+        <p className="mt-8 text-[16px] leading-relaxed text-chalk-300">
+          {SITE.name} collects only what it needs to answer enquiries and deliver work.
+          This page sets out what that means in practice.
+        </p>
+
+        <div className="mt-12 divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {sections.map((s) => (
+            <section key={s.title} className="py-8">
+              <h2 className="text-[20px] font-medium tracking-tight text-chalk-50">{s.title}</h2>
+              <ul className="mt-4 space-y-3">
+                {s.body.map((line) => (
+                  <li key={line} className="flex items-start gap-3 text-[15px] leading-relaxed text-chalk-300">
+                    <span aria-hidden className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-signal-blue" />
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
         </div>
-      </div>
-      <section className="mx-auto max-w-3xl px-4 py-12 prose-clean">
-        <h1 className="text-4xl font-bold text-slate-900">Privacy Policy</h1>
-        <p className="mt-4 text-slate-600">Last updated: April 2026</p>
-        <p className="mt-4 text-slate-600">
-          PrimeDirectory respects your privacy. We collect only the information needed
-          to operate the directory and improve recommendations. We do not sell personal
-          data to third parties.
-        </p>
-        <h2 className="mt-8 text-xl font-bold text-slate-900">Information we collect</h2>
-        <p className="mt-3 text-slate-600">
-          Aggregated analytics (page views, referrers, device class) and any
-          information you submit voluntarily through our contact form.
-        </p>
-        <h2 className="mt-8 text-xl font-bold text-slate-900">Cookies</h2>
-        <p className="mt-3 text-slate-600">
-          We use cookies for analytics and to remember your preferences. You can
-          disable cookies in your browser settings.
-        </p>
-        <h2 className="mt-8 text-xl font-bold text-slate-900">Your rights</h2>
-        <p className="mt-3 text-slate-600">
-          Email us to access, correct, or delete personal data we hold about you.
-        </p>
       </section>
     </>
   );

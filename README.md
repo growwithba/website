@@ -1,30 +1,46 @@
-# PrimeDirectory
+# growwithba.com
 
-A programmatic-SEO directory site built with Next.js 15 (App Router) that
-generates **1,000+ statically rendered pages** targeting high-CPC service
-categories across 100 US cities.
+Marketing site for **Bridging Associates** — an SEO, AEO and GEO agency.
+Built with Next.js 15 (App Router), Tailwind CSS and a WebGL hero, exported as
+a static site.
 
-## What's inside
+## Stack
 
-- **10 high-paying categories** — Personal Injury Lawyers, Mortgage Brokers,
-  Insurance Agents, HVAC, Roofing, Plumbing, Dentists, Web Hosting, CPAs,
-  Real Estate
-- **100 US cities** by population
-- **1,000 `[category]/[city]` programmatic landing pages** (10 × 100)
-- **10 category index pages** + **100 city index pages**
-- **Static pages:** home, categories, cities, about, contact, privacy, terms
-- **Total static pages: ~1,116**
+- **Next.js 15** App Router, `output: 'export'` (static, deployable to any CDN)
+- **Tailwind CSS** with a dark design system (`ink` / `chalk` / `signal` scales)
+- **three + @react-three/fiber** — full-screen fragment shader in the hero
+- **GSAP** — hero type intro
+- **Lenis** — smooth scrolling
+- **IntersectionObserver + CSS transitions** — scroll reveals
 
-## SEO features
+## Pages
 
-- Per-page dynamic `<title>`, meta description, canonical, OpenGraph, Twitter
-- Schema.org JSON-LD: `WebSite`, `LocalBusiness`, `ItemList`,
-  `BreadcrumbList`, `FAQPage`
-- Auto-generated `sitemap.xml` (covers all 1,116 URLs)
-- `robots.txt`
-- Internal linking: nearby cities, related categories, sitewide nav
-- Mobile-first responsive design with Tailwind
-- Static export (`next build`) — deployable on any CDN
+| Route | Purpose |
+|---|---|
+| `/` | Hero, three-surface explainer, services, approach, work, FAQ |
+| `/services/` | Index of the six disciplines |
+| `/services/[slug]/` | SEO, AEO, GEO, Content Engine, Technical SEO, Ecommerce Growth |
+| `/approach/` | Diagnose → Sequence → Ship → Compound, principles, FAQ |
+| `/work/` | Case studies |
+| `/about/` | Positioning and how the verticals are organised |
+| `/contact/` | Diagnostic enquiry |
+| `/privacy/`, `/terms/` | Legal |
+
+## SEO / AEO / GEO features
+
+- Per-page title, description, canonical, OpenGraph and Twitter metadata
+- JSON-LD: `ProfessionalService`, `WebSite`, `Service`, `BreadcrumbList`, `FAQPage`
+- Answer-shaped FAQ blocks on the home, approach and service pages so the
+  content is extractable by answer engines
+- `sitemap.xml` and `robots.txt` generated at build time
+
+## Motion and accessibility
+
+- All animation is gated behind `prefers-reduced-motion`
+- Scroll-revealed content is hidden only after an inline boot script confirms
+  JS and motion are available, so no-JS visitors and crawlers see everything
+- The hero shader stops rendering once it scrolls out of view
+- Skip-to-content link, focus-visible states, semantic headings
 
 ## Run
 
@@ -34,29 +50,27 @@ npm run dev      # dev server
 npm run build    # static export to ./out
 ```
 
-## Project layout
+## Layout
 
 ```
-app/                     # Next.js 15 App Router pages
-  [category]/[city]/     # 1000 programmatic pages
-  [category]/            # 10 category index pages
-  cities/[city]/         # 100 city index pages
-  cities/                # all-cities index
-  categories/            # all-categories index
-  sitemap.ts             # dynamic sitemap
-  robots.ts              # robots.txt
+app/
+  page.tsx               # home
+  services/[slug]/       # six service pages
+  approach/ work/ about/ contact/ privacy/ terms/
+  sitemap.ts robots.ts icon.svg globals.css
+components/
+  Hero.tsx HeroCanvas.tsx    # WebGL aurora hero
+  SurfaceDemo.tsx            # SEO vs AEO vs GEO interactive panel
+  Reveal.tsx SmoothScroll.tsx
+  Header.tsx Footer.tsx ui.tsx JsonLd.tsx
 data/
-  categories.ts          # 10 high-CPC categories
-  cities.ts              # 100 US cities
-  businesses.ts          # deterministic business generator
+  services.ts approach.ts work.ts
 lib/
-  seo.ts                 # metadata + JSON-LD helpers
-  site.ts                # site-wide constants
-components/              # Header, Footer, BusinessCard, Breadcrumbs, JsonLd
+  seo.ts site.ts
 ```
 
-## Notes
+## Content note
 
-Business listings are generated deterministically from a seeded PRNG so SSG
-output is stable. Replace `data/businesses.ts` with a real data source
-(Google Places API, internal DB, CSV import) for production.
+Case studies describe what was done and what changed operationally. No
+performance percentages are published unless they can be sourced from client
+reporting.
