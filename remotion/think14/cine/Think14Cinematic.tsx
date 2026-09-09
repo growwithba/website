@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Easing } from "remotion";
+import { AbsoluteFill, Audio, Easing, Sequence, staticFile } from "remotion";
 import {
   linearTiming,
   TransitionPresentation,
@@ -15,23 +15,38 @@ const T = (frames: number) =>
 
 type Scene = {
   c: React.FC;
+  /** Frames the scene holds — cut to the length of its narration line. */
   d: number;
   t: TransitionPresentation<Record<string, unknown>> | null;
+  /** Frames the incoming transition overlaps the previous scene. */
   tf: number;
+  /** Narration file in public/vo, and the beat before it starts. */
+  vo?: string;
+  voDelay?: number;
 };
 
 const SCENES: Scene[] = [
-  { c: Title, d: 135, t: fade(), tf: 18 },
-  { c: Hook, d: 120, t: wipe({ direction: "from-bottom" }), tf: 22 },
-  { c: Problem, d: 195, t: slide({ direction: "from-right" }), tf: 24 },
-  { c: Stack, d: 210, t: wipe({ direction: "from-left" }), tf: 24 },
-  { c: Route, d: 195, t: slide({ direction: "from-bottom" }), tf: 24 },
-  { c: Traction, d: 210, t: wipe({ direction: "from-right" }), tf: 24 },
-  { c: Ask, d: 210, t: fade(), tf: 22 },
-  { c: Close, d: 180, t: null, tf: 0 },
+  { c: Title, d: 150, t: null, tf: 0, vo: "01-title.mp3", voDelay: 14 },
+  { c: Hook, d: 150, t: wipe({ direction: "from-bottom" }), tf: 22, vo: "02-hook.mp3", voDelay: 10 },
+  { c: Problem, d: 255, t: slide({ direction: "from-right" }), tf: 24, vo: "03-problem.mp3", voDelay: 14 },
+  { c: Stack, d: 340, t: wipe({ direction: "from-left" }), tf: 24, vo: "04-stack.mp3", voDelay: 14 },
+  { c: Route, d: 255, t: slide({ direction: "from-bottom" }), tf: 24, vo: "05-route.mp3", voDelay: 14 },
+  { c: Traction, d: 320, t: wipe({ direction: "from-right" }), tf: 24, vo: "06-traction.mp3", voDelay: 14 },
+  { c: Ask, d: 240, t: fade(), tf: 22 },
+  { c: Close, d: 190, t: fade(), tf: 22, vo: "01-title.mp3", voDelay: 34 },
 ];
 
-/** Total = scene durations minus each overlapping transition. */
+/** Where each scene lands on the timeline once transitions eat into it. */
+const starts = (() => {
+  let cursor = 0;
+  return SCENES.map((s) => {
+    cursor -= s.tf;
+    const start = cursor;
+    cursor += s.d;
+    return start;
+  });
+})();
+
 export const CINE_TOTAL =
   SCENES.reduce((s, x) => s + x.d, 0) - SCENES.reduce((s, x) => s + x.tf, 0);
 
@@ -40,14 +55,20 @@ export const Think14Cinematic: React.FC = () => (
     <TransitionSeries>
       {SCENES.map(({ c: Comp, d, t, tf }, i) => (
         <React.Fragment key={i}>
-          {t ? (
-            <TransitionSeries.Transition presentation={t} timing={T(tf)} />
-          ) : null}
+          {t ? <TransitionSeries.Transition presentation={t} timing={T(tf)} /> : null}
           <TransitionSeries.Sequence durationInFrames={d}>
             <Comp />
           </TransitionSeries.Sequence>
         </React.Fragment>
       ))}
     </TransitionSeries>
+
+    {SCENES.map((s, i) =>
+      s.vo ? (
+        <Sequence key={`vo-${i}`} from={starts[i] + (s.voDelay ?? 0)} name={`VO ${i + 1}`}>
+          <Audio src={staticFile(`vo/${s.vo}`)} volume={1} />
+        </Sequence>
+      ) : null,
+    )}
   </AbsoluteFill>
 );
