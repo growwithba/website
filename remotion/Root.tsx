@@ -2,10 +2,20 @@ import { Composition } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Think14Video, TOTAL } from "./think14/Think14Video";
 import { CINE_TOTAL, Think14Cinematic } from "./think14/cine/Think14Cinematic";
+import { REEL_FRAMES } from "./think14/reel/edit";
+import { Think14Reel } from "./think14/reel/Reel";
 
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      <Composition
+        id="Think14Reel"
+        component={Think14Reel}
+        durationInFrames={REEL_FRAMES}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
       <Composition
         id="Think14Cinematic"
         component={Think14Cinematic}
