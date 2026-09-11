@@ -1,0 +1,498 @@
+<template>
+  <style>
+    /* ── Cobalt Grid · Frame 01 "The report" ───────────────────────────────
+       Palette + type roles pulled from frame.md. Two colors only:
+       cream paper + electric cobalt ink. Zero radius, zero shadow.        */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      /* NO background here — the full-bleed ground is a clip layer below. */
+      --r01tr-paper: #f0ebde;
+      --r01tr-ink: #1f2be0;
+      --r01tr-ink-soft: #5560e5;
+      --r01tr-grid: rgba(31, 43, 224, 0.1);
+      --r01tr-faint: rgba(31, 43, 224, 0.18);
+      --r01tr-serif: "Liberation Serif", "DejaVu Serif", serif;
+      --r01tr-sans: "Liberation Sans", Arial, sans-serif;
+      --r01tr-mono: "DejaVu Sans Mono", "Liberation Mono", monospace;
+    }
+
+    /* ── Layer 1 · the permanent graph-paper ground (full-bleed clip) ──── */
+    .r01tr-ground {
+      position: absolute;
+      inset: 0;
+      background-color: var(--r01tr-paper);
+      background-image:
+        linear-gradient(to right, var(--r01tr-grid) 0 1px, transparent 1px 100%),
+        linear-gradient(to bottom, var(--r01tr-grid) 0 1px, transparent 1px 100%);
+      background-size: 38.4px 38.4px;
+      background-position: 0 0;
+    }
+
+    /* ── Layer 2 · frame furniture: hairlines, topbar, stamp, chrome ───── */
+    .r01tr-furniture {
+      position: absolute;
+      inset: 0;
+      color: var(--r01tr-ink);
+    }
+    .r01tr-rule {
+      position: absolute;
+      background: var(--r01tr-ink);
+      height: 2px;
+      left: 80px;
+      width: 1760px;
+    }
+    .r01tr-hair-top { top: 52px; }
+    .r01tr-hair-bot { top: 866px; }
+    .r01tr-topbar-rule { top: 186px; }
+
+    .r01tr-headline {
+      position: absolute;
+      left: 80px;
+      top: 62px;
+      font-family: var(--r01tr-serif);
+      font-weight: 400;
+      font-size: 6cqw;
+      line-height: 1;
+      letter-spacing: -0.008em;
+      color: var(--r01tr-ink);
+      white-space: nowrap;
+    }
+
+    .r01tr-stamp {
+      position: absolute;
+      right: 80px;
+      top: 92px;
+      border: 2px solid var(--r01tr-ink);
+      padding: 14px 26px 12px;
+      font-family: var(--r01tr-mono);
+      font-size: 26px;
+      letter-spacing: 0.18em;
+      line-height: 1;
+      color: var(--r01tr-ink);
+      white-space: nowrap;
+    }
+
+    .r01tr-chrome {
+      position: absolute;
+      top: 830px;
+      font-family: var(--r01tr-mono);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      color: var(--r01tr-ink);
+    }
+    .r01tr-chrome-l { left: 80px; }
+    .r01tr-chrome-r { right: 80px; }
+
+    /* ── Layer 3 · the report card (foreground subject, left ~58%) ─────── */
+    .r01tr-card {
+      position: absolute;
+      left: 80px;
+      top: 226px;
+      right: auto;
+      bottom: auto;
+      width: 1020px;
+      height: 574px;
+      border: 2px solid var(--r01tr-ink);
+      color: var(--r01tr-ink);
+    }
+    .r01tr-card-kicker {
+      position: absolute;
+      left: 38px;
+      top: 24px;
+      font-family: var(--r01tr-sans);
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .r01tr-card-status {
+      position: absolute;
+      right: 38px;
+      top: 26px;
+      font-family: var(--r01tr-mono);
+      font-size: 13px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    .r01tr-card-rule {
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      top: 74px;
+      height: 2px;
+      background: var(--r01tr-ink);
+    }
+    .r01tr-row {
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      height: 136px;
+      display: flex;
+      align-items: center;
+    }
+    .r01tr-row-1 { top: 90px; }
+    .r01tr-row-2 { top: 226px; }
+    .r01tr-row-3 { top: 362px; }
+    .r01tr-div {
+      position: absolute;
+      left: 38px;
+      right: 38px;
+      height: 1px;
+      background: var(--r01tr-faint);
+    }
+    .r01tr-div-1 { top: 226px; }
+    .r01tr-div-2 { top: 362px; }
+
+    .r01tr-box {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--r01tr-ink);
+      flex: 0 0 auto;
+      position: relative;
+    }
+    .r01tr-box svg {
+      position: absolute;
+      left: -2px;
+      top: -2px;
+      width: 52px;
+      height: 52px;
+      overflow: visible;
+    }
+    .r01tr-check {
+      fill: none;
+      stroke: var(--r01tr-ink);
+      stroke-width: 5;
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+    }
+    .r01tr-name {
+      margin-left: 40px;
+      font-family: var(--r01tr-serif);
+      font-weight: 400;
+      font-size: 1.85cqw;
+      line-height: 1.15;
+      letter-spacing: -0.005em;
+      flex: 1 1 auto;
+    }
+    .r01tr-done {
+      font-family: var(--r01tr-mono);
+      font-size: 26px;
+      letter-spacing: 0.16em;
+      flex: 0 0 auto;
+    }
+    .r01tr-card-foot {
+      position: absolute;
+      left: 38px;
+      top: 520px;
+      font-family: var(--r01tr-mono);
+      font-size: 15px;
+      letter-spacing: 0.14em;
+    }
+
+    /* ── Layer 4 · the plot (focal — the line that never moves) ────────── */
+    .r01tr-plot {
+      position: absolute;
+      left: 1160px;
+      top: 226px;
+      right: auto;
+      bottom: auto;
+      width: 680px;
+      height: 574px;
+      color: var(--r01tr-ink);
+    }
+    .r01tr-plot-kicker {
+      position: absolute;
+      left: 0;
+      top: 22px;
+      font-family: var(--r01tr-sans);
+      font-weight: 600;
+      font-size: 16px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .r01tr-axis {
+      position: absolute;
+      left: 0;
+      top: 86px;
+      width: 2px;
+      height: 412px;
+      background: var(--r01tr-ink);
+    }
+    .r01tr-base {
+      position: absolute;
+      left: 0;
+      top: 498px;
+      width: 680px;
+      height: 2px;
+      background: var(--r01tr-ink);
+    }
+    .r01tr-plot-svg {
+      position: absolute;
+      left: 0;
+      top: 86px;
+      width: 680px;
+      height: 412px;
+      overflow: visible;
+    }
+    .r01tr-flat {
+      fill: none;
+      stroke: var(--r01tr-ink);
+      stroke-width: 6;
+      stroke-linecap: square;
+    }
+    .r01tr-tick {
+      position: absolute;
+      top: 512px;
+      font-family: var(--r01tr-mono);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      transform-origin: left top;
+    }
+    .r01tr-delta {
+      position: absolute;
+      right: 0;
+      top: 226px;
+      font-family: var(--r01tr-mono);
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="01-the-report"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- ground -->
+    <div
+      class="clip r01tr-ground"
+      data-start="0"
+      data-duration="7.381"
+      data-track-index="0"
+    ></div>
+
+    <!-- furniture -->
+    <div
+      class="clip r01tr-furniture"
+      data-start="0"
+      data-duration="7.381"
+      data-track-index="1"
+    >
+      <div class="r01tr-rule r01tr-hair-top" id="r01tr-hairTop"></div>
+      <div class="r01tr-rule r01tr-hair-bot" id="r01tr-hairBot"></div>
+      <div class="r01tr-headline" id="r01tr-headline">Delivered.</div>
+      <div class="r01tr-stamp" id="r01tr-stamp">MONTHLY REPORT</div>
+      <div class="r01tr-rule r01tr-topbar-rule" id="r01tr-topbarRule"></div>
+      <div class="r01tr-chrome r01tr-chrome-l" id="r01tr-chromeL">FIG. 001</div>
+      <div class="r01tr-chrome r01tr-chrome-r" id="r01tr-chromeR">01</div>
+    </div>
+
+    <!-- report card -->
+    <div
+      class="clip r01tr-card"
+      id="r01tr-card"
+      data-start="0"
+      data-duration="7.381"
+      data-track-index="2"
+    >
+      <div class="r01tr-card-kicker" id="r01tr-cardKicker">Deliverables</div>
+      <div class="r01tr-card-status" id="r01tr-cardStatus">Status</div>
+      <div class="r01tr-card-rule" id="r01tr-cardRule"></div>
+
+      <div class="r01tr-div r01tr-div-1" id="r01tr-div1"></div>
+      <div class="r01tr-div r01tr-div-2" id="r01tr-div2"></div>
+
+      <div class="r01tr-row r01tr-row-1" id="r01tr-row1">
+        <div class="r01tr-box">
+          <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <path class="r01tr-check" id="r01tr-check1" d="M 12 27 L 22 37 L 40 15" />
+          </svg>
+        </div>
+        <div class="r01tr-name">Content</div>
+        <div class="r01tr-done" id="r01tr-done1">DONE</div>
+      </div>
+
+      <div class="r01tr-row r01tr-row-2" id="r01tr-row2">
+        <div class="r01tr-box">
+          <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <path class="r01tr-check" id="r01tr-check2" d="M 12 27 L 22 37 L 40 15" />
+          </svg>
+        </div>
+        <div class="r01tr-name">Paid media</div>
+        <div class="r01tr-done" id="r01tr-done2">DONE</div>
+      </div>
+
+      <div class="r01tr-row r01tr-row-3" id="r01tr-row3">
+        <div class="r01tr-box">
+          <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <path class="r01tr-check" id="r01tr-check3" d="M 12 27 L 22 37 L 40 15" />
+          </svg>
+        </div>
+        <div class="r01tr-name">Search</div>
+        <div class="r01tr-done" id="r01tr-done3">DONE</div>
+      </div>
+
+      <div class="r01tr-card-foot" id="r01tr-foot">3 / 3 COMPLETE</div>
+    </div>
+
+    <!-- plot: the flat line -->
+    <div
+      class="clip r01tr-plot"
+      data-start="0"
+      data-duration="7.381"
+      data-track-index="3"
+    >
+      <div class="r01tr-plot-kicker" id="r01tr-plotKicker">Outcome</div>
+      <div class="r01tr-axis" id="r01tr-axis"></div>
+      <div class="r01tr-base" id="r01tr-base"></div>
+      <svg
+        class="r01tr-plot-svg"
+        viewBox="0 0 680 412"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path class="r01tr-flat" id="r01tr-flatline" d="M 6 206 L 674 206" />
+      </svg>
+      <div class="r01tr-tick" id="r01tr-tick1" style="left: 4px">001</div>
+      <div class="r01tr-tick" id="r01tr-tick2" style="left: 226px">002</div>
+      <div class="r01tr-tick" id="r01tr-tick3" style="left: 448px">003</div>
+      <div class="r01tr-tick" id="r01tr-tick4" style="left: 640px">004</div>
+      <div class="r01tr-delta" id="r01tr-delta">&#8212;</div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="01-the-report"]');
+      var q = function (sel) { return root.querySelector(sel); };
+
+      // svg-path-draw setup — measured geometry, never a magic number.
+      var prep = function (sel, fallback) {
+        var p = q(sel);
+        if (!p) return 0;
+        var len = fallback;
+        try {
+          var m = p.getTotalLength();
+          if (m && isFinite(m) && m > 0) len = m;
+        } catch (e) {}
+        p.style.strokeDasharray = String(len);
+        p.style.strokeDashoffset = String(len);
+        return len;
+      };
+
+      var flatLen = prep("#r01tr-flatline", 668);
+      var chkLen = [
+        prep("#r01tr-check1", 43),
+        prep("#r01tr-check2", 43),
+        prep("#r01tr-check3", 43)
+      ];
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      /* ── Scene 1 (0.0–1.9s) · "Every month the report arrives."
+            Ground + hairlines hold the plane; the card slides up and LOCKS
+            into the left two-thirds; the mono stamp stamps down.          */
+      tl.fromTo("#r01tr-hairTop",
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 0.5, ease: "power2.out" }, 0);
+      tl.fromTo("#r01tr-hairBot",
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 0.5, ease: "power2.out" }, 0.06);
+
+      tl.fromTo("#r01tr-card",
+        { y: 92, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.72, ease: "power4.out" }, 0.12);
+
+      tl.fromTo("#r01tr-headline",
+        { y: 38, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.3);
+
+      tl.fromTo("#r01tr-topbarRule",
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 0.45, ease: "power2.out" }, 0.55);
+
+      // the stamp — down hard, no bounce (ink on paper).
+      tl.fromTo("#r01tr-stamp",
+        { scale: 1.4, rotation: -2.2, opacity: 0, transformOrigin: "50% 50%" },
+        { scale: 1, rotation: 0, opacity: 1, duration: 0.28, ease: "power4.out" }, 0.66);
+
+      tl.fromTo(["#r01tr-cardKicker", "#r01tr-cardStatus"],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.34, ease: "power1.out", stagger: 0.06 }, 0.98);
+      tl.fromTo("#r01tr-cardRule",
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 0.4, ease: "power2.out" }, 1.02);
+
+      tl.fromTo("#r01tr-plotKicker",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.36, ease: "power2.out" }, 1.28);
+      tl.fromTo("#r01tr-axis",
+        { scaleY: 0, transformOrigin: "center top" },
+        { scaleY: 1, duration: 0.44, ease: "power2.out" }, 1.42);
+      tl.fromTo("#r01tr-base",
+        { scaleX: 0, transformOrigin: "left center" },
+        { scaleX: 1, duration: 0.5, ease: "power2.out" }, 1.52);
+
+      tl.fromTo(["#r01tr-chromeL", "#r01tr-chromeR"],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.4, ease: "power1.out" }, 1.6);
+
+      /* ── Scene 2 (1.9–3.2s) · "…it says the work got done."
+            svg-path-draw: a constant-speed pen trace, dead level, no rise.
+            It is the only thing in that region.                            */
+      tl.to("#r01tr-flatline",
+        { strokeDashoffset: 0, duration: 1.12, ease: "none" }, 1.96);
+      tl.fromTo(["#r01tr-tick1", "#r01tr-tick2", "#r01tr-tick3", "#r01tr-tick4"],
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power1.out", stagger: 0.1 }, 2.4);
+
+      /* ── Scenes 3–5 · the beat engine: row reveals, tick draws, DONE snaps.
+            One identical move per beat, landing on each voiceover cue.     */
+      var beats = [
+        { row: "#r01tr-row1", chk: "#r01tr-check1", done: "#r01tr-done1", div: null,            t: 3.22 },
+        { row: "#r01tr-row2", chk: "#r01tr-check2", done: "#r01tr-done2", div: "#r01tr-div1",   t: 4.44 },
+        { row: "#r01tr-row3", chk: "#r01tr-check3", done: "#r01tr-done3", div: "#r01tr-div2",   t: 5.54 }
+      ];
+
+      for (var i = 0; i < beats.length; i++) {
+        var b = beats[i];
+        if (b.div) {
+          tl.fromTo(b.div,
+            { scaleX: 0, transformOrigin: "left center" },
+            { scaleX: 1, duration: 0.36, ease: "power2.out" }, b.t - 0.02);
+        }
+        tl.fromTo(b.row,
+          { opacity: 0, x: -26 },
+          { opacity: 1, x: 0, duration: 0.44, ease: "power3.out" }, b.t);
+        // the checkbox ticks itself — same drawn-stroke language as the plot line
+        tl.to(b.chk,
+          { strokeDashoffset: 0, duration: 0.34, ease: "power2.out" }, b.t + 0.4);
+        // percussive punctuation on the beat
+        tl.fromTo(b.done,
+          { opacity: 0, scale: 0.7, transformOrigin: "100% 50%" },
+          { opacity: 1, scale: 1, duration: 0.34, ease: "back.out(2.2)" }, b.t + 0.78);
+      }
+
+      // the card completes; the line's delta is a flat rule.
+      tl.fromTo("#r01tr-foot",
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.34, ease: "power2.out" }, 6.2);
+      tl.fromTo("#r01tr-delta",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.32, ease: "power1.out" }, 6.32);
+
+      /* ── Scene 6 (6.5–7.381s) · held. Both halves still.
+            Nothing about the flat line ever resolves. No exits.           */
+
+      window.__timelines["01-the-report"] = tl;
+    })();
+  </script>
+</template>

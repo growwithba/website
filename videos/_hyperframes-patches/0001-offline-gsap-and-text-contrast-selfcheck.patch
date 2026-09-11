@@ -1,0 +1,1172 @@
+From a973735a796759969629aa38b7234508b2760e52 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 8 Sep 2026 11:52:44 +0000
+Subject: [PATCH] fix(skills): render offline with vendored GSAP; catch
+ unreadable text roles early
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Two failures found driving faceless-explainer through two full films.
+
+**Renders die when the GSAP CDN is unreachable.** Every workflow assembler and
+captions.mjs hardcoded a jsdelivr URL, so on a machine behind an egress proxy,
+in CI without outbound access, or offline, the page loads, `gsap` is never
+defined, and every sub-composition registration throws. The render fails as
+`sub_timeline_script_failure` naming a timeline rather than the network, and
+only after the full frame capture has been paid for. Vendoring GSAP into the
+project by hand did not survive, because re-assembly rewrote the CDN tag back.
+
+lib/gsap-tag.mjs now picks the source: a project-vendored copy at
+assets/vendor/ or public/vendor/ when one exists, else the pinned CDN build.
+A vendored tag carries no integrity or crossorigin — those describe a
+cross-origin fetch, and a hash pinned to the CDN build blocks a local file
+outright, which is its own hard-to-read render failure. The assembler summary
+now names which source it linked. Projects with nothing vendored behave exactly
+as before. talking-head-recut already staged a local GSAP this way; this brings
+the other four workflows in line.
+
+**build-frame's self-check passed body copy at 2.65:1.** It compared only ink
+against canvas, but a brand remix repaints roles by position and can land a
+light accent in a text role — here #F97A4D into `text-muted` on white. Ink and
+canvas still separated, so the check printed "contrast ok" and the failure
+surfaced at the render-time contrast gate, after nine frames had been built
+against the bad spec.
+
+The self-check now reads the color roles the typography ramp actually paints
+text with and measures each against the canvas at the same 3:1 floor the render
+gate enforces, naming every failing role and its ratio. It reports rather than
+dies, so a deliberate edge palette is not blocked. This needed a real WCAG
+ratio: the existing lum() is a weighted sum of raw channels, which rates
+orange-on-white far more readable than it is, so relLuminance()/contrastRatio()
+are added alongside it rather than replacing it.
+
+Both are covered by tests, including the 2.65:1 case as a regression. The
+existing 596 skill tests still pass, captions.mjs stays byte-identical across
+its three workflows, and the skill mirror check is clean.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_017MVv5yTXjk43kpbk6aN19J
+---
+ .../scripts/assemble-index.mjs                | 10 ++-
+ .../scripts/build-frame.mjs                   | 44 ++++++++++++-
+ .../faceless-explainer/scripts/captions.mjs   |  8 ++-
+ .../scripts/gsap-tag.test.mjs                 | 59 +++++++++++++++++
+ .../scripts/lib/gsap-tag.mjs                  | 66 +++++++++++++++++++
+ .../faceless-explainer/scripts/lib/tokens.mjs | 44 +++++++++++++
+ .../scripts/text-contrast.test.mjs            | 65 ++++++++++++++++++
+ .../music-to-video/scripts/assemble-index.mjs | 10 ++-
+ .../music-to-video/scripts/lib/gsap-tag.mjs   | 66 +++++++++++++++++++
+ skills/pr-to-video/scripts/assemble-index.mjs | 10 ++-
+ skills/pr-to-video/scripts/build-frame.mjs    | 44 ++++++++++++-
+ skills/pr-to-video/scripts/captions.mjs       |  8 ++-
+ skills/pr-to-video/scripts/lib/gsap-tag.mjs   | 66 +++++++++++++++++++
+ skills/pr-to-video/scripts/lib/tokens.mjs     | 44 +++++++++++++
+ .../scripts/assemble-index.mjs                | 10 ++-
+ .../scripts/build-frame.mjs                   | 44 ++++++++++++-
+ .../product-launch-video/scripts/captions.mjs |  8 ++-
+ .../scripts/lib/gsap-tag.mjs                  | 66 +++++++++++++++++++
+ .../scripts/lib/tokens.mjs                    | 44 +++++++++++++
+ 19 files changed, 700 insertions(+), 16 deletions(-)
+ create mode 100644 skills/faceless-explainer/scripts/gsap-tag.test.mjs
+ create mode 100644 skills/faceless-explainer/scripts/lib/gsap-tag.mjs
+ create mode 100644 skills/faceless-explainer/scripts/text-contrast.test.mjs
+ create mode 100644 skills/music-to-video/scripts/lib/gsap-tag.mjs
+ create mode 100644 skills/pr-to-video/scripts/lib/gsap-tag.mjs
+ create mode 100644 skills/product-launch-video/scripts/lib/gsap-tag.mjs
+
+diff --git a/skills/faceless-explainer/scripts/assemble-index.mjs b/skills/faceless-explainer/scripts/assemble-index.mjs
+index 1104dc7..98a844d 100644
+--- a/skills/faceless-explainer/scripts/assemble-index.mjs
++++ b/skills/faceless-explainer/scripts/assemble-index.mjs
+@@ -56,6 +56,7 @@ import { spawnSync } from "node:child_process";
+ import { basename, join, resolve } from "node:path";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
+ import { parseFormat } from "./lib/dimensions.mjs";
++import { GSAP_CDN_VERSION, gsapScriptTag } from "./lib/gsap-tag.mjs";
+ import { stageAssets } from "./lib/assets.mjs";
+ import { parseColors, semanticColors } from "./lib/tokens.mjs";
+ import { bgmDefaultVolume } from "../../media-use/audio/scripts/lib/bgm.mjs";
+@@ -571,12 +572,16 @@ const headStyle = [
+   "      }",
+ ].join("\n");
+ 
++// GSAP source: a project-vendored copy when there is one (renders offline),
++// otherwise the pinned CDN build. See lib/gsap-tag.mjs.
++const { tag: gsapTag, vendored: gsapVendored } = gsapScriptTag(hyperframesDir);
++
+ const html = `<!doctype html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=${WIDTH}, height=${HEIGHT}" />
+-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++    ${gsapTag}
+     <style>
+ ${headStyle}
+     </style>
+@@ -606,6 +611,9 @@ writeFileSync(outPath, html);
+ // ---------- summary ----------
+ console.log(`✓ wrote ${outPath}`);
+ console.log(`  canvas:            ${WIDTH}×${HEIGHT}`);
++console.log(
++  `  gsap:              ${gsapVendored ? gsapVendored + " (vendored — renders offline)" : "CDN " + GSAP_CDN_VERSION + " (no vendored copy; render needs network)"}`,
++);
+ console.log(`  frames (track 1):  ${mounted.length}`);
+ console.log(`  voice  (track 10): ${voiceCount}`);
+ console.log(`  bgm    (track 11): ${bgmEmitted ? "yes" + bgmNote : "no"}`);
+diff --git a/skills/faceless-explainer/scripts/build-frame.mjs b/skills/faceless-explainer/scripts/build-frame.mjs
+index ec08e11..ae21510 100644
+--- a/skills/faceless-explainer/scripts/build-frame.mjs
++++ b/skills/faceless-explainer/scripts/build-frame.mjs
+@@ -32,12 +32,14 @@ import { fileURLToPath } from "node:url";
+ import {
+   brandRolesFromStats,
+   chroma,
++  contrastRatio,
+   lum,
+   parseColors,
+   parseFonts,
+   pickAccent,
+   semanticColors,
+   STATUS_ROLE_KEY,
++  textColorRoles,
+   UA_DEFAULT_COLORS,
+ } from "./lib/tokens.mjs";
+ 
+@@ -526,6 +528,9 @@ if (existsSync(presetSkin)) {
+   skinCopied = true;
+ }
+ 
++// Text must clear the same 3:1 floor the render-time contrast pass enforces.
++const TEXT_CONTRAST_MIN = 3;
++
+ // ── self-validate ─────────────────────────────────────────────────────────────
+ const outColors = parseColors(md);
+ if (outColors.length !== presetColors.length) {
+@@ -543,9 +548,46 @@ if (li != null && lc != null && Math.abs(li - lc) < 40) {
+   );
+ }
+ 
++// Every color the typography ramp paints text with must stay readable on the
++// canvas — not just `ink`. A brand remix repaints roles by position, so it can
++// land a light accent in a body-copy role (e.g. a brand orange into `text-muted`)
++// while ink/canvas still separates cleanly. That passes here and then fails the
++// render-time contrast gate, after every frame has already been built against
++// the bad spec. Check it now, while it is one file to fix.
++const outMap = new Map(outColors);
++const canvasHex = outRoles.canvas;
++const textRoles = textColorRoles(md);
++const failures = [];
++let checked = 0;
++for (const role of textRoles) {
++  const hex = outMap.get(role);
++  if (!hex) continue;
++  const ratio = contrastRatio(hex, canvasHex);
++  if (ratio == null) continue; // rgba()/var() — not resolvable here
++  checked += 1;
++  if (ratio < TEXT_CONTRAST_MIN) failures.push({ role, hex, ratio });
++}
++
+ console.log(`✓ build-frame: ${presetName} → ${framePath}`);
+ for (const s of summary) console.log(`  ${s}`);
+ console.log(
+   `  .hyperframes/caption-skin.html: ${skinCopied ? "copied" : "preset ships none — captions will use the default pill"}`,
+ );
+-console.log(`  self-check: keys preserved, ink/canvas contrast ok ✓`);
++if (failures.length) {
++  console.log(
++    `  self-check: keys preserved, ink/canvas contrast ok — but ${failures.length} of ${checked} text role(s) FAIL ${TEXT_CONTRAST_MIN}:1 on canvas ${canvasHex}:`,
++  );
++  for (const f of failures) {
++    console.log(`    ✗ ${f.role} ${f.hex} = ${f.ratio.toFixed(2)}:1`);
++  }
++  console.log(
++    `    These will fail \`hyperframes check\` at render time. Fix ${framePath} before building frames:`,
++  );
++  console.log(
++    `    darken the role for text use, or move the brand color to a fill-only key and give the text role a readable value.`,
++  );
++} else {
++  console.log(
++    `  self-check: keys preserved, ink/canvas contrast ok, ${checked} text role(s) ≥ ${TEXT_CONTRAST_MIN}:1 ✓`,
++  );
++}
+diff --git a/skills/faceless-explainer/scripts/captions.mjs b/skills/faceless-explainer/scripts/captions.mjs
+index 7e04aff..ba6c4e9 100644
+--- a/skills/faceless-explainer/scripts/captions.mjs
++++ b/skills/faceless-explainer/scripts/captions.mjs
+@@ -38,6 +38,7 @@ import { fileURLToPath } from "node:url";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
+ import { captionBand, parseFormat } from "./lib/dimensions.mjs";
+ import { parseColors, parseFonts, semanticColors } from "./lib/tokens.mjs";
++import { gsapScriptTag } from "./lib/gsap-tag.mjs";
+ 
+ const flag = (argv, name, def) => {
+   const i = argv.indexOf(`--${name}`);
+@@ -192,7 +193,7 @@ function runBuild(argv) {
+     );
+     source = `preset skin (${skinPath.replace(hyperframesDir + "/", "")})`;
+   } else {
+-    writeFileSync(htmlPath, buildCaptionsHtml(finalized, total, W, H));
++    writeFileSync(htmlPath, buildCaptionsHtml(finalized, total, W, H, hyperframesDir));
+     source = "default (built-in pill)";
+   }
+ 
+@@ -429,7 +430,8 @@ function frameTokensCss(framePath, H) {
+ // per word for the karaoke highlight — no className flips, no JS state) and ends each
+ // group with a hard tl.set kill so an exit can't get stuck. gsap is loaded via CDN
+ // inside the template (matching the frame compositions). Band = captionBand(H).
+-function buildCaptionsHtml(groups, total, W, H) {
++function buildCaptionsHtml(groups, total, W, H, projectDir = ".") {
++  const { tag: gsapTag } = gsapScriptTag(projectDir);
+   const band = captionBand(H);
+   const fs = Math.round(H * 0.038);
+   const pad = Math.round(fs * 0.4);
+@@ -477,7 +479,7 @@ function buildCaptionsHtml(groups, total, W, H) {
+       color: rgba(255, 255, 255, 0.55);
+     }
+   </style>
+-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++  ${gsapTag}
+   <script>
+     (function () {
+       var GROUPS = ${JSON.stringify(groups)};
+diff --git a/skills/faceless-explainer/scripts/gsap-tag.test.mjs b/skills/faceless-explainer/scripts/gsap-tag.test.mjs
+new file mode 100644
+index 0000000..2e8667e
+--- /dev/null
++++ b/skills/faceless-explainer/scripts/gsap-tag.test.mjs
+@@ -0,0 +1,59 @@
++import { strict as assert } from "node:assert";
++import { test } from "node:test";
++import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
++import { tmpdir } from "node:os";
++import { join, dirname } from "node:path";
++
++import {
++  GSAP_CDN_INTEGRITY,
++  GSAP_CDN_URL,
++  GSAP_VENDOR_CANDIDATES,
++  findVendoredGsap,
++  gsapScriptTag,
++} from "./lib/gsap-tag.mjs";
++
++function project(vendorRel) {
++  const dir = mkdtempSync(join(tmpdir(), "hf-gsap-"));
++  if (vendorRel) {
++    const abs = join(dir, vendorRel);
++    mkdirSync(dirname(abs), { recursive: true });
++    writeFileSync(abs, "/* gsap */");
++  }
++  return dir;
++}
++
++test("falls back to the pinned CDN when the project vendors nothing", () => {
++  const { tag, vendored } = gsapScriptTag(project(null));
++  assert.equal(vendored, null);
++  assert.ok(tag.includes(GSAP_CDN_URL));
++  assert.ok(tag.includes(GSAP_CDN_INTEGRITY));
++  assert.ok(tag.includes('crossorigin="anonymous"'));
++});
++
++test("prefers a vendored copy over the CDN", () => {
++  for (const rel of GSAP_VENDOR_CANDIDATES) {
++    const dir = project(rel);
++    assert.equal(findVendoredGsap(dir), rel);
++    const { tag, vendored } = gsapScriptTag(dir);
++    assert.equal(vendored, rel);
++    assert.equal(tag, `<script src="${rel}"></script>`);
++  }
++});
++
++test("a vendored tag carries no integrity or crossorigin", () => {
++  // A hash pinned to the CDN build blocks a locally vendored file outright, and
++  // crossorigin is meaningless same-origin. Getting this wrong reproduces the
++  // exact `subresource-integrity` render failure this helper exists to prevent.
++  const { tag } = gsapScriptTag(project(GSAP_VENDOR_CANDIDATES[0]));
++  assert.ok(!tag.includes("integrity"));
++  assert.ok(!tag.includes("crossorigin"));
++  assert.ok(!tag.includes("cdn.jsdelivr.net"));
++});
++
++test("assets/vendor wins when both candidate locations exist", () => {
++  const dir = project(GSAP_VENDOR_CANDIDATES[0]);
++  const second = join(dir, GSAP_VENDOR_CANDIDATES[1]);
++  mkdirSync(dirname(second), { recursive: true });
++  writeFileSync(second, "/* gsap */");
++  assert.equal(findVendoredGsap(dir), GSAP_VENDOR_CANDIDATES[0]);
++});
+diff --git a/skills/faceless-explainer/scripts/lib/gsap-tag.mjs b/skills/faceless-explainer/scripts/lib/gsap-tag.mjs
+new file mode 100644
+index 0000000..b0296ba
+--- /dev/null
++++ b/skills/faceless-explainer/scripts/lib/gsap-tag.mjs
+@@ -0,0 +1,66 @@
++// gsap-tag.mjs — emit the <script> tag that loads GSAP into an assembled
++// composition, preferring a copy vendored inside the project.
++//
++// Why this exists. The assemblers used to hardcode a jsdelivr CDN URL with a
++// subresource-integrity hash. That is correct on a networked machine and fatal
++// everywhere else: renders run in a headless Chrome that may sit behind an
++// egress proxy, in CI without outbound access, or on a plane. When the fetch is
++// blocked the page loads, `gsap` is never defined, every sub-composition's
++// registration script throws, and the render dies late with
++// `sub_timeline_script_failure` — after the full frame capture has been paid for.
++// The failure names the timeline, not the network, so it reads as a composition
++// bug rather than a missing dependency.
++//
++// So: if the project carries its own GSAP, link that instead. A project-local
++// file is same-origin, needs no integrity attribute, and renders offline.
++// Nothing is downloaded or written here — this only decides which src to emit,
++// so a project without a vendored copy behaves exactly as before.
++
++import { existsSync } from "node:fs";
++import { join } from "node:path";
++
++// Pinned CDN fallback. Keep the version and hash in lockstep: the integrity
++// attribute is computed over this exact file, so bumping one without the other
++// makes browsers refuse the script — the same hard failure this module exists
++// to avoid.
++export const GSAP_CDN_VERSION = "3.14.2";
++export const GSAP_CDN_URL = `https://cdn.jsdelivr.net/npm/gsap@${GSAP_CDN_VERSION}/dist/gsap.min.js`;
++export const GSAP_CDN_INTEGRITY =
++  "sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2";
++
++// Where a project may vendor GSAP, most conventional first. `public/vendor/` is
++// the layout talking-head-recut already stages into; `assets/vendor/` matches
++// the `assets` path the rest of the workflows write to.
++export const GSAP_VENDOR_CANDIDATES = ["assets/vendor/gsap.min.js", "public/vendor/gsap.min.js"];
++
++/**
++ * Find a project-vendored GSAP, if there is one.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {string|null}      project-relative path, or null when none exists
++ */
++export function findVendoredGsap(projectDir) {
++  for (const rel of GSAP_VENDOR_CANDIDATES) {
++    if (existsSync(join(projectDir, rel))) return rel;
++  }
++  return null;
++}
++
++/**
++ * Build the GSAP <script> tag for an assembled composition.
++ *
++ * A vendored copy wins over the CDN, and is emitted without `integrity` /
++ * `crossorigin`: those describe a cross-origin fetch, and a stale hash against a
++ * local file blocks the script outright.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {{ tag: string, vendored: string|null }}
++ */
++export function gsapScriptTag(projectDir) {
++  const vendored = findVendoredGsap(projectDir);
++  if (vendored) return { tag: `<script src="${vendored}"></script>`, vendored };
++  return {
++    tag: `<script src="${GSAP_CDN_URL}" integrity="${GSAP_CDN_INTEGRITY}" crossorigin="anonymous"></script>`,
++    vendored: null,
++  };
++}
+diff --git a/skills/faceless-explainer/scripts/lib/tokens.mjs b/skills/faceless-explainer/scripts/lib/tokens.mjs
+index c2f3321..a6bc808 100644
+--- a/skills/faceless-explainer/scripts/lib/tokens.mjs
++++ b/skills/faceless-explainer/scripts/lib/tokens.mjs
+@@ -209,3 +209,47 @@ export function parseFonts(md) {
+     null;
+   return { display: q(display), body: q(body), mono: q(mono) };
+ }
++
++// WCAG relative luminance of a #rrggbb (null for non-hex like rgba()).
++// Distinct from lum() above: that one is a cheap weighted sum of raw 0–255
++// channels used for ordering/"is this light or dark" decisions. Contrast ratios
++// need sRGB-linearized channels, and the two are not interchangeable — a naive
++// weighted sum reports orange-on-white as far more readable than it is.
++export function relLuminance(v) {
++  const m = /^#?([0-9a-fA-F]{6})$/.exec(String(v).trim());
++  if (!m) return null;
++  const n = parseInt(m[1], 16);
++  const chan = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
++    const s = c / 255;
++    return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
++  });
++  return 0.2126 * chan[0] + 0.7152 * chan[1] + 0.0722 * chan[2];
++}
++
++// WCAG contrast ratio between two #rrggbb colors (null when either is non-hex).
++// 1 = identical, 21 = black on white. The downstream `hyperframes check`
++// contrast pass gates text at 3:1.
++export function contrastRatio(a, b) {
++  const la = relLuminance(a),
++    lb = relLuminance(b);
++  if (la == null || lb == null) return null;
++  const hi = Math.max(la, lb),
++    lo = Math.min(la, lb);
++  return (hi + 0.05) / (lo + 0.05);
++}
++
++// Color-role keys the `typography:` ramp actually paints text with, e.g. a ramp
++// entry `body: { ..., color: "text-muted" }` yields "text-muted". These are the
++// keys a brand remix must keep readable against the canvas — checking only
++// ink-vs-canvas misses every one of them.
++export function textColorRoles(md) {
++  const block = /^typography:\s*$/m.exec(md);
++  if (!block) return [];
++  const rest = md.slice(block.index + block[0].length);
++  // stop at the next top-level key (a non-indented `word:` line)
++  const end = /^\S[^\n]*:\s*$/m.exec(rest);
++  const body = end ? rest.slice(0, end.index) : rest;
++  const roles = new Set();
++  for (const m of body.matchAll(/\bcolor:\s*"([^"]+)"/g)) roles.add(m[1].trim());
++  return [...roles];
++}
+diff --git a/skills/faceless-explainer/scripts/text-contrast.test.mjs b/skills/faceless-explainer/scripts/text-contrast.test.mjs
+new file mode 100644
+index 0000000..8d21cf7
+--- /dev/null
++++ b/skills/faceless-explainer/scripts/text-contrast.test.mjs
+@@ -0,0 +1,65 @@
++import { strict as assert } from "node:assert";
++import { test } from "node:test";
++
++import { contrastRatio, relLuminance, textColorRoles } from "./lib/tokens.mjs";
++
++test("contrastRatio matches known WCAG anchors", () => {
++  assert.equal(contrastRatio("#000000", "#FFFFFF").toFixed(0), "21");
++  assert.equal(contrastRatio("#FFFFFF", "#FFFFFF").toFixed(0), "1");
++  // symmetric — order of arguments must not matter
++  assert.equal(
++    contrastRatio("#111111", "#FFFFFF").toFixed(4),
++    contrastRatio("#FFFFFF", "#111111").toFixed(4),
++  );
++});
++
++test("contrastRatio is null for colors it cannot resolve", () => {
++  assert.equal(contrastRatio("rgba(0,0,0,0.5)", "#FFFFFF"), null);
++  assert.equal(contrastRatio("var(--x)", "#FFFFFF"), null);
++  assert.equal(relLuminance("not-a-color"), null);
++});
++
++test("a light brand accent fails the 3:1 text floor on white", () => {
++  // The regression this guards: a brand remix put #F97A4D into the body-copy
++  // role against a white canvas. ink/canvas still separated cleanly, so the old
++  // self-check passed and the render-time contrast gate failed nine frames later.
++  const ratio = contrastRatio("#F97A4D", "#FFFFFF");
++  assert.ok(ratio < 3, `expected < 3:1, got ${ratio}`);
++  assert.equal(ratio.toFixed(2), "2.65");
++  // and the darkened variant that replaced it clears the floor
++  assert.ok(contrastRatio("#D9542A", "#FFFFFF") >= 3);
++});
++
++test("textColorRoles reads the color roles the typography ramp paints with", () => {
++  const md = [
++    "colors:",
++    '  text: "#111111"',
++    '  text-muted: "#6B6B6B"',
++    "",
++    "typography:",
++    '  body:   { fontFamily: "Inter", cqw: 0.85, color: "text-muted" }',
++    '  h1:     { fontFamily: "Inter", cqw: 4.2, color: "text" }',
++    '  stat:   { fontFamily: "Inter", cqw: 1.9, color: "primary" }',
++    "",
++    "spacing:",
++    '  pad-x: "5cqw"',
++  ].join("\n");
++  const roles = textColorRoles(md);
++  assert.deepEqual(roles.sort(), ["primary", "text", "text-muted"]);
++});
++
++test("textColorRoles stops at the next top-level key", () => {
++  // `color:` inside a later block (components, say) is not part of the type ramp
++  // and must not be pulled in.
++  const md = [
++    "typography:",
++    '  body: { color: "text" }',
++    "components:",
++    '  chip: { color: "should-not-appear" }',
++  ].join("\n");
++  assert.deepEqual(textColorRoles(md), ["text"]);
++});
++
++test("textColorRoles is empty when there is no typography block", () => {
++  assert.deepEqual(textColorRoles('colors:\n  text: "#111111"\n'), []);
++});
+diff --git a/skills/music-to-video/scripts/assemble-index.mjs b/skills/music-to-video/scripts/assemble-index.mjs
+index e5b6d59..cc76499 100644
+--- a/skills/music-to-video/scripts/assemble-index.mjs
++++ b/skills/music-to-video/scripts/assemble-index.mjs
+@@ -27,6 +27,7 @@
+ import { existsSync, readFileSync, writeFileSync } from "node:fs";
+ import { basename, join, resolve } from "node:path";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
++import { GSAP_CDN_VERSION, gsapScriptTag } from "./lib/gsap-tag.mjs";
+ 
+ const argv = process.argv.slice(2);
+ const flag = (name, def) => {
+@@ -177,12 +178,16 @@ const headStyle = [
+   "      .frame { position: absolute; inset: 0; width: 100%; height: 100%; }",
+ ].join("\n");
+ 
++// GSAP source: a project-vendored copy when there is one (renders offline),
++// otherwise the pinned CDN build. See lib/gsap-tag.mjs.
++const { tag: gsapTag, vendored: gsapVendored } = gsapScriptTag(hyperframesDir);
++
+ const html = `<!doctype html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=${WIDTH}, height=${HEIGHT}" />
+-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++    ${gsapTag}
+     <style>
+ ${headStyle}
+     </style>
+@@ -210,6 +215,9 @@ writeFileSync(outPath, html);
+ 
+ console.log(`✓ wrote ${outPath}`);
+ console.log(`  canvas:           ${WIDTH}×${HEIGHT}`);
++console.log(
++  `  gsap:              ${gsapVendored ? gsapVendored + " (vendored — renders offline)" : "CDN " + GSAP_CDN_VERSION + " (no vendored copy; render needs network)"}`,
++);
+ console.log(`  frames (track 1): ${mounted.length}`);
+ console.log(`  bgm (track 11):   ${bgmEmitted ? bgmRel : "MISSING"}`);
+ console.log(`  vo (track 10):    ${voiceCount}`);
+diff --git a/skills/music-to-video/scripts/lib/gsap-tag.mjs b/skills/music-to-video/scripts/lib/gsap-tag.mjs
+new file mode 100644
+index 0000000..b0296ba
+--- /dev/null
++++ b/skills/music-to-video/scripts/lib/gsap-tag.mjs
+@@ -0,0 +1,66 @@
++// gsap-tag.mjs — emit the <script> tag that loads GSAP into an assembled
++// composition, preferring a copy vendored inside the project.
++//
++// Why this exists. The assemblers used to hardcode a jsdelivr CDN URL with a
++// subresource-integrity hash. That is correct on a networked machine and fatal
++// everywhere else: renders run in a headless Chrome that may sit behind an
++// egress proxy, in CI without outbound access, or on a plane. When the fetch is
++// blocked the page loads, `gsap` is never defined, every sub-composition's
++// registration script throws, and the render dies late with
++// `sub_timeline_script_failure` — after the full frame capture has been paid for.
++// The failure names the timeline, not the network, so it reads as a composition
++// bug rather than a missing dependency.
++//
++// So: if the project carries its own GSAP, link that instead. A project-local
++// file is same-origin, needs no integrity attribute, and renders offline.
++// Nothing is downloaded or written here — this only decides which src to emit,
++// so a project without a vendored copy behaves exactly as before.
++
++import { existsSync } from "node:fs";
++import { join } from "node:path";
++
++// Pinned CDN fallback. Keep the version and hash in lockstep: the integrity
++// attribute is computed over this exact file, so bumping one without the other
++// makes browsers refuse the script — the same hard failure this module exists
++// to avoid.
++export const GSAP_CDN_VERSION = "3.14.2";
++export const GSAP_CDN_URL = `https://cdn.jsdelivr.net/npm/gsap@${GSAP_CDN_VERSION}/dist/gsap.min.js`;
++export const GSAP_CDN_INTEGRITY =
++  "sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2";
++
++// Where a project may vendor GSAP, most conventional first. `public/vendor/` is
++// the layout talking-head-recut already stages into; `assets/vendor/` matches
++// the `assets` path the rest of the workflows write to.
++export const GSAP_VENDOR_CANDIDATES = ["assets/vendor/gsap.min.js", "public/vendor/gsap.min.js"];
++
++/**
++ * Find a project-vendored GSAP, if there is one.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {string|null}      project-relative path, or null when none exists
++ */
++export function findVendoredGsap(projectDir) {
++  for (const rel of GSAP_VENDOR_CANDIDATES) {
++    if (existsSync(join(projectDir, rel))) return rel;
++  }
++  return null;
++}
++
++/**
++ * Build the GSAP <script> tag for an assembled composition.
++ *
++ * A vendored copy wins over the CDN, and is emitted without `integrity` /
++ * `crossorigin`: those describe a cross-origin fetch, and a stale hash against a
++ * local file blocks the script outright.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {{ tag: string, vendored: string|null }}
++ */
++export function gsapScriptTag(projectDir) {
++  const vendored = findVendoredGsap(projectDir);
++  if (vendored) return { tag: `<script src="${vendored}"></script>`, vendored };
++  return {
++    tag: `<script src="${GSAP_CDN_URL}" integrity="${GSAP_CDN_INTEGRITY}" crossorigin="anonymous"></script>`,
++    vendored: null,
++  };
++}
+diff --git a/skills/pr-to-video/scripts/assemble-index.mjs b/skills/pr-to-video/scripts/assemble-index.mjs
+index b05f4d9..b99e4a2 100644
+--- a/skills/pr-to-video/scripts/assemble-index.mjs
++++ b/skills/pr-to-video/scripts/assemble-index.mjs
+@@ -56,6 +56,7 @@ import { spawnSync } from "node:child_process";
+ import { basename, join, resolve } from "node:path";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
+ import { parseFormat } from "./lib/dimensions.mjs";
++import { GSAP_CDN_VERSION, gsapScriptTag } from "./lib/gsap-tag.mjs";
+ import { stageAssets } from "./lib/assets.mjs";
+ import { parseColors, semanticColors } from "./lib/tokens.mjs";
+ import { validateFrameHtml } from "./lib/frame-contract.mjs";
+@@ -577,12 +578,16 @@ const headStyle = [
+   "      }",
+ ].join("\n");
+ 
++// GSAP source: a project-vendored copy when there is one (renders offline),
++// otherwise the pinned CDN build. See lib/gsap-tag.mjs.
++const { tag: gsapTag, vendored: gsapVendored } = gsapScriptTag(hyperframesDir);
++
+ const html = `<!doctype html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=${WIDTH}, height=${HEIGHT}" />
+-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++    ${gsapTag}
+     <style>
+ ${headStyle}
+     </style>
+@@ -612,6 +617,9 @@ writeFileSync(outPath, html);
+ // ---------- summary ----------
+ console.log(`✓ wrote ${outPath}`);
+ console.log(`  canvas:            ${WIDTH}×${HEIGHT}`);
++console.log(
++  `  gsap:              ${gsapVendored ? gsapVendored + " (vendored — renders offline)" : "CDN " + GSAP_CDN_VERSION + " (no vendored copy; render needs network)"}`,
++);
+ console.log(`  frames (track 1):  ${mounted.length}`);
+ console.log(`  voice  (track 10): ${voiceCount}`);
+ console.log(`  bgm    (track 11): ${bgmEmitted ? "yes" + bgmNote : "no"}`);
+diff --git a/skills/pr-to-video/scripts/build-frame.mjs b/skills/pr-to-video/scripts/build-frame.mjs
+index b5f6855..93ee5e9 100644
+--- a/skills/pr-to-video/scripts/build-frame.mjs
++++ b/skills/pr-to-video/scripts/build-frame.mjs
+@@ -32,12 +32,14 @@ import { fileURLToPath } from "node:url";
+ import {
+   brandRolesFromStats,
+   chroma,
++  contrastRatio,
+   lum,
+   parseColors,
+   parseFonts,
+   pickAccent,
+   semanticColors,
+   STATUS_ROLE_KEY,
++  textColorRoles,
+   UA_DEFAULT_COLORS,
+ } from "./lib/tokens.mjs";
+ 
+@@ -561,6 +563,9 @@ if (existsSync(presetSkin)) {
+   skinCopied = true;
+ }
+ 
++// Text must clear the same 3:1 floor the render-time contrast pass enforces.
++const TEXT_CONTRAST_MIN = 3;
++
+ // ── self-validate ─────────────────────────────────────────────────────────────
+ const outColors = parseColors(md);
+ if (outColors.length !== presetColors.length) {
+@@ -578,9 +583,46 @@ if (li != null && lc != null && Math.abs(li - lc) < 40) {
+   );
+ }
+ 
++// Every color the typography ramp paints text with must stay readable on the
++// canvas — not just `ink`. A brand remix repaints roles by position, so it can
++// land a light accent in a body-copy role (e.g. a brand orange into `text-muted`)
++// while ink/canvas still separates cleanly. That passes here and then fails the
++// render-time contrast gate, after every frame has already been built against
++// the bad spec. Check it now, while it is one file to fix.
++const outMap = new Map(outColors);
++const canvasHex = outRoles.canvas;
++const textRoles = textColorRoles(md);
++const failures = [];
++let checked = 0;
++for (const role of textRoles) {
++  const hex = outMap.get(role);
++  if (!hex) continue;
++  const ratio = contrastRatio(hex, canvasHex);
++  if (ratio == null) continue; // rgba()/var() — not resolvable here
++  checked += 1;
++  if (ratio < TEXT_CONTRAST_MIN) failures.push({ role, hex, ratio });
++}
++
+ console.log(`✓ build-frame: ${presetName} → ${framePath}`);
+ for (const s of summary) console.log(`  ${s}`);
+ console.log(
+   `  .hyperframes/caption-skin.html: ${skinCopied ? "copied" : "preset ships none — captions will use the default pill"}`,
+ );
+-console.log(`  self-check: keys preserved, ink/canvas contrast ok ✓`);
++if (failures.length) {
++  console.log(
++    `  self-check: keys preserved, ink/canvas contrast ok — but ${failures.length} of ${checked} text role(s) FAIL ${TEXT_CONTRAST_MIN}:1 on canvas ${canvasHex}:`,
++  );
++  for (const f of failures) {
++    console.log(`    ✗ ${f.role} ${f.hex} = ${f.ratio.toFixed(2)}:1`);
++  }
++  console.log(
++    `    These will fail \`hyperframes check\` at render time. Fix ${framePath} before building frames:`,
++  );
++  console.log(
++    `    darken the role for text use, or move the brand color to a fill-only key and give the text role a readable value.`,
++  );
++} else {
++  console.log(
++    `  self-check: keys preserved, ink/canvas contrast ok, ${checked} text role(s) ≥ ${TEXT_CONTRAST_MIN}:1 ✓`,
++  );
++}
+diff --git a/skills/pr-to-video/scripts/captions.mjs b/skills/pr-to-video/scripts/captions.mjs
+index 7e04aff..ba6c4e9 100644
+--- a/skills/pr-to-video/scripts/captions.mjs
++++ b/skills/pr-to-video/scripts/captions.mjs
+@@ -38,6 +38,7 @@ import { fileURLToPath } from "node:url";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
+ import { captionBand, parseFormat } from "./lib/dimensions.mjs";
+ import { parseColors, parseFonts, semanticColors } from "./lib/tokens.mjs";
++import { gsapScriptTag } from "./lib/gsap-tag.mjs";
+ 
+ const flag = (argv, name, def) => {
+   const i = argv.indexOf(`--${name}`);
+@@ -192,7 +193,7 @@ function runBuild(argv) {
+     );
+     source = `preset skin (${skinPath.replace(hyperframesDir + "/", "")})`;
+   } else {
+-    writeFileSync(htmlPath, buildCaptionsHtml(finalized, total, W, H));
++    writeFileSync(htmlPath, buildCaptionsHtml(finalized, total, W, H, hyperframesDir));
+     source = "default (built-in pill)";
+   }
+ 
+@@ -429,7 +430,8 @@ function frameTokensCss(framePath, H) {
+ // per word for the karaoke highlight — no className flips, no JS state) and ends each
+ // group with a hard tl.set kill so an exit can't get stuck. gsap is loaded via CDN
+ // inside the template (matching the frame compositions). Band = captionBand(H).
+-function buildCaptionsHtml(groups, total, W, H) {
++function buildCaptionsHtml(groups, total, W, H, projectDir = ".") {
++  const { tag: gsapTag } = gsapScriptTag(projectDir);
+   const band = captionBand(H);
+   const fs = Math.round(H * 0.038);
+   const pad = Math.round(fs * 0.4);
+@@ -477,7 +479,7 @@ function buildCaptionsHtml(groups, total, W, H) {
+       color: rgba(255, 255, 255, 0.55);
+     }
+   </style>
+-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++  ${gsapTag}
+   <script>
+     (function () {
+       var GROUPS = ${JSON.stringify(groups)};
+diff --git a/skills/pr-to-video/scripts/lib/gsap-tag.mjs b/skills/pr-to-video/scripts/lib/gsap-tag.mjs
+new file mode 100644
+index 0000000..b0296ba
+--- /dev/null
++++ b/skills/pr-to-video/scripts/lib/gsap-tag.mjs
+@@ -0,0 +1,66 @@
++// gsap-tag.mjs — emit the <script> tag that loads GSAP into an assembled
++// composition, preferring a copy vendored inside the project.
++//
++// Why this exists. The assemblers used to hardcode a jsdelivr CDN URL with a
++// subresource-integrity hash. That is correct on a networked machine and fatal
++// everywhere else: renders run in a headless Chrome that may sit behind an
++// egress proxy, in CI without outbound access, or on a plane. When the fetch is
++// blocked the page loads, `gsap` is never defined, every sub-composition's
++// registration script throws, and the render dies late with
++// `sub_timeline_script_failure` — after the full frame capture has been paid for.
++// The failure names the timeline, not the network, so it reads as a composition
++// bug rather than a missing dependency.
++//
++// So: if the project carries its own GSAP, link that instead. A project-local
++// file is same-origin, needs no integrity attribute, and renders offline.
++// Nothing is downloaded or written here — this only decides which src to emit,
++// so a project without a vendored copy behaves exactly as before.
++
++import { existsSync } from "node:fs";
++import { join } from "node:path";
++
++// Pinned CDN fallback. Keep the version and hash in lockstep: the integrity
++// attribute is computed over this exact file, so bumping one without the other
++// makes browsers refuse the script — the same hard failure this module exists
++// to avoid.
++export const GSAP_CDN_VERSION = "3.14.2";
++export const GSAP_CDN_URL = `https://cdn.jsdelivr.net/npm/gsap@${GSAP_CDN_VERSION}/dist/gsap.min.js`;
++export const GSAP_CDN_INTEGRITY =
++  "sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2";
++
++// Where a project may vendor GSAP, most conventional first. `public/vendor/` is
++// the layout talking-head-recut already stages into; `assets/vendor/` matches
++// the `assets` path the rest of the workflows write to.
++export const GSAP_VENDOR_CANDIDATES = ["assets/vendor/gsap.min.js", "public/vendor/gsap.min.js"];
++
++/**
++ * Find a project-vendored GSAP, if there is one.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {string|null}      project-relative path, or null when none exists
++ */
++export function findVendoredGsap(projectDir) {
++  for (const rel of GSAP_VENDOR_CANDIDATES) {
++    if (existsSync(join(projectDir, rel))) return rel;
++  }
++  return null;
++}
++
++/**
++ * Build the GSAP <script> tag for an assembled composition.
++ *
++ * A vendored copy wins over the CDN, and is emitted without `integrity` /
++ * `crossorigin`: those describe a cross-origin fetch, and a stale hash against a
++ * local file blocks the script outright.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {{ tag: string, vendored: string|null }}
++ */
++export function gsapScriptTag(projectDir) {
++  const vendored = findVendoredGsap(projectDir);
++  if (vendored) return { tag: `<script src="${vendored}"></script>`, vendored };
++  return {
++    tag: `<script src="${GSAP_CDN_URL}" integrity="${GSAP_CDN_INTEGRITY}" crossorigin="anonymous"></script>`,
++    vendored: null,
++  };
++}
+diff --git a/skills/pr-to-video/scripts/lib/tokens.mjs b/skills/pr-to-video/scripts/lib/tokens.mjs
+index c2f3321..a6bc808 100644
+--- a/skills/pr-to-video/scripts/lib/tokens.mjs
++++ b/skills/pr-to-video/scripts/lib/tokens.mjs
+@@ -209,3 +209,47 @@ export function parseFonts(md) {
+     null;
+   return { display: q(display), body: q(body), mono: q(mono) };
+ }
++
++// WCAG relative luminance of a #rrggbb (null for non-hex like rgba()).
++// Distinct from lum() above: that one is a cheap weighted sum of raw 0–255
++// channels used for ordering/"is this light or dark" decisions. Contrast ratios
++// need sRGB-linearized channels, and the two are not interchangeable — a naive
++// weighted sum reports orange-on-white as far more readable than it is.
++export function relLuminance(v) {
++  const m = /^#?([0-9a-fA-F]{6})$/.exec(String(v).trim());
++  if (!m) return null;
++  const n = parseInt(m[1], 16);
++  const chan = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
++    const s = c / 255;
++    return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
++  });
++  return 0.2126 * chan[0] + 0.7152 * chan[1] + 0.0722 * chan[2];
++}
++
++// WCAG contrast ratio between two #rrggbb colors (null when either is non-hex).
++// 1 = identical, 21 = black on white. The downstream `hyperframes check`
++// contrast pass gates text at 3:1.
++export function contrastRatio(a, b) {
++  const la = relLuminance(a),
++    lb = relLuminance(b);
++  if (la == null || lb == null) return null;
++  const hi = Math.max(la, lb),
++    lo = Math.min(la, lb);
++  return (hi + 0.05) / (lo + 0.05);
++}
++
++// Color-role keys the `typography:` ramp actually paints text with, e.g. a ramp
++// entry `body: { ..., color: "text-muted" }` yields "text-muted". These are the
++// keys a brand remix must keep readable against the canvas — checking only
++// ink-vs-canvas misses every one of them.
++export function textColorRoles(md) {
++  const block = /^typography:\s*$/m.exec(md);
++  if (!block) return [];
++  const rest = md.slice(block.index + block[0].length);
++  // stop at the next top-level key (a non-indented `word:` line)
++  const end = /^\S[^\n]*:\s*$/m.exec(rest);
++  const body = end ? rest.slice(0, end.index) : rest;
++  const roles = new Set();
++  for (const m of body.matchAll(/\bcolor:\s*"([^"]+)"/g)) roles.add(m[1].trim());
++  return [...roles];
++}
+diff --git a/skills/product-launch-video/scripts/assemble-index.mjs b/skills/product-launch-video/scripts/assemble-index.mjs
+index 3be06af..9a2d225 100644
+--- a/skills/product-launch-video/scripts/assemble-index.mjs
++++ b/skills/product-launch-video/scripts/assemble-index.mjs
+@@ -56,6 +56,7 @@ import { spawnSync } from "node:child_process";
+ import { basename, join, resolve } from "node:path";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
+ import { parseFormat } from "./lib/dimensions.mjs";
++import { GSAP_CDN_VERSION, gsapScriptTag } from "./lib/gsap-tag.mjs";
+ import { stageAssets } from "./lib/assets.mjs";
+ import { parseColors, semanticColors } from "./lib/tokens.mjs";
+ import { bgmDefaultVolume } from "../../media-use/audio/scripts/lib/bgm.mjs";
+@@ -719,12 +720,16 @@ const headStyle = [
+   "      }",
+ ].join("\n");
+ 
++// GSAP source: a project-vendored copy when there is one (renders offline),
++// otherwise the pinned CDN build. See lib/gsap-tag.mjs.
++const { tag: gsapTag, vendored: gsapVendored } = gsapScriptTag(hyperframesDir);
++
+ const html = `<!doctype html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <meta name="viewport" content="width=${WIDTH}, height=${HEIGHT}" />
+-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++    ${gsapTag}
+     <style>
+ ${headStyle}
+     </style>
+@@ -754,6 +759,9 @@ writeFileSync(outPath, html);
+ // ---------- summary ----------
+ console.log(`✓ wrote ${outPath}`);
+ console.log(`  canvas:            ${WIDTH}×${HEIGHT}`);
++console.log(
++  `  gsap:              ${gsapVendored ? gsapVendored + " (vendored — renders offline)" : "CDN " + GSAP_CDN_VERSION + " (no vendored copy; render needs network)"}`,
++);
+ console.log(`  frames (track 1):  ${mounted.length}`);
+ console.log(`  voice  (track 10): ${voiceCount}`);
+ console.log(`  bgm    (track 11): ${bgmEmitted ? "yes" + bgmNote : "no"}`);
+diff --git a/skills/product-launch-video/scripts/build-frame.mjs b/skills/product-launch-video/scripts/build-frame.mjs
+index 7f3bf01..2a30011 100644
+--- a/skills/product-launch-video/scripts/build-frame.mjs
++++ b/skills/product-launch-video/scripts/build-frame.mjs
+@@ -32,6 +32,7 @@ import { fileURLToPath } from "node:url";
+ import {
+   brandRolesFromStats,
+   chroma,
++  contrastRatio,
+   isIconFont,
+   lum,
+   parseColors,
+@@ -39,6 +40,7 @@ import {
+   pickAccent,
+   semanticColors,
+   STATUS_ROLE_KEY,
++  textColorRoles,
+   UA_DEFAULT_COLORS,
+ } from "./lib/tokens.mjs";
+ 
+@@ -524,6 +526,9 @@ if (existsSync(presetSkin)) {
+   skinCopied = true;
+ }
+ 
++// Text must clear the same 3:1 floor the render-time contrast pass enforces.
++const TEXT_CONTRAST_MIN = 3;
++
+ // ── self-validate ─────────────────────────────────────────────────────────────
+ const outColors = parseColors(md);
+ if (outColors.length !== presetColors.length) {
+@@ -541,9 +546,46 @@ if (li != null && lc != null && Math.abs(li - lc) < 40) {
+   );
+ }
+ 
++// Every color the typography ramp paints text with must stay readable on the
++// canvas — not just `ink`. A brand remix repaints roles by position, so it can
++// land a light accent in a body-copy role (e.g. a brand orange into `text-muted`)
++// while ink/canvas still separates cleanly. That passes here and then fails the
++// render-time contrast gate, after every frame has already been built against
++// the bad spec. Check it now, while it is one file to fix.
++const outMap = new Map(outColors);
++const canvasHex = outRoles.canvas;
++const textRoles = textColorRoles(md);
++const failures = [];
++let checked = 0;
++for (const role of textRoles) {
++  const hex = outMap.get(role);
++  if (!hex) continue;
++  const ratio = contrastRatio(hex, canvasHex);
++  if (ratio == null) continue; // rgba()/var() — not resolvable here
++  checked += 1;
++  if (ratio < TEXT_CONTRAST_MIN) failures.push({ role, hex, ratio });
++}
++
+ console.log(`✓ build-frame: ${presetName} → ${framePath}`);
+ for (const s of summary) console.log(`  ${s}`);
+ console.log(
+   `  .hyperframes/caption-skin.html: ${skinCopied ? "copied" : "preset ships none — captions will use the default pill"}`,
+ );
+-console.log(`  self-check: keys preserved, ink/canvas contrast ok ✓`);
++if (failures.length) {
++  console.log(
++    `  self-check: keys preserved, ink/canvas contrast ok — but ${failures.length} of ${checked} text role(s) FAIL ${TEXT_CONTRAST_MIN}:1 on canvas ${canvasHex}:`,
++  );
++  for (const f of failures) {
++    console.log(`    ✗ ${f.role} ${f.hex} = ${f.ratio.toFixed(2)}:1`);
++  }
++  console.log(
++    `    These will fail \`hyperframes check\` at render time. Fix ${framePath} before building frames:`,
++  );
++  console.log(
++    `    darken the role for text use, or move the brand color to a fill-only key and give the text role a readable value.`,
++  );
++} else {
++  console.log(
++    `  self-check: keys preserved, ink/canvas contrast ok, ${checked} text role(s) ≥ ${TEXT_CONTRAST_MIN}:1 ✓`,
++  );
++}
+diff --git a/skills/product-launch-video/scripts/captions.mjs b/skills/product-launch-video/scripts/captions.mjs
+index 7e04aff..ba6c4e9 100644
+--- a/skills/product-launch-video/scripts/captions.mjs
++++ b/skills/product-launch-video/scripts/captions.mjs
+@@ -38,6 +38,7 @@ import { fileURLToPath } from "node:url";
+ import { parseStoryboard } from "./lib/storyboard.mjs";
+ import { captionBand, parseFormat } from "./lib/dimensions.mjs";
+ import { parseColors, parseFonts, semanticColors } from "./lib/tokens.mjs";
++import { gsapScriptTag } from "./lib/gsap-tag.mjs";
+ 
+ const flag = (argv, name, def) => {
+   const i = argv.indexOf(`--${name}`);
+@@ -192,7 +193,7 @@ function runBuild(argv) {
+     );
+     source = `preset skin (${skinPath.replace(hyperframesDir + "/", "")})`;
+   } else {
+-    writeFileSync(htmlPath, buildCaptionsHtml(finalized, total, W, H));
++    writeFileSync(htmlPath, buildCaptionsHtml(finalized, total, W, H, hyperframesDir));
+     source = "default (built-in pill)";
+   }
+ 
+@@ -429,7 +430,8 @@ function frameTokensCss(framePath, H) {
+ // per word for the karaoke highlight — no className flips, no JS state) and ends each
+ // group with a hard tl.set kill so an exit can't get stuck. gsap is loaded via CDN
+ // inside the template (matching the frame compositions). Band = captionBand(H).
+-function buildCaptionsHtml(groups, total, W, H) {
++function buildCaptionsHtml(groups, total, W, H, projectDir = ".") {
++  const { tag: gsapTag } = gsapScriptTag(projectDir);
+   const band = captionBand(H);
+   const fs = Math.round(H * 0.038);
+   const pad = Math.round(fs * 0.4);
+@@ -477,7 +479,7 @@ function buildCaptionsHtml(groups, total, W, H) {
+       color: rgba(255, 255, 255, 0.55);
+     }
+   </style>
+-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
++  ${gsapTag}
+   <script>
+     (function () {
+       var GROUPS = ${JSON.stringify(groups)};
+diff --git a/skills/product-launch-video/scripts/lib/gsap-tag.mjs b/skills/product-launch-video/scripts/lib/gsap-tag.mjs
+new file mode 100644
+index 0000000..b0296ba
+--- /dev/null
++++ b/skills/product-launch-video/scripts/lib/gsap-tag.mjs
+@@ -0,0 +1,66 @@
++// gsap-tag.mjs — emit the <script> tag that loads GSAP into an assembled
++// composition, preferring a copy vendored inside the project.
++//
++// Why this exists. The assemblers used to hardcode a jsdelivr CDN URL with a
++// subresource-integrity hash. That is correct on a networked machine and fatal
++// everywhere else: renders run in a headless Chrome that may sit behind an
++// egress proxy, in CI without outbound access, or on a plane. When the fetch is
++// blocked the page loads, `gsap` is never defined, every sub-composition's
++// registration script throws, and the render dies late with
++// `sub_timeline_script_failure` — after the full frame capture has been paid for.
++// The failure names the timeline, not the network, so it reads as a composition
++// bug rather than a missing dependency.
++//
++// So: if the project carries its own GSAP, link that instead. A project-local
++// file is same-origin, needs no integrity attribute, and renders offline.
++// Nothing is downloaded or written here — this only decides which src to emit,
++// so a project without a vendored copy behaves exactly as before.
++
++import { existsSync } from "node:fs";
++import { join } from "node:path";
++
++// Pinned CDN fallback. Keep the version and hash in lockstep: the integrity
++// attribute is computed over this exact file, so bumping one without the other
++// makes browsers refuse the script — the same hard failure this module exists
++// to avoid.
++export const GSAP_CDN_VERSION = "3.14.2";
++export const GSAP_CDN_URL = `https://cdn.jsdelivr.net/npm/gsap@${GSAP_CDN_VERSION}/dist/gsap.min.js`;
++export const GSAP_CDN_INTEGRITY =
++  "sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2";
++
++// Where a project may vendor GSAP, most conventional first. `public/vendor/` is
++// the layout talking-head-recut already stages into; `assets/vendor/` matches
++// the `assets` path the rest of the workflows write to.
++export const GSAP_VENDOR_CANDIDATES = ["assets/vendor/gsap.min.js", "public/vendor/gsap.min.js"];
++
++/**
++ * Find a project-vendored GSAP, if there is one.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {string|null}      project-relative path, or null when none exists
++ */
++export function findVendoredGsap(projectDir) {
++  for (const rel of GSAP_VENDOR_CANDIDATES) {
++    if (existsSync(join(projectDir, rel))) return rel;
++  }
++  return null;
++}
++
++/**
++ * Build the GSAP <script> tag for an assembled composition.
++ *
++ * A vendored copy wins over the CDN, and is emitted without `integrity` /
++ * `crossorigin`: those describe a cross-origin fetch, and a stale hash against a
++ * local file blocks the script outright.
++ *
++ * @param {string} projectDir  project root (the `--hyperframes` directory)
++ * @returns {{ tag: string, vendored: string|null }}
++ */
++export function gsapScriptTag(projectDir) {
++  const vendored = findVendoredGsap(projectDir);
++  if (vendored) return { tag: `<script src="${vendored}"></script>`, vendored };
++  return {
++    tag: `<script src="${GSAP_CDN_URL}" integrity="${GSAP_CDN_INTEGRITY}" crossorigin="anonymous"></script>`,
++    vendored: null,
++  };
++}
+diff --git a/skills/product-launch-video/scripts/lib/tokens.mjs b/skills/product-launch-video/scripts/lib/tokens.mjs
+index ed5beb7..a59b981 100644
+--- a/skills/product-launch-video/scripts/lib/tokens.mjs
++++ b/skills/product-launch-video/scripts/lib/tokens.mjs
+@@ -216,3 +216,47 @@ export function parseFonts(md) {
+     null;
+   return { display: q(display), body: q(body), mono: q(mono) };
+ }
++
++// WCAG relative luminance of a #rrggbb (null for non-hex like rgba()).
++// Distinct from lum() above: that one is a cheap weighted sum of raw 0–255
++// channels used for ordering/"is this light or dark" decisions. Contrast ratios
++// need sRGB-linearized channels, and the two are not interchangeable — a naive
++// weighted sum reports orange-on-white as far more readable than it is.
++export function relLuminance(v) {
++  const m = /^#?([0-9a-fA-F]{6})$/.exec(String(v).trim());
++  if (!m) return null;
++  const n = parseInt(m[1], 16);
++  const chan = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
++    const s = c / 255;
++    return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
++  });
++  return 0.2126 * chan[0] + 0.7152 * chan[1] + 0.0722 * chan[2];
++}
++
++// WCAG contrast ratio between two #rrggbb colors (null when either is non-hex).
++// 1 = identical, 21 = black on white. The downstream `hyperframes check`
++// contrast pass gates text at 3:1.
++export function contrastRatio(a, b) {
++  const la = relLuminance(a),
++    lb = relLuminance(b);
++  if (la == null || lb == null) return null;
++  const hi = Math.max(la, lb),
++    lo = Math.min(la, lb);
++  return (hi + 0.05) / (lo + 0.05);
++}
++
++// Color-role keys the `typography:` ramp actually paints text with, e.g. a ramp
++// entry `body: { ..., color: "text-muted" }` yields "text-muted". These are the
++// keys a brand remix must keep readable against the canvas — checking only
++// ink-vs-canvas misses every one of them.
++export function textColorRoles(md) {
++  const block = /^typography:\s*$/m.exec(md);
++  if (!block) return [];
++  const rest = md.slice(block.index + block[0].length);
++  // stop at the next top-level key (a non-indented `word:` line)
++  const end = /^\S[^\n]*:\s*$/m.exec(rest);
++  const body = end ? rest.slice(0, end.index) : rest;
++  const roles = new Set();
++  for (const m of body.matchAll(/\bcolor:\s*"([^"]+)"/g)) roles.add(m[1].trim());
++  return [...roles];
++}
+-- 
+2.43.0
+

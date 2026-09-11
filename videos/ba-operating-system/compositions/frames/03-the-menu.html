@@ -1,0 +1,515 @@
+<template>
+  <div
+    id="root"
+    data-composition-id="03-the-menu"
+    data-start="0"
+    data-duration="9.225"
+    data-width="1920"
+    data-height="1080"
+  >
+    <style>
+      /* ---- Cobalt Grid — frame 03 "The menu" ---------------------------------
+         Two colours only: paper #F0EBDE + cobalt ink #1F2BE0.
+         No status colours in this frame (frames 6/7/8 own those).
+         Container law: #root is the container; type + geometry in cqw.        */
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        container-type: size;
+        color: #1f2be0;
+      }
+
+      #root .f03-the-menu-ground {
+        position: absolute;
+        inset: 0;
+        background-color: #f0ebde;
+        background-image:
+          linear-gradient(to right, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%),
+          linear-gradient(to bottom, rgba(31, 43, 224, 0.1) 0 1px, transparent 1px 100%);
+        background-size: 2cqw 2cqw;
+      }
+
+      #root .f03-the-menu-stage {
+        position: absolute;
+        inset: 0;
+      }
+      #root .f03-the-menu-cam {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---- persistent furniture ---- */
+      #root .f03-the-menu-hair {
+        position: absolute;
+        left: 4cqw;
+        width: 92cqw;
+        height: 0.12cqw;
+        background: #1f2be0;
+      }
+      #root .f03-the-menu-hair-top {
+        top: 3cqw;
+      }
+      #root .f03-the-menu-hair-bot {
+        top: 46cqw;
+      }
+
+      #root .f03-the-menu-mono {
+        font-family: "DejaVu Sans Mono", "Liberation Mono", monospace;
+        font-weight: 400;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      #root .f03-the-menu-label {
+        font-family: "Liberation Sans", Arial, sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+      #root .f03-the-menu-serif {
+        font-family: "Liberation Serif", "DejaVu Serif", serif;
+        font-weight: 400;
+        letter-spacing: -0.005em;
+      }
+
+      #root .f03-the-menu-eyebrow {
+        position: absolute;
+        left: 4cqw;
+        top: 5cqw;
+        font-size: 1.2cqw;
+        letter-spacing: 0.16em;
+      }
+      #root .f03-the-menu-figtag {
+        position: absolute;
+        right: 4cqw;
+        top: 5cqw;
+        font-size: 1.2cqw;
+        letter-spacing: 0.16em;
+        text-align: right;
+      }
+      #root .f03-the-menu-chrome-l {
+        position: absolute;
+        left: 4cqw;
+        top: 44.2cqw;
+        font-size: 1cqw;
+      }
+      #root .f03-the-menu-chrome-r {
+        position: absolute;
+        right: 4cqw;
+        top: 44.2cqw;
+        font-size: 1cqw;
+        text-align: right;
+      }
+
+      /* ---- left 70% : the menu matrix ---- */
+      #root .f03-the-menu-panel-l {
+        position: absolute;
+        left: 4cqw;
+        top: 13cqw;
+        width: 66.83cqw;
+      }
+      #root .f03-the-menu-headstrip {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: end;
+        height: 3.1cqw;
+      }
+      #root .f03-the-menu-headrule {
+        width: 100%;
+        height: 0.12cqw;
+        background: #1f2be0;
+        transform-origin: left center;
+      }
+      #root .f03-the-menu-agency {
+        font-size: 1.55cqw;
+        line-height: 1;
+      }
+      #root .f03-the-menu-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: center;
+        height: 8.3cqw;
+      }
+      #root .f03-the-menu-cell {
+        font-size: 2.1cqw;
+        line-height: 1.05;
+      }
+      #root .f03-the-menu-div {
+        width: 100%;
+        height: 0.06cqw;
+        background: rgba(31, 43, 224, 0.18);
+        transform-origin: left center;
+      }
+      #root .f03-the-menu-div-last {
+        height: 0.12cqw;
+        background: #1f2be0;
+      }
+
+      /* ---- right 30% : the price column ---- */
+      #root .f03-the-menu-wash {
+        position: absolute;
+        left: 72.8cqw;
+        top: 11.6cqw;
+        width: 23.2cqw;
+        height: 26cqw;
+        background: rgba(31, 43, 224, 0.055);
+      }
+      #root .f03-the-menu-panel-r {
+        position: absolute;
+        left: 73.96cqw;
+        top: 13cqw;
+        width: 22.04cqw;
+      }
+      #root .f03-the-menu-pricehead {
+        display: flex;
+        align-items: flex-end;
+        height: 3.1cqw;
+        font-size: 1.55cqw;
+        line-height: 1;
+      }
+      #root .f03-the-menu-steps {
+        position: relative;
+        width: 22.04cqw;
+        height: 21cqw;
+        margin-top: 0.9cqw;
+      }
+      #root .f03-the-menu-step {
+        position: absolute;
+        left: 0;
+        width: 22.04cqw;
+        height: 2.2cqw;
+        display: flex;
+        align-items: center;
+      }
+      #root .f03-the-menu-steptag {
+        width: 2.6cqw;
+        font-size: 1.45cqw;
+        line-height: 1;
+        letter-spacing: 0.08em;
+      }
+      #root .f03-the-menu-bartrack {
+        height: 1.15cqw;
+        position: relative;
+      }
+      #root .f03-the-menu-bar {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        background: #1f2be0;
+        transform-origin: left center;
+      }
+      #root .f03-the-menu-connector {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 22.04cqw;
+        height: 21cqw;
+        overflow: visible;
+      }
+
+      /* ---- QR punctuation ---- */
+      #root .f03-the-menu-qr {
+        position: absolute;
+        left: 91cqw;
+        top: 38cqw;
+        width: 5cqw;
+        height: 5cqw;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+        background: #f0ebde;
+        box-shadow: 0 0 0 0.12cqw #f0ebde;
+      }
+      #root .f03-the-menu-qr i {
+        display: block;
+      }
+    </style>
+
+    <!-- depth 1 — the ground: warm paper + permanent graph grid (full-bleed clip) -->
+    <div
+      class="clip f03-the-menu-ground"
+      data-start="0"
+      data-duration="9.225"
+      data-track-index="0"
+    ></div>
+
+    <!-- depth 2 + 3 — furniture, wash, board -->
+    <div class="clip f03-the-menu-stage" data-start="0" data-duration="9.225" data-track-index="1">
+      <div class="f03-the-menu-cam">
+        <div class="f03-the-menu-hair f03-the-menu-hair-top"></div>
+        <div class="f03-the-menu-hair f03-the-menu-hair-bot"></div>
+
+        <div class="f03-the-menu-eyebrow f03-the-menu-mono">The Menu</div>
+        <div class="f03-the-menu-figtag f03-the-menu-mono">Fig. 03</div>
+
+        <div class="f03-the-menu-chrome-l f03-the-menu-mono">Service Menu</div>
+        <div class="f03-the-menu-chrome-r f03-the-menu-mono">03</div>
+
+        <!-- depth 2 — ink-faint graphic wash behind the price column -->
+        <div class="f03-the-menu-wash"></div>
+
+        <!-- LEFT 70% — three identical menus, side by side -->
+        <div class="f03-the-menu-panel-l">
+          <div class="f03-the-menu-headstrip">
+            <div class="f03-the-menu-agency f03-the-menu-label">Agency A</div>
+            <div class="f03-the-menu-agency f03-the-menu-label">Agency B</div>
+            <div class="f03-the-menu-agency f03-the-menu-label">Agency C</div>
+          </div>
+          <div class="f03-the-menu-headrule"></div>
+
+          <div class="f03-the-menu-row" data-row="0">
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+          </div>
+          <div class="f03-the-menu-div" data-div="0"></div>
+
+          <div class="f03-the-menu-row" data-row="1">
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+          </div>
+          <div class="f03-the-menu-div" data-div="1"></div>
+
+          <div class="f03-the-menu-row" data-row="2">
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+            <div class="f03-the-menu-cell f03-the-menu-serif"></div>
+          </div>
+          <div class="f03-the-menu-div f03-the-menu-div-last" data-div="2"></div>
+        </div>
+
+        <!-- RIGHT 30% — the price column: the one thing that differs -->
+        <div class="f03-the-menu-panel-r">
+          <div class="f03-the-menu-pricehead f03-the-menu-label">Price</div>
+          <div class="f03-the-menu-headrule f03-the-menu-pricerule"></div>
+
+          <div class="f03-the-menu-steps">
+            <svg
+              class="f03-the-menu-connector"
+              viewBox="0 0 423 403"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M 405 30 L 405 170 L 290 170 L 290 310 L 195 310"
+                fill="none"
+                stroke="#1F2BE0"
+                stroke-width="2"
+                stroke-opacity="0.55"
+              />
+            </svg>
+
+            <div class="f03-the-menu-step" style="top: 0.47cqw">
+              <div class="f03-the-menu-steptag f03-the-menu-mono">A</div>
+              <div class="f03-the-menu-bartrack" style="width: 17.7cqw">
+                <div class="f03-the-menu-bar"></div>
+              </div>
+            </div>
+            <div class="f03-the-menu-step" style="top: 7.76cqw">
+              <div class="f03-the-menu-steptag f03-the-menu-mono">B</div>
+              <div class="f03-the-menu-bartrack" style="width: 11.7cqw">
+                <div class="f03-the-menu-bar"></div>
+              </div>
+            </div>
+            <div class="f03-the-menu-step" style="top: 15.05cqw">
+              <div class="f03-the-menu-steptag f03-the-menu-mono">C</div>
+              <div class="f03-the-menu-bartrack" style="width: 6.8cqw">
+                <div class="f03-the-menu-bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="f03-the-menu-qr"></div>
+      </div>
+    </div>
+
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script>
+      (function () {
+        var root = document.querySelector('[data-composition-id="03-the-menu"]');
+        var q = function (s) {
+          return root.querySelector(s);
+        };
+        var qa = function (s) {
+          return Array.prototype.slice.call(root.querySelectorAll(s));
+        };
+
+        /* ---- QR block: deterministic hand-authored 8x8 mosaic ---- */
+        var QR = "1110101110001100101110101000101111101101000001101101100110110111";
+        var qr = q(".f03-the-menu-qr");
+        for (var i = 0; i < 64; i++) {
+          var cell = document.createElement("i");
+          cell.style.background = QR.charAt(i) === "1" ? "#1F2BE0" : "rgba(31,43,224,0.10)";
+          qr.appendChild(cell);
+        }
+
+        /* ---- dynamic-content-sequencing: row start times computed from
+               content length + per-item config, reduced ONCE into a flat
+               TIMELINE. No per-frame recomputation anywhere.            ---- */
+        var ROWS_START = 2.0,
+          BASE_DURATION = 0.95,
+          SEC_PER_CHAR = 0.035,
+          HOLD_MID = 0.03;
+        var CONTENT = [{ label: "SOCIAL POSTS" }, { label: "PAID ADS" }, { label: "SEO" }];
+        var cumulative = ROWS_START;
+        var TIMELINE = CONTENT.map(function (entry) {
+          var dur = BASE_DURATION + entry.label.length * SEC_PER_CHAR + HOLD_MID;
+          var start = cumulative;
+          cumulative += dur;
+          return { label: entry.label, start: start, end: cumulative };
+        });
+
+        /* the same line, printed three times — sameness is the content */
+        TIMELINE.forEach(function (entry, r) {
+          qa('.f03-the-menu-row[data-row="' + r + '"] .f03-the-menu-cell').forEach(function (c) {
+            c.textContent = entry.label;
+          });
+        });
+
+        var hairs = qa(".f03-the-menu-hair");
+        var agencies = qa(".f03-the-menu-agency");
+        var headrule = q(".f03-the-menu-panel-l .f03-the-menu-headrule");
+        var pricerule = q(".f03-the-menu-pricerule");
+        var pricehead = q(".f03-the-menu-pricehead");
+        var wash = q(".f03-the-menu-wash");
+        var steptags = qa(".f03-the-menu-steptag");
+        var bars = qa(".f03-the-menu-bar");
+        var conn = q(".f03-the-menu-connector path");
+        var qrCells = qa(".f03-the-menu-qr i");
+        var cam = q(".f03-the-menu-cam");
+        var dimmable = [q(".f03-the-menu-panel-l"), q(".f03-the-menu-figtag")];
+
+        var CONN_LEN = conn.getTotalLength() || 490;
+        gsap.set(conn, { strokeDasharray: CONN_LEN, strokeDashoffset: CONN_LEN });
+        gsap.set(bars, { scaleX: 0 });
+        gsap.set(hairs, { scaleX: 0, transformOrigin: "center center" });
+        gsap.set([headrule, pricerule], { scaleX: 0 });
+        window.__timelines = window.__timelines || {};
+        var tl = gsap.timeline({ paused: true });
+
+        /* ================= Scene 1 (0.0 – 2.0) — open the board ================= */
+        tl.fromTo(hairs, { scaleX: 0 }, { scaleX: 1, duration: 0.55, ease: "power3.out" }, 0);
+        tl.fromTo(
+          q(".f03-the-menu-eyebrow"),
+          { opacity: 0, x: -14 },
+          { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" },
+          0.05,
+        );
+        tl.fromTo(
+          q(".f03-the-menu-figtag"),
+          { opacity: 0 },
+          { opacity: 1, duration: 0.45, ease: "power3.out" },
+          0.3,
+        );
+        tl.fromTo(
+          [q(".f03-the-menu-chrome-l"), q(".f03-the-menu-chrome-r")],
+          { opacity: 0 },
+          { opacity: 1, duration: 0.45, ease: "power3.out" },
+          0.55,
+        );
+
+        /* three unnamed agencies snap in across the top — identical treatment */
+        tl.fromTo(
+          agencies,
+          { opacity: 0, y: -20 },
+          { opacity: 1, y: 0, duration: 0.42, ease: "power4.out", stagger: 0.11 },
+          0.85,
+        );
+        tl.fromTo(
+          headrule,
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.6, ease: "power3.out" },
+          0.92,
+        );
+
+        /* the price column's empty slot is established early — the focal frame */
+        tl.fromTo(wash, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 1.3);
+        tl.fromTo(
+          pricehead,
+          { opacity: 0, y: -18 },
+          { opacity: 1, y: 0, duration: 0.42, ease: "power4.out" },
+          1.45,
+        );
+        tl.fromTo(
+          pricerule,
+          { scaleX: 0 },
+          { scaleX: 1, duration: 0.55, ease: "power3.out" },
+          1.5,
+        );
+        tl.fromTo(
+          qrCells,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.3, ease: "none", stagger: 0.006 },
+          1.75,
+        );
+
+        /* ===== Scenes 2–4 (2.0 – 5.9) — one identical line, three times, thrice ===== */
+        TIMELINE.forEach(function (entry, r) {
+          var cells = qa('.f03-the-menu-row[data-row="' + r + '"] .f03-the-menu-cell');
+          var divider = q('.f03-the-menu-div[data-div="' + r + '"]');
+          tl.fromTo(
+            cells,
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.5, ease: "power3.out", stagger: 0.055 },
+            entry.start,
+          );
+          tl.fromTo(
+            divider,
+            { scaleX: 0 },
+            { scaleX: 1, duration: 0.55, ease: "power3.out" },
+            entry.start + 0.12,
+          );
+        });
+
+        /* ========= Scene 5 (5.9 – 7.8) — everything dims but the price ========= */
+        var DIM_AT = 5.9;
+        tl.to(dimmable, { opacity: 0.22, duration: 0.62, ease: "power2.out" }, DIM_AT);
+        tl.to(
+          [q(".f03-the-menu-chrome-l"), q(".f03-the-menu-chrome-r")],
+          { opacity: 0.35, duration: 0.62, ease: "power2.out" },
+          DIM_AT,
+        );
+
+        /* descending step: each mark undercuts the last (scaleX from a left origin) */
+        var STEP_AT = [6.15, 6.68, 7.2];
+        bars.forEach(function (bar, i) {
+          tl.fromTo(
+            steptags[i],
+            { opacity: 0 },
+            { opacity: 1, duration: 0.3, ease: "power2.out" },
+            STEP_AT[i] - 0.1,
+          );
+          tl.fromTo(
+            bar,
+            { scaleX: 0 },
+            { scaleX: 1, duration: 0.5, ease: "power3.out" },
+            STEP_AT[i],
+          );
+        });
+
+        /* the staircase drawn between the marks — the slide downward */
+        tl.fromTo(
+          conn,
+          { strokeDashoffset: CONN_LEN },
+          { strokeDashoffset: 0, duration: 1.25, ease: "none" },
+          6.3,
+        );
+
+        /* ===== Scene 6 (7.8 – 8.725) — held. A flat, airless board. =====
+           Only the barely-there push continues; nothing new arrives, nothing exits. */
+        tl.fromTo(
+          cam,
+          { scale: 1, transformOrigin: "50% 50%" },
+          { scale: 1.012, duration: 8.725, ease: "none" },
+          0,
+        );
+
+        window.__timelines["03-the-menu"] = tl;
+      })();
+    </script>
+  </div>
+</template>

@@ -1,0 +1,273 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- full-bleed ground (lowest content track) ---------- */
+    .nb2-ground {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+
+    /* ---------- supporting lead-in (accent rule + eyebrow) ---------- */
+    .nb2-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .nb2-rule {
+      position: absolute;
+      left: 930px;
+      top: 178px;
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      background: #5b1fc7;
+    }
+
+    .nb2-eyebrow {
+      position: absolute;
+      left: 0;
+      top: 214px;
+      width: 1920px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #5b1fc7;
+    }
+
+    /* ---------- centred word stage ---------- */
+    .nb2-panel {
+      position: absolute;
+      left: 140px;
+      top: 268px;
+      width: 1640px;
+      height: 380px;
+      border-radius: 14px;
+      background: #ddd0fb;
+      transform-origin: 50% 50%;
+    }
+
+    .nb2-slot {
+      position: absolute;
+      left: 140px;
+      top: 268px;
+      width: 1640px;
+      height: 380px;
+    }
+
+    .nb2-word-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+    }
+
+    .nb2-out {
+      z-index: 1;
+    }
+
+    .nb2-in {
+      z-index: 2;
+    }
+
+    .nb2-product {
+      font-size: 200px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #111111;
+      white-space: nowrap;
+    }
+
+    .nb2-infra {
+      font-size: 140px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: #111111;
+      white-space: nowrap;
+    }
+
+    /* drawn strike-through (css-marker-patterns — scribble mode, strike variant) */
+    .nb2-strike {
+      position: absolute;
+      left: 320px;
+      top: 168px;
+      width: 1000px;
+      height: 44px;
+      overflow: visible;
+    }
+
+    .nb2-strike path {
+      stroke-dasharray: 1160;
+      stroke-dashoffset: 1160;
+    }
+
+    .nb2-underline {
+      position: absolute;
+      left: 230px;
+      top: 272px;
+      width: 1180px;
+      height: 10px;
+      border-radius: 6px;
+      background: #5b1fc7;
+      transform-origin: left center;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="02-never-the-product"
+    data-width="1920"
+    data-height="1080" data-duration="5.961"
+  >
+    <!-- Scene 1 ground: white field, full duration -->
+    <div
+      class="clip nb2-ground"
+      data-start="0"
+      data-duration="5.961"
+      data-track-index="0"
+    ></div>
+
+    <!-- Scene 1 supporting: accent rule + lead-in eyebrow -->
+    <div
+      class="clip nb2-layer"
+      data-start="0"
+      data-duration="5.961"
+      data-track-index="1"
+    >
+      <div class="nb2-rule" id="nb2-rule"></div>
+      <div class="nb2-eyebrow" id="nb2-eyebrow">What nobody tells you</div>
+    </div>
+
+    <!-- Scenes 2-4: lavender panel + the word slot -->
+    <div
+      class="clip nb2-layer"
+      data-start="0"
+      data-duration="5.961"
+      data-track-index="2"
+    >
+      <div class="nb2-panel" id="nb2-panel"></div>
+
+      <div class="nb2-slot">
+        <div class="nb2-word-layer nb2-out" id="nb2-out">
+          <span class="nb2-product" id="nb2-product">PRODUCT</span>
+          <svg
+            class="nb2-strike"
+            viewBox="0 0 1000 44"
+            preserveAspectRatio="none"
+          >
+            <path
+              id="nb2-strike-path"
+              d="M0,22 Q50,10 100,22 Q150,34 200,22 Q250,10 300,22 Q350,34 400,22 Q450,10 500,22 Q550,34 600,22 Q650,10 700,22 Q750,34 800,22 Q850,10 900,22 Q950,34 1000,22"
+              fill="none"
+              stroke="#5b1fc7"
+              stroke-width="9"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+
+        <div class="nb2-word-layer nb2-in" id="nb2-in">
+          <span class="nb2-infra">INFRASTRUCTURE</span>
+          <span class="nb2-underline" id="nb2-underline"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    window.__timelines = window.__timelines || {};
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+
+      /* ---- Scene 1 (0.0-1.6s): sparse lead-in on white ---- */
+      tl.fromTo(
+        "#nb2-rule",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.38, ease: "power2.out" },
+        0.05
+      );
+      tl.fromTo(
+        "#nb2-eyebrow",
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+        0.18
+      );
+
+      /* ---- Scene 2 (1.6-2.9s): panel opens, PRODUCT scale-swap arrival ---- */
+      tl.fromTo(
+        "#nb2-panel",
+        { scaleX: 0.86, scaleY: 0.7, opacity: 0 },
+        {
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: "power3.out",
+        },
+        1.3
+      );
+      tl.to("#nb2-eyebrow", { color: "#9a9a9a", duration: 0.4, ease: "power1.out" }, 1.55);
+      tl.to(
+        "#nb2-rule",
+        { backgroundColor: "#b79cf5", duration: 0.4, ease: "power1.out" },
+        1.55
+      );
+      tl.fromTo(
+        "#nb2-out",
+        { scale: 0.68, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.84, ease: "back.out(1.35)" },
+        1.6
+      );
+
+      /* ---- Scene 3 (2.9-4.0s): strike draws L->R, word desaturates ---- */
+      tl.fromTo(
+        "#nb2-strike-path",
+        { strokeDashoffset: 1160 },
+        { strokeDashoffset: 0, duration: 0.58, ease: "power1.inOut" },
+        2.95
+      );
+      tl.to(
+        "#nb2-product",
+        { color: "#9a9a9a", duration: 0.5, ease: "power1.inOut" },
+        3.12
+      );
+
+      /* ---- Scene 4 (4.0-5.461s): velocity-matched swap to INFRASTRUCTURE ---- */
+      tl.to(
+        "#nb2-out",
+        { scale: 0.74, opacity: 0, duration: 0.38, ease: "power2.in" },
+        4.0
+      );
+      tl.fromTo(
+        "#nb2-in",
+        { scale: 0.74, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.62, ease: "back.out(1.7)" },
+        4.23
+      );
+      tl.fromTo(
+        "#nb2-underline",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
+        4.62
+      );
+
+      window.__timelines["02-never-the-product"] = tl;
+    })();
+  </script>
+</template>

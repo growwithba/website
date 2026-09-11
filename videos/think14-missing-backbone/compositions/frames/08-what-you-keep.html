@@ -1,0 +1,288 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------- background (full-bleed clip, lowest track) ---------- */
+    .wyk-bg {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+    .wyk-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          to right,
+          rgba(91, 31, 199, 0.07) 0px,
+          rgba(91, 31, 199, 0.07) 1px,
+          rgba(91, 31, 199, 0) 1px,
+          rgba(91, 31, 199, 0) 96px
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(91, 31, 199, 0.07) 0px,
+          rgba(91, 31, 199, 0.07) 1px,
+          rgba(91, 31, 199, 0) 1px,
+          rgba(91, 31, 199, 0) 96px
+        );
+    }
+    .wyk-grid-fade {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        62% 58% at 50% 34%,
+        rgba(255, 255, 255, 0.92) 0%,
+        rgba(255, 255, 255, 0.55) 46%,
+        rgba(255, 255, 255, 0) 100%
+      );
+    }
+
+    /* ---------- stage ---------- */
+    .wyk-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* swap wrapper — fixed box centred on the chip row (960, 330), no CSS transform */
+    .wyk-swap {
+      position: absolute;
+      left: 50%;
+      top: 330px;
+      width: 1728px;
+      height: 240px;
+      margin-left: -864px;
+      margin-top: -120px;
+    }
+
+    #wyk-cluster {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+      z-index: 1;
+    }
+    .wyk-chip {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(91, 31, 199, 0.04);
+      border: 1.5px solid rgba(91, 31, 199, 0.2);
+      border-radius: 100px;
+      font-size: 1.4cqw;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #6b6b6b;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .wyk-c1 { width: 420px; }
+    .wyk-c2 { width: 386px; }
+    .wyk-c3 { width: 132px; }
+    .wyk-c4 { width: 116px; }
+    .wyk-c5 { width: 480px; }
+
+    #wyk-think {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: 50% 50%;
+      z-index: 2;
+    }
+    .wyk-think-pill {
+      width: 420px;
+      height: 116px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #5b1fc7;
+      border-radius: 100px;
+      color: #ffffff;
+      font-size: 3cqw;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    /* ---------- payoff lines ---------- */
+    .wyk-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 2.6cqw;
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: #111111;
+      will-change: transform;
+    }
+    #wyk-line1 { top: 517px; }
+    #wyk-line2 { top: 612px; }
+
+    #wyk-rule {
+      position: absolute;
+      left: 50%;
+      top: 728px;
+      margin-left: -80px;
+      width: 160px;
+      height: 4px;
+      border-radius: 2px;
+      background: #5b1fc7;
+      transform-origin: 0% 50%;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="08-what-you-keep"
+    data-width="1920"
+    data-height="1080"
+  >
+    <div
+      class="clip wyk-bg"
+      data-start="0"
+      data-duration="4.139"
+      data-track-index="0"
+    >
+      <div class="wyk-grid" id="wyk-grid"></div>
+      <div class="wyk-grid-fade"></div>
+    </div>
+
+    <div
+      class="clip wyk-stage"
+      data-start="0"
+      data-duration="4.139"
+      data-track-index="1"
+    >
+      <div class="wyk-swap">
+        <div id="wyk-cluster">
+          <div class="wyk-chip wyk-c1" data-target-x="-609">INCORPORATION AGENT</div>
+          <div class="wyk-chip wyk-c2" data-target-x="-180">FREIGHT FORWARDER</div>
+          <div class="wyk-chip wyk-c3" data-target-x="105">3PL</div>
+          <div class="wyk-chip wyk-c4" data-target-x="255">CA</div>
+          <div class="wyk-chip wyk-c5" data-target-x="579">MARKETPLACE CONSULTANT</div>
+        </div>
+        <div id="wyk-think">
+          <div class="wyk-think-pill">THINK14</div>
+        </div>
+      </div>
+
+      <div class="wyk-line" id="wyk-line1">Your brand.</div>
+      <div class="wyk-line" id="wyk-line2">Your margin.</div>
+      <div id="wyk-rule"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      var chips = document.querySelectorAll(".wyk-chip");
+
+      /* --- background: faint hairline grid settles in --- */
+      tl.fromTo(
+        "#wyk-grid",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: "power2.out" },
+        0
+      );
+
+      /* --- Scene 1a (0.05-0.55): five muted chips arrive spread across the row --- */
+      chips.forEach(function (el, i) {
+        var tx = Number(el.dataset.targetX);
+        tl.fromTo(
+          el,
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: tx,
+            y: 14,
+            scale: 0.94,
+            opacity: 0,
+          },
+          {
+            x: tx,
+            y: 0,
+            scale: 1,
+            opacity: 1,
+            duration: 0.45,
+            ease: "power3.out",
+          },
+          0.05 + i * 0.05
+        );
+      });
+
+      /* --- Scene 1b (0.72-1.20): center-outward-expansion run INWARD.
+             x lerps target -> 0 over the baked xPercent/yPercent:-50 centering,
+             accelerating (in-ease) so the cluster's velocity matches the swap. --- */
+      chips.forEach(function (el, i) {
+        tl.to(
+          el,
+          { x: 0, scale: 0.8, duration: 0.48, ease: "power2.in" },
+          0.72 + i * 0.015
+        );
+        /* the five dissolve into one another as they pile on the shared origin */
+        tl.to(el, { opacity: 0.5, duration: 0.18, ease: "power1.in" }, 1.02);
+      });
+
+      /* --- Scene 1c (1.15-1.80): scale-swap-transition into one solid THINK14 chip.
+             Outgoing shrinks + fades fast (power2.in); incoming pops with weight
+             (back.out) starting OVERLAP before the exit lands, z-index above. --- */
+      tl.to(
+        "#wyk-cluster",
+        { scale: 0.72, opacity: 0, duration: 0.3, ease: "power2.in" },
+        1.15
+      );
+      tl.fromTo(
+        "#wyk-think",
+        { scale: 0.7, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.6)" },
+        1.3
+      );
+
+      /* --- Scene 2 (1.72): "Your brand." --- */
+      tl.fromTo(
+        "#wyk-line1",
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.52, ease: "power3.out" },
+        1.72
+      );
+
+      /* --- Scene 3 (2.82): "Your margin." + the short primary rule draws --- */
+      tl.fromTo(
+        "#wyk-line2",
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.52, ease: "power3.out" },
+        2.82
+      );
+      tl.fromTo(
+        "#wyk-rule",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.5, ease: "power3.out" },
+        3.1
+      );
+
+      /* --- Scene 4 (3.7-4.139): resolved and held still. --- */
+
+      window.__timelines["08-what-you-keep"] = tl;
+    })();
+  </script>
+</template>

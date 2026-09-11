@@ -8,3 +8,9 @@ out/
 .vercel
 next-env.d.ts
 *.zip
+
+# HyperFrames video projects
+videos/*/node_modules/
+videos/*/.hyperframes/
+videos/*/snapshots/
+videos/*/renders/

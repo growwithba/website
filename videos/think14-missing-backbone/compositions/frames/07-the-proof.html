@@ -1,0 +1,368 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: Helvetica, Arial, "DejaVu Sans", sans-serif;
+      color: #111111;
+    }
+
+    /* ---------- layers ---------- */
+    .proof-ground {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+    .proof-bandlayer,
+    .proof-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---------- background: wedge-soft metric band ---------- */
+    .proof-band {
+      position: absolute;
+      left: 96px;
+      top: 296px;
+      width: 1728px;
+      height: 384px;
+      background: #fde7df;
+      border-radius: 14px;
+    }
+
+    /* ---------- slide-header chrome ---------- */
+    .proof-rule {
+      position: absolute;
+      left: 96px;
+      top: 100px;
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      background: #5b1fc7;
+      transform-origin: left center;
+    }
+    .proof-eyebrow {
+      position: absolute;
+      left: 96px;
+      top: 128px;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #5b1fc7;
+    }
+
+    /* ---------- strip structure ---------- */
+    .proof-axis {
+      position: absolute;
+      left: 96px;
+      bottom: 438px;
+      width: 1728px;
+      height: 2px;
+      background: rgba(91, 31, 199, 0.18);
+      transform-origin: left center;
+    }
+    .proof-div {
+      position: absolute;
+      top: 332px;
+      width: 1.5px;
+      height: 308px;
+      background: rgba(91, 31, 199, 0.14);
+      transform-origin: top center;
+    }
+
+    /* ---------- metric cells ---------- */
+    .proof-wrap {
+      position: absolute;
+      top: 332px;
+      width: 432px;
+      height: 108px;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+    }
+    .proof-num {
+      display: inline-block;
+      font-size: 100px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+      transform-origin: center bottom;
+      color: #5b1fc7;
+    }
+    .proof-suffix {
+      display: inline-block;
+      font-size: 46px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      margin-left: 14px;
+      color: #5b1fc7;
+    }
+    .proof-wedge {
+      color: #D9542A;
+    }
+    .proof-label {
+      position: absolute;
+      top: 458px;
+      width: 432px;
+      text-align: center;
+      font-size: 27px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      color: #6b6b6b;
+    }
+
+    /* ---------- paired graphics ---------- */
+    .proof-bar {
+      position: absolute;
+      bottom: 440px;
+      width: 64px;
+      border-radius: 6px 6px 0 0;
+      transform-origin: center bottom;
+    }
+    .proof-tick {
+      position: absolute;
+      bottom: 440px;
+      width: 60px;
+      height: 5px;
+      border-radius: 2px;
+      background: #5b1fc7;
+      transform-origin: left center;
+    }
+    .proof-ref {
+      position: absolute;
+      left: 712px;
+      bottom: 518px;
+      width: 496px;
+      height: 0;
+      border-top: 2px dashed rgba(91, 31, 199, 0.45);
+      transform-origin: left center;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="07-the-proof"
+    data-start="0"
+    data-duration="13.449"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- ground -->
+    <div class="clip proof-ground" data-start="0" data-duration="13.449" data-track-index="0"></div>
+
+    <!-- background role: wedge-soft band -->
+    <div class="clip proof-bandlayer" data-start="0" data-duration="13.449" data-track-index="1">
+      <div class="proof-band" id="proof-band"></div>
+    </div>
+
+    <!-- foreground subject: four metric cells on one strip -->
+    <div class="clip proof-stage" data-start="0" data-duration="13.449" data-track-index="2">
+      <div class="proof-rule" id="proof-rule"></div>
+      <div class="proof-eyebrow" id="proof-eyebrow">OPERATING TODAY</div>
+
+      <div class="proof-axis" id="proof-axis"></div>
+      <div class="proof-div" id="proof-d1" style="left: 527px"></div>
+      <div class="proof-div" id="proof-d2" style="left: 959px"></div>
+      <div class="proof-div" id="proof-d3" style="left: 1391px"></div>
+
+      <!-- cell 1 -->
+      <div class="proof-wrap" style="left: 96px">
+        <span class="proof-num" id="proof-c1">0</span>
+      </div>
+      <div class="proof-label" id="proof-l1" style="left: 96px">ACTIVE SELLER LLCs</div>
+      <div class="proof-tick" id="proof-t1" style="left: 282px"></div>
+
+      <!-- cell 2 -->
+      <div class="proof-wrap" style="left: 528px">
+        <span class="proof-num" id="proof-c2">&#8377;0</span
+        ><span class="proof-suffix" id="proof-s2">Cr</span>
+      </div>
+      <div class="proof-label" id="proof-l2" style="left: 528px">CLIENT TOP-LINE 2025</div>
+      <div
+        class="proof-bar"
+        id="proof-bar2"
+        style="left: 712px; height: 78px; background: #5b1fc7"
+      ></div>
+
+      <!-- cell 3 — the one wedge moment -->
+      <div class="proof-wrap" style="left: 960px">
+        <span class="proof-num proof-wedge" id="proof-c3">&#8377;0</span
+        ><span class="proof-suffix proof-wedge" id="proof-s3">Cr</span>
+      </div>
+      <div class="proof-label" id="proof-l3" style="left: 960px">JAN&#8211;JUL 2026</div>
+      <div
+        class="proof-bar"
+        id="proof-bar3"
+        style="left: 1144px; height: 126px; background: #f97a4d"
+      ></div>
+      <div class="proof-ref" id="proof-ref"></div>
+
+      <!-- cell 4 -->
+      <div class="proof-wrap" style="left: 1392px">
+        <span class="proof-num" id="proof-c4">0</span>
+      </div>
+      <div class="proof-label" id="proof-l4" style="left: 1392px">DAYS TO FIRST SHIP</div>
+      <div class="proof-tick" id="proof-t4" style="left: 1578px"></div>
+    </div>
+  </div>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      var RUPEE = "₹";
+      var START_SCALE = 0.55; // counting-dynamic-scale: START_SIZE / END_SIZE
+
+      // counting-dynamic-scale — proxy value + transform-scale on the SAME
+      // position with the SAME ease; text writes only, no style writes.
+      function countUp(id, target, prefix, at, dur) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var state = { value: 0 };
+        el.textContent = prefix + "0";
+        tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, at);
+        tl.to(
+          state,
+          {
+            value: target,
+            duration: dur,
+            ease: "power3.out",
+            onUpdate: function () {
+              el.textContent = prefix + Math.round(state.value);
+            },
+          },
+          at,
+        );
+        tl.fromTo(
+          el,
+          { scale: START_SCALE },
+          { scale: 1, duration: dur, ease: "power3.out" },
+          at,
+        );
+      }
+
+      function label(id, at) {
+        tl.fromTo(
+          "#" + id,
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" },
+          at,
+        );
+      }
+
+      function suffix(id, at) {
+        tl.fromTo(
+          "#" + id,
+          { opacity: 0, y: 22 },
+          { opacity: 1, y: 0, duration: 0.42, ease: "back.out(1.6)" },
+          at,
+        );
+      }
+
+      function divider(id, at) {
+        tl.fromTo(
+          "#" + id,
+          { scaleY: 0, opacity: 0 },
+          { scaleY: 1, opacity: 1, duration: 0.5, ease: "power2.out" },
+          at,
+        );
+      }
+
+      /* ---------------- Scene 1 (0.0–2.6s) — band settles, cell one counts to 21 ------------ */
+      tl.fromTo(
+        "#proof-band",
+        { opacity: 0, scaleX: 0.965, scaleY: 0.86 },
+        { opacity: 1, scaleX: 1, scaleY: 1, duration: 0.85, ease: "power3.out" },
+        0.05,
+      );
+      tl.fromTo(
+        "#proof-rule",
+        { scaleX: 0 },
+        { scaleX: 1, duration: 0.45, ease: "power3.out" },
+        0.15,
+      );
+      tl.fromTo(
+        "#proof-eyebrow",
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        0.3,
+      );
+      tl.fromTo(
+        "#proof-axis",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.9, ease: "power2.out" },
+        0.45,
+      );
+
+      countUp("proof-c1", 21, "", 0.5, 1.5);
+      label("proof-l1", 1.1);
+      tl.fromTo(
+        "#proof-t1",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.6, ease: "power3.out" },
+        1.35,
+      );
+      divider("proof-d1", 1.95);
+
+      /* ---------------- Scene 2 (2.6–5.4s) — Rs 18 Cr, 2025 --------------------------------- */
+      countUp("proof-c2", 18, RUPEE, 2.7, 1.45);
+      // stat-bars-and-fills: the fill shares the counter's start + ease so they land as one beat
+      tl.fromTo(
+        "#proof-bar2",
+        { scaleY: 0, opacity: 0 },
+        { scaleY: 1, opacity: 1, duration: 1.45, ease: "power3.out" },
+        2.7,
+      );
+      label("proof-l2", 3.25);
+      suffix("proof-s2", 4.15);
+      divider("proof-d2", 4.45);
+
+      /* ---------------- Scene 3 (5.4–9.0s) — Rs 29 Cr, the wedge moment --------------------- */
+      // the dashed marker carries 2025's height across to the 2026 bar
+      tl.fromTo(
+        "#proof-ref",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 0.5, ease: "power2.out" },
+        5.45,
+      );
+      countUp("proof-c3", 29, RUPEE, 5.8, 1.65);
+      // the 2026 bar enters AT cell two's height, then fills up to its own
+      tl.fromTo("#proof-bar3", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" }, 5.8);
+      tl.fromTo(
+        "#proof-bar3",
+        { scaleY: 0.619 },
+        { scaleY: 1, duration: 1.65, ease: "power3.out" },
+        5.8,
+      );
+      label("proof-l3", 6.45);
+      suffix("proof-s3", 7.45);
+      divider("proof-d3", 7.55);
+
+      /* ---------------- Scene 4 (9.0–11.4s) — 21 days to first ship ------------------------- */
+      countUp("proof-c4", 21, "", 9.05, 1.8);
+      tl.fromTo(
+        "#proof-t4",
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 1.8, ease: "power3.out" },
+        9.05,
+      );
+      label("proof-l4", 9.7);
+
+      /* ---------------- Scene 5 (11.4–12.949s) — held. No push, no drift. ------------------- */
+      tl.to({}, { duration: 0.01 }, 12.93);
+
+      window.__timelines["07-the-proof"] = tl;
+    })();
+  </script>
+</template>

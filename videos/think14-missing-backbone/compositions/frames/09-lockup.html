@@ -1,0 +1,241 @@
+<template>
+  <style>
+    /* ── 09-lockup — design tokens pulled from frame.md ─────────────────────
+       bg #FFFFFF · primary #5B1FC7 · wedge #F97A4D · text-muted #6B6B6B
+       Display/chrome face: Helvetica Neue (frame.md) → Arial fallback.
+       No font files ship with this project, so no @font-face is declarable;
+       the stack ends in the always-resolvable generic.                      */
+
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── background: full-bleed white ground (lowest content track) ──────── */
+    #root .f09-ground {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+
+    /* ── background: closing atmosphere — concentric rings (frame.md:
+         atmosphere is permitted on cover/closing frames only) ────────────── */
+    #root .f09-rings {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 38.9%; /* the lockup's optical centre (960, 420) */
+      will-change: transform, opacity;
+    }
+    #root .f09-rings svg {
+      display: block;
+      width: 1920px;
+      height: 1080px;
+    }
+
+    /* ── foreground subject: the THINK14 wordmark ─────────────────────────── */
+    #root .f09-lockup {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 316px;
+      text-align: center;
+    }
+    .f09-mark {
+      display: inline-block;
+      font-size: 9.8cqw; /* ≈188px — the wordmark step; ~40% of frame width */
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+    }
+    .f09-mark-think {
+      color: #5b1fc7;
+    }
+    .f09-mark-14 {
+      color: #D9542A; /* the single wedge moment in this frame */
+    }
+
+    /* ── supporting: the tagline ──────────────────────────────────────────── */
+    #root .f09-tagline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 542px;
+      text-align: center;
+      font-size: 1.98cqw; /* ≈38px — above the 1.4cqw legibility floor */
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+      color: #6b6b6b;
+    }
+    .f09-word {
+      display: inline-block;
+      will-change: transform, opacity;
+    }
+
+    /* ── background: the closing primary band on the bottom edge ──────────── */
+    #root .f09-band-wrap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 132px;
+      overflow: hidden;
+    }
+    .f09-band {
+      position: absolute;
+      inset: 0;
+      background: #5b1fc7;
+      will-change: transform;
+    }
+    .f09-url {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 34px; /* baseline sits ≈1036px — clear of the caption pill */
+      text-align: center;
+      font-family: monospace;
+      font-size: 1.46cqw; /* ≈28px */
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffffff;
+      will-change: opacity;
+    }
+  </style>
+
+  <div id="root" data-composition-id="09-lockup" data-width="1920" data-height="1080">
+    <!-- track 0 — full-bleed ground -->
+    <div class="clip f09-ground" data-start="0" data-duration="4.245" data-track-index="0"></div>
+
+    <!-- track 1 — closing atmosphere -->
+    <div class="clip f09-rings" id="f09-rings" data-start="0" data-duration="4.245" data-track-index="1">
+      <svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#5b1fc7" stroke-width="1.5">
+          <circle cx="960" cy="420" r="320" stroke-opacity="0.10" />
+          <circle cx="960" cy="420" r="470" stroke-opacity="0.075" />
+          <circle cx="960" cy="420" r="620" stroke-opacity="0.055" />
+          <circle cx="960" cy="420" r="780" stroke-opacity="0.04" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- track 2 — the lockup: wordmark + tagline -->
+    <div class="clip f09-lockup" data-start="0" data-duration="4.245" data-track-index="2">
+      <div class="f09-mark" id="f09-mark"><span class="f09-mark-think">THINK</span><span class="f09-mark-14">14</span></div>
+    </div>
+
+    <div class="clip f09-tagline" id="f09-tagline" data-start="0" data-duration="4.245" data-track-index="3"></div>
+
+    <!-- track 4 — the closing band + URL end card -->
+    <div class="clip f09-band-wrap" data-start="0" data-duration="4.245" data-track-index="4">
+      <div class="f09-band" id="f09-band"></div>
+      <div class="f09-url" id="f09-url">thinkfourteen.com</div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="09-lockup"]');
+      if (!root) return;
+
+      var q = function (sel) {
+        return root.querySelector(sel);
+      };
+
+      /* ── build the tagline word spans ──────────────────────────────────── */
+      var TAGLINE = ["The", "US", "Backbone", "for", "Cross-Border", "Ecommerce."];
+      var taglineEl = q("#f09-tagline");
+      var wordEls = [];
+      for (var i = 0; i < TAGLINE.length; i++) {
+        var span = document.createElement("span");
+        span.className = "f09-word";
+        span.textContent = TAGLINE[i];
+        taglineEl.appendChild(span);
+        wordEls.push(span);
+        if (i < TAGLINE.length - 1) {
+          taglineEl.appendChild(document.createTextNode(" "));
+        }
+      }
+
+      /* ── dynamic-content-sequencing: per-word windows derived ONCE from
+           content length (BASE + chars × SEC_PER_CHAR), reduced into a flat
+           table of absolute start times. No hardcoded per-word offsets, no
+           recomputation at runtime. ─────────────────────────────────────── */
+      var WORD_BASE = 0.08; // minimum window per word
+      var SEC_PER_CHAR = 0.018; // ≈55 chars/sec cadence
+      var WORDS_AT = 1.2; // Scene 2 opens on "The US backbone"
+      var cumulative = 0;
+      var WORD_TIMELINE = TAGLINE.map(function (w) {
+        var start = cumulative;
+        cumulative += WORD_BASE + w.length * SEC_PER_CHAR;
+        return { start: start, end: cumulative };
+      });
+
+      var tl = gsap.timeline({ paused: true });
+
+      /* ── Scene 1 (0.0–1.2s) · the mark settles whole onto a cleared stage.
+           spring-pop-entrance, calm-settle variation: scale 0 → 1 on
+           power3.out (long tail, NO overshoot), small Y_RISE. fromTo so the
+           collapsed state is correct under seek; hero lands well before
+           t = 0.5s. ──────────────────────────────────────────────────────── */
+      tl.fromTo(
+        q("#f09-mark"),
+        { scale: 0, opacity: 0, y: 10 },
+        { scale: 1, opacity: 1, y: 0, duration: 0.72, ease: "power3.out" },
+        0.02,
+      );
+
+      // the closing atmosphere settles with it — quiet, background register
+      tl.fromTo(
+        q("#f09-rings"),
+        { scale: 0.955, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1.0, ease: "power3.out" },
+        0.1,
+      );
+
+      /* ── Scene 2 (1.2–2.6s) · the tagline reveals word by word on the
+           "The US backbone" cue, paced by the table above. ───────────────── */
+      wordEls.forEach(function (el, i) {
+        tl.fromTo(
+          el,
+          { opacity: 0, y: 14 },
+          { opacity: 1, y: 0, duration: 0.34, ease: "power3.out" },
+          WORDS_AT + WORD_TIMELINE[i].start,
+        );
+      });
+
+      /* ── Scene 3 (2.6–3.4s) · the primary band settles onto the bottom
+           edge, then thinkfourteen.com sets into it on a left→right wipe. ── */
+      tl.fromTo(
+        q("#f09-band"),
+        { yPercent: 100 },
+        { yPercent: 0, duration: 0.6, ease: "power3.out" },
+        2.6,
+      );
+
+      tl.fromTo(
+        q("#f09-url"),
+        { opacity: 0, clipPath: "inset(0% 100% 0% 0%)" },
+        { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.44, ease: "power2.out" },
+        2.98,
+      );
+
+      /* ── Scene 4 (3.4–4.245s) · held to the last frame. Fully still —
+           no jitter, no drift, and no exit tween. The zero-duration marker
+           below only carries the timeline out to the frame's full length. ── */
+      var hold = { t: 0 };
+      tl.to(hold, { t: 1, duration: 0.845, ease: "none" }, 3.4);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["09-lockup"] = tl;
+    })();
+  </script>
+</template>

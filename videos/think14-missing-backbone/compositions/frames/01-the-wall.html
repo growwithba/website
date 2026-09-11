@@ -1,0 +1,297 @@
+<template>
+  <style>
+    /* ── 01-the-wall — Blue Professional (Think14 purple remix) ───────────────
+       Ground white #FFFFFF · primary #5B1FC7 · primary-2 #7C3AED · lavender #B79CF5
+       Type ramp from frame.md: h4-eyebrow / h2 / h1, Helvetica Neue.
+       Container law: #root sets container-type:size; frame-relative units are cqw/cqh.
+       Caption keep-out: every element ends above y = 896px (83% of 1080).
+    ------------------------------------------------------------------------ */
+
+    /* Root is styled by #root (never a class) — a class on the composition root
+       is scoped to a descendant selector at render and would never match. */
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      container-type: size;
+      overflow: hidden;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── background layer: white ground + hairline 12-col grid at 6% primary ── */
+    /* Full-bleed ground lives on a class="clip" layer, NOT on #root. */
+    #the-wall-ground {
+      position: absolute;
+      inset: 0;
+      background-color: #ffffff;
+    }
+    #the-wall-grid {
+      position: absolute;
+      inset: 0;
+      /* 12 columns across 1920 → a hairline every 160px (13 rules incl. edges) */
+      background-image: repeating-linear-gradient(
+        to right,
+        rgba(91, 31, 199, 0.06) 0px,
+        rgba(91, 31, 199, 0.06) 1px,
+        rgba(91, 31, 199, 0) 1px,
+        rgba(91, 31, 199, 0) 160px
+      );
+    }
+
+    /* ── type stage ─────────────────────────────────────────────────────────── */
+    #the-wall-stage {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* supporting: eyebrow, upper-left */
+    #the-wall-eyebrow {
+      position: absolute;
+      left: 7.5cqw;
+      top: 12cqh;
+      display: flex;
+      align-items: center;
+      gap: 0.95cqw;
+    }
+    #the-wall-eyebrow-tick {
+      display: block;
+      width: 2.6cqw;
+      height: 2px;
+      background-color: #b79cf5;
+      border-radius: 2px;
+    }
+    #the-wall-eyebrow-text {
+      font-size: 1.15cqw;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      /* softer secondary purple — lavender at this size fails the AA floor on white */
+      color: #7c3aed;
+      white-space: nowrap;
+    }
+
+    /* foreground subject: the three stacked statement lines */
+    .the-wall-line {
+      position: absolute;
+      left: 7.5cqw;
+      white-space: nowrap;
+      color: #111111;
+      letter-spacing: -0.02em;
+    }
+    #the-wall-l1 {
+      top: 31cqh;
+    }
+    #the-wall-l2 {
+      top: 38.5cqh;
+    }
+    /* lines one + two — h2 step */
+    #the-wall-l1,
+    #the-wall-l2 {
+      font-size: 3cqw;
+      font-weight: 600;
+      line-height: 1.12;
+    }
+    /* line three — h1 step, breaks wider than the stack above it (~62% measure) */
+    #the-wall-l3 {
+      top: 55cqh;
+      font-size: 4.9cqw;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .the-wall-w {
+      display: inline-block;
+      margin-right: 0.26em;
+    }
+    .the-wall-w:last-child {
+      margin-right: 0;
+    }
+
+    /* the emphasised token — weight + scale only, primary, no glow */
+    #the-wall-zero {
+      font-weight: 800;
+      font-size: 1.1em;
+      color: #5b1fc7;
+      letter-spacing: -0.03em;
+      transform-origin: 0% 90%;
+    }
+
+    /* the short purple rule drawn beneath the stack */
+    #the-wall-rule {
+      position: absolute;
+      left: 7.5cqw;
+      top: 49.5cqh;
+      width: 232px;
+      height: 8px;
+      overflow: visible;
+    }
+    #the-wall-rule path {
+      fill: none;
+      stroke: #5b1fc7;
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="01-the-wall"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- background · full duration, lowest track -->
+    <div
+      id="the-wall-ground"
+      class="clip"
+      data-start="0"
+      data-duration="5.547"
+      data-track-index="0"
+    >
+      <div id="the-wall-grid"></div>
+    </div>
+
+    <!-- foreground + supporting · full duration -->
+    <div
+      id="the-wall-stage"
+      class="clip"
+      data-start="0"
+      data-duration="5.547"
+      data-track-index="1"
+    >
+      <div id="the-wall-eyebrow">
+        <span id="the-wall-eyebrow-tick"></span>
+        <span id="the-wall-eyebrow-text">Cross-border ecommerce</span>
+      </div>
+
+      <div id="the-wall-l1" class="the-wall-line">
+        <span class="the-wall-w">A</span><span class="the-wall-w">great</span
+        ><span class="the-wall-w">product.</span>
+      </div>
+
+      <div id="the-wall-l2" class="the-wall-line">
+        <span class="the-wall-w">A</span><span class="the-wall-w">working</span
+        ><span class="the-wall-w">India</span><span class="the-wall-w">business.</span>
+      </div>
+
+      <svg
+        id="the-wall-rule"
+        viewBox="0 0 232 8"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path id="the-wall-rule-path" d="M 3 4 L 229 4" />
+      </svg>
+
+      <div id="the-wall-l3" class="the-wall-line">
+        <span class="the-wall-w" id="the-wall-zero">ZERO</span
+        ><span class="the-wall-w">sales</span><span class="the-wall-w">in</span
+        ><span class="the-wall-w">America.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      var scope =
+        document.querySelector('[data-composition-id="01-the-wall"]') || document;
+      var all = function (sel) {
+        return scope.querySelectorAll(sel);
+      };
+      var one = function (sel) {
+        return all(sel)[0];
+      };
+
+      /* ── Scene 1 (0.0–1.5s) — ground settles, eyebrow parks, line one lands ── */
+
+      tl.fromTo(
+        one("#the-wall-grid"),
+        { opacity: 0 },
+        { opacity: 1, duration: 0.65, ease: "power1.out" },
+        0,
+      );
+
+      tl.fromTo(
+        one("#the-wall-eyebrow-tick"),
+        { scaleX: 0, transformOrigin: "0% 50%" },
+        { scaleX: 1, duration: 0.5, ease: "power2.out" },
+        0.08,
+      );
+      tl.fromTo(
+        one("#the-wall-eyebrow-text"),
+        { opacity: 0, x: -10 },
+        { opacity: 1, x: 0, duration: 0.55, ease: "power2.out" },
+        0.14,
+      );
+
+      /* ── per-word staggered reveal (dynamic-content-sequencing) ─────────────
+         Each line's word windows are pre-computed ONCE from the content itself —
+         no hardcoded per-word offsets. Each line's cue is its spoken beat. */
+      var LINES = [
+        { sel: "#the-wall-l1", cue: 0.22, stagger: 0.115, dur: 0.66, rise: 20 },
+        { sel: "#the-wall-l2", cue: 1.58, stagger: 0.105, dur: 0.62, rise: 20 },
+        { sel: "#the-wall-l3", cue: 3.3, stagger: 0.135, dur: 0.74, rise: 30 },
+      ];
+
+      var WORD_TIMELINE = [];
+      LINES.forEach(function (line) {
+        var words = all(line.sel + " .the-wall-w");
+        for (var i = 0; i < words.length; i++) {
+          WORD_TIMELINE.push({
+            el: words[i],
+            start: line.cue + i * line.stagger,
+            dur: line.dur,
+            rise: line.rise,
+          });
+        }
+      });
+
+      WORD_TIMELINE.forEach(function (item) {
+        tl.fromTo(
+          item.el,
+          { opacity: 0, y: item.rise, filter: "blur(7px)" },
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            duration: item.dur,
+            ease: "power3.out", /* long-tail settle */
+          },
+          item.start,
+        );
+      });
+
+      /* ── Scene 3 (2.8–4.4s) — the rule draws, then line three breaks wider ── */
+
+      /* svg-path-draw: dash pattern from the measured path length, never guessed */
+      var rulePath = one("#the-wall-rule-path");
+      if (rulePath && rulePath.getTotalLength) {
+        var len = rulePath.getTotalLength();
+        rulePath.style.strokeDasharray = String(len);
+        rulePath.style.strokeDashoffset = String(len);
+        tl.to(
+          rulePath,
+          { strokeDashoffset: 0, duration: 0.52, ease: "power2.out" },
+          2.86,
+        );
+      }
+
+      /* ZERO carries the emphasis by weight + scale alone — one extra scale beat
+         layered on top of its word reveal, no glow, no colour flash. */
+      tl.fromTo(
+        one("#the-wall-zero"),
+        { scale: 0.9 },
+        { scale: 1, duration: 0.82, ease: "power3.out" },
+        3.3,
+      );
+
+      /* ── Scene 4 (4.4–5.547s) — held. Nothing moves. The stillness is the beat. */
+
+      window.__timelines["01-the-wall"] = tl;
+    })();
+  </script>
+</template>

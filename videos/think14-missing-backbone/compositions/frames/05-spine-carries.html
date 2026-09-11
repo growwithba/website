@@ -1,0 +1,318 @@
+<template>
+  <style>
+    /* ── 05-spine-carries · Blue Professional (frame.md tokens, by role) ──
+       ground #FFFFFF · primary #5B1FC7 · primary-2 #7C3AED · lavender-bg #DDD0FB
+       wedge #F97A4D (ONE wedge moment: the Scene-1 spine restroke)
+       Root styled via #root — never a class on the composition-id element. */
+    #root,
+    #root * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .clip {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* full-bleed ground — a clip layer, never a background on #root */
+    .sc05-ground {
+      background: #ffffff;
+    }
+
+    /* background role — soft lavender field, left of the spine, fading clear
+       of the caption band so the bottom 17% stays quiet */
+    .sc05-field {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 500px;
+      height: 1080px;
+      background: linear-gradient(
+        180deg,
+        #ddd0fb 0%,
+        #ddd0fb 78%,
+        rgba(221, 208, 251, 0) 97%
+      );
+    }
+
+    /* slide-header chrome — accent-line + eyebrow, upper-left */
+    .sc05-rule {
+      position: absolute;
+      left: 96px;
+      top: 96px;
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      background: #5b1fc7;
+      transform-origin: 0% 50%;
+      will-change: transform;
+    }
+    .sc05-eyebrow {
+      position: absolute;
+      left: 96px;
+      top: 124px;
+      font-size: 25px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #5b1fc7;
+      will-change: transform, opacity;
+    }
+
+    /* the load: spine + connectors + markers + chips, jittered as one on the hold */
+    .sc05-load {
+      position: absolute;
+      inset: 0;
+      will-change: transform;
+    }
+    .sc05-svg {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: visible;
+    }
+    .sc05-spine {
+      fill: none;
+      stroke: #5b1fc7;
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+    /* the frame's single wedge moment — restrokes once, then clears to primary */
+    .sc05-wedge {
+      fill: none;
+      stroke: #f97a4d;
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+    .sc05-conn {
+      fill: none;
+      stroke: #7c3aed;
+      stroke-width: 4;
+      stroke-linecap: round;
+    }
+
+    .sc05-marker {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #5b1fc7;
+      border: 5px solid #ffffff;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    /* card-tinted: 4% primary fill · 20% primary 1.5px border · 14px radius · no shadow */
+    .sc05-chip {
+      position: absolute;
+      left: 608px;
+      width: 522px;
+      height: 84px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 0 30px;
+      border-radius: 14px;
+      background: rgba(91, 31, 199, 0.04);
+      border: 1.5px solid rgba(91, 31, 199, 0.2);
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+    .sc05-num {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.05em;
+      color: #7c3aed;
+      opacity: 0;
+    }
+    .sc05-label {
+      font-size: 36px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #111111;
+      white-space: nowrap;
+      clip-path: inset(0% 100% 0% 0%);
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="05-spine-carries"
+    data-width="1920"
+    data-height="1080" data-duration="7.455"
+  >
+    <!-- track 0 — full-bleed white ground -->
+    <div
+      class="clip sc05-ground"
+      data-start="0"
+      data-duration="7.455"
+      data-track-index="0"
+    ></div>
+
+    <!-- track 1 — the shot -->
+    <div class="clip" data-start="0" data-duration="7.455" data-track-index="1">
+      <div class="sc05-field"></div>
+
+      <div class="sc05-rule"></div>
+      <div class="sc05-eyebrow">ONE SPINE</div>
+
+      <div class="sc05-load">
+        <svg
+          class="sc05-svg"
+          viewBox="0 0 1920 1080"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <line class="sc05-spine" x1="500" y1="220" x2="500" y2="872" />
+
+          <line class="sc05-conn" x1="503" y1="280" x2="608" y2="280" />
+          <line class="sc05-conn" x1="503" y1="413" x2="608" y2="413" />
+          <line class="sc05-conn" x1="503" y1="546" x2="608" y2="546" />
+          <line class="sc05-conn" x1="503" y1="679" x2="608" y2="679" />
+          <line class="sc05-conn" x1="503" y1="812" x2="608" y2="812" />
+
+          <line class="sc05-wedge" x1="500" y1="220" x2="500" y2="872" />
+        </svg>
+
+        <div class="sc05-marker" style="left: 484px; top: 264px"></div>
+        <div class="sc05-marker" style="left: 484px; top: 397px"></div>
+        <div class="sc05-marker" style="left: 484px; top: 530px"></div>
+        <div class="sc05-marker" style="left: 484px; top: 663px"></div>
+        <div class="sc05-marker" style="left: 484px; top: 796px"></div>
+
+        <div class="sc05-chip" style="top: 238px">
+          <span class="sc05-num">01</span
+          ><span class="sc05-label">US ENTITY</span>
+        </div>
+        <div class="sc05-chip" style="top: 371px">
+          <span class="sc05-num">02</span><span class="sc05-label">CAPITAL</span>
+        </div>
+        <div class="sc05-chip" style="top: 504px">
+          <span class="sc05-num">03</span
+          ><span class="sc05-label">US WAREHOUSE</span>
+        </div>
+        <div class="sc05-chip" style="top: 637px">
+          <span class="sc05-num">04</span
+          ><span class="sc05-label">COMPLIANCE</span>
+        </div>
+        <div class="sc05-chip" style="top: 770px">
+          <span class="sc05-num">05</span><span class="sc05-label">CHANNEL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var FRAME_ID = "05-spine-carries";
+      var DUR = 6.955;
+      var root = document.querySelector('[data-composition-id="' + FRAME_ID + '"]');
+      var q = function (s) { return root.querySelector(s); };
+      var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
+
+      var field = q(".sc05-field");
+      var rule = q(".sc05-rule");
+      var eyebrow = q(".sc05-eyebrow");
+      var load = q(".sc05-load");
+      var spine = q(".sc05-spine");
+      var wedge = q(".sc05-wedge");
+      var conns = qa(".sc05-conn");
+      var markers = qa(".sc05-marker");
+      var chips = qa(".sc05-chip");
+      var nums = qa(".sc05-num");
+      var labels = qa(".sc05-label");
+
+      // svg-path-draw setup — dash pattern from measured geometry, never guessed.
+      var wlen = wedge.getTotalLength ? wedge.getTotalLength() : 652;
+      wedge.style.strokeDasharray = String(wlen);
+      wedge.style.strokeDashoffset = String(wlen);
+      var clens = conns.map(function (c) {
+        var l = c.getTotalLength ? c.getTotalLength() : 105;
+        c.style.strokeDasharray = String(l);
+        c.style.strokeDashoffset = String(l);
+        return l;
+      });
+
+      // static transform origins (spring-pop: anchored at the spine side)
+      gsap.set(rule, { transformOrigin: "0% 50%" });
+      gsap.set(markers, { transformOrigin: "50% 50%" });
+      gsap.set(chips, { transformOrigin: "0% 50%" });
+
+      var tl = gsap.timeline({ paused: true });
+
+      /* ── Scene 1 (0.0–1.3s) — the spine, carried in from Frame 4, restrokes
+            once in wedge orange, then settles back to primary. ────────────── */
+      tl.fromTo(field, { opacity: 0 }, { opacity: 1, duration: 0.55, ease: "power2.out" }, 0);
+      tl.fromTo(spine, { opacity: 0.25 }, { opacity: 1, duration: 0.42, ease: "power2.out" }, 0);
+      tl.fromTo(rule, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.45, ease: "power3.out" }, 0.06);
+      tl.fromTo(eyebrow, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.14);
+      tl.fromTo(wedge, { strokeDashoffset: wlen, opacity: 1 }, { strokeDashoffset: 0, duration: 0.62, ease: "power2.out" }, 0.42);
+      tl.to(wedge, { opacity: 0, duration: 0.3, ease: "power1.out" }, 1.04);
+
+      /* ── Scenes 2–6 — one node per VO beat: marker springs onto the spine,
+            connector draws out, chip pops anchored at the connector, label
+            typesets in behind a mask-wipe. Same five labels, same order as
+            Frame 3's wall — now carried instead of stacked. ───────────────── */
+      var NODE_T = [1.32, 2.32, 3.22, 4.12, 5.02];
+      for (var i = 0; i < NODE_T.length; i++) {
+        var t = NODE_T[i];
+        tl.fromTo(markers[i], { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.42, ease: "power3.out" }, t);
+        tl.fromTo(conns[i], { strokeDashoffset: clens[i] }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, t + 0.1);
+        tl.fromTo(chips[i], { opacity: 0, scale: 0.88, x: -18 }, { opacity: 1, scale: 1, x: 0, duration: 0.52, ease: "power3.out" }, t + 0.14);
+        tl.fromTo(nums[i], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, t + 0.24);
+        tl.fromTo(labels[i], { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.44, ease: "power2.out" }, t + 0.26);
+      }
+
+      /* ── Scene 6 tail (~5.7s) — the spine takes the load in a single beat:
+            every connector and the spine itself thicken one step together. ── */
+      var LOAD_T = 5.72;
+      for (var c = 0; c < conns.length; c++) {
+        tl.fromTo(conns[c], { strokeWidth: 4 }, { strokeWidth: 7, duration: 0.34, ease: "power2.out" }, LOAD_T);
+      }
+      tl.fromTo(spine, { strokeWidth: 6 }, { strokeWidth: 9, duration: 0.34, ease: "power2.out" }, LOAD_T);
+      for (var k = 0; k < chips.length; k++) {
+        tl.fromTo(chips[k], { borderColor: "rgba(91,31,199,0.2)" }, { borderColor: "rgba(91,31,199,0.36)", duration: 0.34, ease: "power2.out" }, LOAD_T);
+      }
+
+      /* ── Scene 7 (6.1–6.955s) — held. sine-wave-loop at the low end of its
+            amplitude range: a single half-cycle so the frame is dead still at
+            hand-off (sin(0) = sin(pi) = 0 — no jump in, no drift out). ────── */
+      var IDLE_START = 6.16;
+      var IDLE_DUR = DUR - IDLE_START;
+      var Y_AMP_PX = 2.4;
+      var phase = { p: 0 };
+      tl.to(
+        phase,
+        {
+          p: Math.PI,
+          duration: IDLE_DUR,
+          ease: "none",
+          onUpdate: function () {
+            load.style.transform =
+              "translateY(" + (Math.sin(phase.p) * Y_AMP_PX).toFixed(3) + "px)";
+          }
+        },
+        IDLE_START
+      );
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[FRAME_ID] = tl;
+    })();
+  </script>
+</template>

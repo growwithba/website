@@ -1,0 +1,504 @@
+<template>
+  <style>
+    #root {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      container-type: size;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .fw03-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---------- ground ---------- */
+    .fw03-ground {
+      background: #ffffff;
+    }
+
+    /* ---------- header chrome ---------- */
+    .fw03-accent-line {
+      position: absolute;
+      left: 96px;
+      top: 96px;
+      width: 60px;
+      height: 4px;
+      border-radius: 2px;
+      background: #5b1fc7;
+    }
+
+    .fw03-eyebrow {
+      position: absolute;
+      left: 96px;
+      top: 124px;
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #5b1fc7;
+      white-space: nowrap;
+    }
+
+    /* ---------- background growth block ---------- */
+    .fw03-growth {
+      position: absolute;
+      left: 160px;
+      top: 240px;
+      width: 1110px;
+      height: 644px;
+      border-radius: 16px;
+      background: #ddd0fb;
+      opacity: 0.5;
+    }
+
+    /* ---------- the wall ---------- */
+    .fw03-wall {
+      position: absolute;
+      inset: 0;
+    }
+
+    .fw03-bar {
+      position: absolute;
+      left: 200px;
+      height: 108px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(91, 31, 199, 0.2);
+      background:
+        linear-gradient(rgba(91, 31, 199, 0.05), rgba(91, 31, 199, 0.05)),
+        #ffffff;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .fw03-bar-label {
+      padding-left: 46px;
+      font-size: 34px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      color: #111111;
+      white-space: nowrap;
+    }
+
+    .fw03-cap {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      border-radius: 12px 0 0 12px;
+      background: #5b1fc7;
+    }
+
+    .fw03-bar-wedge {
+      border-color: rgba(249, 122, 77, 0.45);
+      background: #fde7df;
+    }
+
+    .fw03-bar-wedge .fw03-cap {
+      background: #f97a4d;
+    }
+
+    /* ---------- numeral gutter ---------- */
+    .fw03-num {
+      position: absolute;
+      left: 84px;
+      width: 90px;
+      height: 108px;
+      line-height: 108px;
+      text-align: right;
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #7c3aed;
+    }
+
+    /* ---------- right rail ---------- */
+    .fw03-rail {
+      position: absolute;
+      left: 1330px;
+      top: 508px;
+      width: 400px;
+    }
+
+    .fw03-rail-card {
+      position: relative;
+      height: 244px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(91, 31, 199, 0.2);
+      background: rgba(91, 31, 199, 0.04);
+      padding: 30px 32px 0 32px;
+    }
+
+    .fw03-rail-label {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #5b1fc7;
+    }
+
+    .fw03-rail-figure {
+      position: absolute;
+      left: 32px;
+      bottom: 24px;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .fw03-count {
+      font-size: 116px;
+      font-weight: 700;
+      line-height: 1;
+      color: #7c3aed;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fw03-count-of {
+      margin-left: 12px;
+      font-size: 42px;
+      font-weight: 500;
+      line-height: 1;
+      color: #6B6B6B;
+    }
+
+    .fw03-ticks {
+      position: absolute;
+      left: 1330px;
+      top: 790px;
+      width: 400px;
+      height: 8px;
+    }
+
+    .fw03-tick-track {
+      position: absolute;
+      top: 0;
+      width: 68px;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(91, 31, 199, 0.08);
+      overflow: hidden;
+    }
+
+    .fw03-tick-fill {
+      position: absolute;
+      inset: 0;
+      border-radius: 4px;
+      background: #7c3aed;
+    }
+
+    .fw03-tick-track.fw03-tick-wedge .fw03-tick-fill {
+      background: #f97a4d;
+    }
+
+    /* ---------- connector staples ---------- */
+    .fw03-ties {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      pointer-events: none;
+    }
+
+    .fw03-ties path {
+      fill: none;
+      stroke: #f97a4d;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="03-five-walls"
+    data-start="0"
+    data-duration="11.423"
+    data-width="1920"
+    data-height="1080"
+  >
+    <!-- full-bleed ground (lowest content track) -->
+    <div
+      class="clip fw03-layer fw03-ground"
+      data-start="0"
+      data-duration="11.423"
+      data-track-index="0"
+    ></div>
+
+    <!-- stage -->
+    <div
+      class="clip fw03-layer"
+      data-start="0"
+      data-duration="11.423"
+      data-track-index="1"
+    >
+      <!-- header chrome -->
+      <div class="fw03-accent-line" id="fw03-accent"></div>
+      <div class="fw03-eyebrow" id="fw03-eyebrow">The US Wall</div>
+
+      <!-- background layer: lavender block growing behind the stack -->
+      <div class="fw03-growth" id="fw03-growth"></div>
+
+      <!-- supporting: numeral rail -->
+      <div class="fw03-num" data-num="1" style="top: 752px">01</div>
+      <div class="fw03-num" data-num="2" style="top: 630px">02</div>
+      <div class="fw03-num" data-num="3" style="top: 508px">03</div>
+      <div class="fw03-num" data-num="4" style="top: 386px">04</div>
+      <div class="fw03-num" data-num="5" style="top: 264px">05</div>
+
+      <!-- foreground subject: five stacked courses -->
+      <div class="fw03-wall" id="fw03-wall">
+        <div class="fw03-bar" data-bar="1" style="top: 752px; width: 1030px">
+          <div class="fw03-cap"></div>
+          <div class="fw03-bar-label">US ENTITY</div>
+        </div>
+        <div class="fw03-bar" data-bar="2" style="top: 630px; width: 955px">
+          <div class="fw03-cap"></div>
+          <div class="fw03-bar-label">CAPITAL</div>
+        </div>
+        <div class="fw03-bar" data-bar="3" style="top: 508px; width: 1010px">
+          <div class="fw03-cap"></div>
+          <div class="fw03-bar-label">US WAREHOUSE</div>
+        </div>
+        <div class="fw03-bar" data-bar="4" style="top: 386px; width: 920px">
+          <div class="fw03-cap"></div>
+          <div class="fw03-bar-label">COMPLIANCE</div>
+        </div>
+        <div
+          class="fw03-bar fw03-bar-wedge"
+          data-bar="5"
+          style="top: 264px; width: 1030px"
+        >
+          <div class="fw03-cap"></div>
+          <div class="fw03-bar-label">CHANNEL</div>
+        </div>
+      </div>
+
+      <!-- the one wedge moment: hairline ties between the courses -->
+      <svg class="fw03-ties" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 419 719 L 441 719 M 430 719 L 430 771 M 419 771 L 441 771" />
+        <path d="M 969 719 L 991 719 M 980 719 L 980 771 M 969 771 L 991 771" />
+        <path d="M 419 597 L 441 597 M 430 597 L 430 649 M 419 649 L 441 649" />
+        <path d="M 969 597 L 991 597 M 980 597 L 980 649 M 969 649 L 991 649" />
+        <path d="M 419 475 L 441 475 M 430 475 L 430 527 M 419 527 L 441 527" />
+        <path d="M 969 475 L 991 475 M 980 475 L 980 527 M 969 527 L 991 527" />
+        <path d="M 419 353 L 441 353 M 430 353 L 430 405 M 419 405 L 441 405" />
+        <path d="M 969 353 L 991 353 M 980 353 L 980 405 M 969 405 L 991 405" />
+      </svg>
+
+      <!-- supporting: the muted right rail -->
+      <div class="fw03-rail" id="fw03-rail">
+        <div class="fw03-rail-card">
+          <div class="fw03-rail-label">Blockers</div>
+          <div class="fw03-rail-figure">
+            <div class="fw03-count" id="fw03-count">0</div>
+            <div class="fw03-count-of">/ 5</div>
+          </div>
+        </div>
+      </div>
+      <div class="fw03-ticks" id="fw03-ticks">
+        <div class="fw03-tick-track" style="left: 0px">
+          <div class="fw03-tick-fill"></div>
+        </div>
+        <div class="fw03-tick-track" style="left: 83px">
+          <div class="fw03-tick-fill"></div>
+        </div>
+        <div class="fw03-tick-track" style="left: 166px">
+          <div class="fw03-tick-fill"></div>
+        </div>
+        <div class="fw03-tick-track" style="left: 249px">
+          <div class="fw03-tick-fill"></div>
+        </div>
+        <div class="fw03-tick-track fw03-tick-wedge" style="left: 332px">
+          <div class="fw03-tick-fill"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      var root = document.querySelector('[data-composition-id="03-five-walls"]');
+      var q = function (sel) {
+        return root.querySelectorAll(sel);
+      };
+      var one = function (sel) {
+        return root.querySelector(sel);
+      };
+
+      var bars = [];
+      var caps = [];
+      var nums = [];
+      var fills = [];
+      for (var i = 1; i <= 5; i++) {
+        var bar = one('.fw03-bar[data-bar="' + i + '"]');
+        bars.push(bar);
+        caps.push(bar.querySelector(".fw03-cap"));
+        nums.push(one('.fw03-num[data-num="' + i + '"]'));
+      }
+      var tickTracks = q(".fw03-tick-track");
+      for (var t = 0; t < tickTracks.length; t++) {
+        fills.push(tickTracks[t].querySelector(".fw03-tick-fill"));
+      }
+
+      // one spoken cue per course — Scene 1..5 windows
+      var CUES = [0.15, 1.95, 3.75, 5.55, 7.35];
+      // growth block scaleY as the wall gains height (bottom-anchored)
+      var GROWTH = [0.23, 0.419, 0.609, 0.798, 0.988];
+
+      // ---- build-time pre-states (nothing on screen before its spoken cue) ----
+      gsap.set(bars, { x: -620, opacity: 0 });
+      gsap.set(caps, { scaleY: 0, transformOrigin: "50% 50%" });
+      gsap.set(nums, { opacity: 0, x: -26 });
+      gsap.set("#fw03-eyebrow", { opacity: 0, x: -22 });
+      gsap.set("#fw03-accent", { scaleX: 0, transformOrigin: "0% 50%" });
+      gsap.set("#fw03-rail", { opacity: 0, y: 20 });
+      gsap.set("#fw03-ticks", { opacity: 0 });
+
+      // ---- header chrome ----
+      tl.fromTo(
+        "#fw03-accent",
+        { scaleX: 0, transformOrigin: "0% 50%" },
+        { scaleX: 1, duration: 0.5, ease: "power3.out" },
+        0
+      );
+      tl.fromTo(
+        "#fw03-eyebrow",
+        { opacity: 0, x: -22 },
+        { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" },
+        0.05
+      );
+
+      // ---- background growth block: present, empty, bottom-anchored ----
+      gsap.set("#fw03-growth", { scaleY: 0, transformOrigin: "50% 100%" });
+
+      // ---- right rail arrives quiet ----
+      tl.fromTo(
+        "#fw03-rail",
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
+        0.3
+      );
+      tl.fromTo(
+        "#fw03-ticks",
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: "power2.out" },
+        0.34
+      );
+      gsap.set(fills, { scaleX: 0, transformOrigin: "0% 50%" });
+
+      // ---- five courses, one per spoken blocker ----
+      for (var n = 0; n < 5; n++) {
+        var c = CUES[n];
+
+        // course slides in from the left and locks
+        tl.fromTo(
+          bars[n],
+          { x: -620, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.7, ease: "power3.out" },
+          c
+        );
+        // the lock: the cap seats itself
+        tl.fromTo(
+          caps[n],
+          { scaleY: 0, transformOrigin: "50% 50%" },
+          { scaleY: 1, duration: 0.34, ease: "power3.out" },
+          c + 0.5
+        );
+        // its numeral reveals in the gutter
+        tl.fromTo(
+          nums[n],
+          { opacity: 0, x: -26 },
+          { opacity: 1, x: 0, duration: 0.46, ease: "power2.out" },
+          c + 0.28
+        );
+        // older numerals dim by position
+        if (n > 0) {
+          tl.to(
+            nums[n - 1],
+            { opacity: 0.42, duration: 0.4, ease: "power2.out" },
+            c + 0.1
+          );
+        }
+        // the lavender block grows with the stack
+        tl.to(
+          "#fw03-growth",
+          { scaleY: GROWTH[n], duration: 0.6, ease: "power3.out" },
+          c + 0.18
+        );
+        // the rail ledger fills one notch
+        tl.to(
+          fills[n],
+          { scaleX: 1, duration: 0.4, ease: "power3.out" },
+          c + 0.34
+        );
+      }
+
+      // ---- Scene 3: the wall passes the rail; the rail takes less weight ----
+      tl.to("#fw03-rail", { opacity: 0.75, duration: 0.7, ease: "power2.out" }, 4.35);
+      tl.to("#fw03-ticks", { opacity: 0.75, duration: 0.7, ease: "power2.out" }, 4.35);
+
+      // ---- Scene 5: the fifth lands and the whole wall settles ----
+      tl.fromTo(
+        "#fw03-wall",
+        { y: -6 },
+        { y: 0, duration: 0.55, ease: "power3.out" },
+        7.95
+      );
+
+      // ---- Scene 5: hairline ties snap between the courses (svg-path-draw) ----
+      var ties = q(".fw03-ties path");
+      for (var p = 0; p < ties.length; p++) {
+        var len = ties[p].getTotalLength() * 1.02;
+        ties[p].style.strokeDasharray = String(len);
+        ties[p].style.strokeDashoffset = String(len);
+        tl.to(
+          ties[p],
+          { strokeDashoffset: 0, duration: 0.26, ease: "power2.out" },
+          8.05 + p * 0.17
+        );
+      }
+
+      // ---- rail counter: pre-computed sequence, DOM swap only on transition ----
+      var SEQUENCE = [{ start: 0, label: "0" }];
+      for (var s = 0; s < CUES.length; s++) {
+        SEQUENCE.push({ start: CUES[s] + 0.34, label: String(s + 1) });
+      }
+      function entryAt(time) {
+        for (var i2 = SEQUENCE.length - 1; i2 >= 0; i2--) {
+          if (time >= SEQUENCE[i2].start) return SEQUENCE[i2];
+        }
+        return SEQUENCE[0];
+      }
+      var countEl = one("#fw03-count");
+      var driver = { t: 0 };
+      var lastLabel = "";
+      tl.to(
+        driver,
+        {
+          t: 10.923,
+          duration: 10.923,
+          ease: "none",
+          onUpdate: function () {
+            var e = entryAt(driver.t);
+            if (e.label !== lastLabel) {
+              countEl.textContent = e.label;
+              lastLabel = e.label;
+            }
+          },
+        },
+        0
+      );
+
+      window.__timelines["03-five-walls"] = tl;
+    })();
+  </script>
+</template>

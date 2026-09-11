@@ -1,0 +1,284 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .f06-think14-bg {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+
+    .f06-think14-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    /* ---- receding spine (background, dimmed) ---- */
+    .f06-think14-spine {
+      position: absolute;
+      left: 520px;
+      top: 190px;
+      width: 880px;
+      height: 0;
+      transform-origin: 50% 50%;
+    }
+    .f06-think14-rail {
+      position: absolute;
+      left: 0;
+      top: -1.5px;
+      width: 880px;
+      height: 3px;
+      background: #5b1fc7;
+      border-radius: 2px;
+    }
+    .f06-think14-node {
+      position: absolute;
+      top: -11px;
+      width: 22px;
+      height: 22px;
+      margin-left: -11px;
+      border-radius: 50%;
+      background: #7c3aed;
+    }
+    .f06-think14-node.n1 { left: 0%; }
+    .f06-think14-node.n2 { left: 25%; }
+    .f06-think14-node.n3 { left: 50%; }
+    .f06-think14-node.n4 { left: 75%; }
+    .f06-think14-node.n5 { left: 100%; }
+
+    /* ---- wordmark lockup ---- */
+    .f06-think14-markwrap {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 250px;
+      text-align: center;
+    }
+    .f06-think14-mark {
+      display: inline-block;
+      font-size: 200px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      transform-origin: 50% 50%;
+      white-space: nowrap;
+    }
+    .f06-think14-mark-a { color: #5b1fc7; }
+    .f06-think14-mark-b { color: #D9542A; }
+
+    /* ---- geography chips ---- */
+    .f06-think14-chiprow {
+      position: absolute;
+      left: 160px;
+      top: 600px;
+      width: 1600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .f06-think14-chip {
+      background: rgba(91, 31, 199, 0.04);
+      border: 1.5px solid rgba(91, 31, 199, 0.2);
+      border-radius: 100px;
+      padding: 22px 36px;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: 0.06em;
+      color: #5b1fc7;
+      white-space: nowrap;
+      transform-origin: 50% 50%;
+    }
+
+    /* ---- closing rule under the chip row ---- */
+    .f06-think14-rulewrap {
+      position: absolute;
+      left: 160px;
+      top: 706px;
+      width: 1600px;
+      height: 8px;
+    }
+    .f06-think14-rulewrap svg {
+      display: block;
+      width: 1600px;
+      height: 8px;
+      overflow: visible;
+    }
+    .f06-think14-rulewrap path {
+      fill: none;
+      stroke: #5b1fc7;
+      stroke-width: 4;
+      stroke-linecap: round;
+    }
+  </style>
+
+  <div
+    id="root"
+    data-composition-id="06-think14"
+    data-start="0"
+    data-duration="9.225"
+    data-width="1920"
+    data-height="1080"
+  >
+    <div
+      class="clip f06-think14-bg"
+      data-start="0"
+      data-duration="9.225"
+      data-track-index="0"
+    ></div>
+
+    <div
+      class="clip f06-think14-layer"
+      data-start="0"
+      data-duration="9.225"
+      data-track-index="1"
+    >
+      <div class="f06-think14-spine" id="f06-think14-spine">
+        <div class="f06-think14-rail"></div>
+        <div class="f06-think14-node n1"></div>
+        <div class="f06-think14-node n2"></div>
+        <div class="f06-think14-node n3"></div>
+        <div class="f06-think14-node n4"></div>
+        <div class="f06-think14-node n5"></div>
+      </div>
+    </div>
+
+    <div
+      class="clip f06-think14-layer"
+      data-start="0"
+      data-duration="9.225"
+      data-track-index="2"
+    >
+      <div class="f06-think14-markwrap">
+        <span class="f06-think14-mark" id="f06-think14-mark"
+          ><span class="f06-think14-mark-a">THINK</span><span
+            class="f06-think14-mark-b"
+            >14</span
+          ></span
+        >
+      </div>
+
+      <div class="f06-think14-chiprow">
+        <div class="f06-think14-chip" id="f06-think14-chip1">
+          AUSTIN, TX &middot; REGISTERED
+        </div>
+        <div class="f06-think14-chip" id="f06-think14-chip2">
+          SPRING, TX &middot; WAREHOUSE + US TEAM
+        </div>
+        <div class="f06-think14-chip" id="f06-think14-chip3">
+          NAGPUR &times;2 + BHILAI &middot; 45+ TEAM
+        </div>
+      </div>
+
+      <div class="f06-think14-rulewrap">
+        <svg viewBox="0 0 1600 8" xmlns="http://www.w3.org/2000/svg">
+          <path id="f06-think14-rule" d="M 0 4 L 1600 4" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.querySelector('[data-composition-id="06-think14"]');
+      if (!root) return;
+      var q = function (sel) {
+        return root.querySelector(sel);
+      };
+
+      var spine = q("#f06-think14-spine");
+      var mark = q("#f06-think14-mark");
+      var chip1 = q("#f06-think14-chip1");
+      var chip2 = q("#f06-think14-chip2");
+      var chip3 = q("#f06-think14-chip3");
+      var rule = q("#f06-think14-rule");
+
+      // svg-path-draw setup: measured geometry, never a magic number.
+      var ruleLen = 1600;
+      if (rule && typeof rule.getTotalLength === "function") {
+        var measured = rule.getTotalLength();
+        if (measured > 0) ruleLen = measured;
+      }
+      rule.style.strokeDasharray = ruleLen;
+      rule.style.strokeDashoffset = ruleLen;
+
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      /* ---------- Scene 1 (0.0-2.0s) --------------------------------------
+         The spine rotates from vertical to horizontal and COLLAPSES into the
+         stem at the optical centre (the scale-swap "outgoing"); the THINK14
+         lockup pops in at that same centre (the "incoming", back.out), then
+         the spent spine recedes upward and dims to ~22% as background.      */
+
+      // vertical spine present at t=0, centred on the mark's optical centre
+      tl.set(spine, { rotation: 90, scale: 0.66, y: 160, opacity: 1 }, 0);
+
+      tl.to(spine, { rotation: 0, duration: 0.56, ease: "power2.inOut" }, 0.1);
+      tl.to(
+        spine,
+        { scale: 0.4, opacity: 0.5, duration: 0.4, ease: "power2.in" },
+        0.22
+      );
+
+      // incoming lockup — overlaps the collapse by ~0.15s (the morph window)
+      tl.fromTo(
+        mark,
+        { scale: 0.74, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.66, ease: "back.out(1.5)" },
+        0.42
+      );
+
+      // the spine recedes: back out to full span, up behind the mark, dimmed
+      tl.to(
+        spine,
+        { scale: 1, y: 0, opacity: 0.22, duration: 1.15, ease: "power2.out" },
+        0.85
+      );
+
+      /* ---------- Scene 2 (2.0-4.0s) — "A US company" -------------------- */
+      tl.fromTo(
+        chip1,
+        { opacity: 0, y: 26, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.4)" },
+        2.05
+      );
+
+      /* ---------- Scene 3 (4.0-5.8s) — "a Texas warehouse" -------------- */
+      tl.fromTo(
+        chip2,
+        { opacity: 0, y: 26, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.4)" },
+        4.05
+      );
+
+      /* ---------- Scene 4 (5.8-7.4s) — "forty-five people in India" ----- */
+      tl.fromTo(
+        chip3,
+        { opacity: 0, y: 26, scale: 0.94 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "back.out(1.4)" },
+        5.85
+      );
+
+      /* ---------- Scene 5 (7.4-8.725s) — the rule draws, frame holds ---- */
+      tl.to(
+        rule,
+        { strokeDashoffset: 0, duration: 0.7, ease: "power2.out" },
+        7.45
+      );
+
+      // hold the full duration (no exit — this is not the final frame)
+      tl.to({}, { duration: 0.01 }, 8.71);
+
+      window.__timelines["06-think14"] = tl;
+    })();
+  </script>
+</template>
