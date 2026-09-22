@@ -39,15 +39,16 @@ export function localBusinessJsonLd(business: Business, category: Category, city
     '@type': 'LocalBusiness',
     '@id': `${SITE.url}/${category.slug}/${city.slug}/#${business.id}`,
     name: business.name,
-    description: business.tagline,
-    telephone: business.phone,
-    url: business.website,
+    description: business.tagline || undefined,
+    telephone: business.phone || undefined,
+    url: business.website || undefined,
+    hasMap: business.mapsUrl || undefined,
     address: {
       '@type': 'PostalAddress',
       streetAddress: business.address.split(',')[0],
       addressLocality: city.name,
       addressRegion: city.stateCode,
-      postalCode: business.zip,
+      postalCode: business.zip || undefined,
       addressCountry: 'US',
     },
     geo: {
@@ -55,11 +56,14 @@ export function localBusinessJsonLd(business: Business, category: Category, city
       latitude: city.lat,
       longitude: city.lng,
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: business.rating,
-      reviewCount: business.reviewCount,
-    },
+    aggregateRating:
+      business.reviewCount > 0
+        ? {
+            '@type': 'AggregateRating',
+            ratingValue: business.rating,
+            reviewCount: business.reviewCount,
+          }
+        : undefined,
     openingHours: business.hours,
   };
 }

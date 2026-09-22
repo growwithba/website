@@ -45,7 +45,9 @@ app/                     # Next.js 15 App Router pages
   categories/            # all-categories index
   sitemap.ts             # dynamic sitemap
   robots.ts              # robots.txt
+scraper/                 # Google Maps scraper kit + import_to_site.py
 data/
+  scraped/               # real listings (category/city.json)
   categories.ts          # 10 high-CPC categories
   cities.ts              # 100 US cities
   businesses.ts          # deterministic business generator
@@ -55,8 +57,23 @@ lib/
 components/              # Header, Footer, BusinessCard, Breadcrumbs, JsonLd
 ```
 
-## Notes
+## Real listings (Google Maps scraper)
 
-Business listings are generated deterministically from a seeded PRNG so SSG
-output is stable. Replace `data/businesses.ts` with a real data source
-(Google Places API, internal DB, CSV import) for production.
+`scraper/` vendors [google-maps-scraper-kit](https://github.com/Mahanaicoach/google-maps-scraper-kit)
+(wraps `gosom/google-maps-scraper`, MIT — see `scraper/CREDITS.md`).
+
+```bash
+cd scraper && docker compose up -d && cd ..          # scraper on localhost:8080
+python3 scraper/scripts/import_to_site.py list        # valid slugs
+python3 scraper/scripts/import_to_site.py run --category plumbers --city austin-tx
+python3 scraper/scripts/import_to_site.py run --category all --city austin-tx,dallas-tx --depth 3
+python3 scraper/scripts/import_to_site.py import results.csv --category dentists --city denver-co
+npm run build
+```
+
+Results land in `data/scraped/<category>/<city>.json` (top 20 by rating, emails
+dropped). `getBusinesses()` in `data/businesses.ts` uses them when present and
+falls back to deterministic generated listings otherwise. `run` skips pairs that
+already have data (use `--overwrite` to refresh), pauses between jobs, and stops
+on the first failed job to avoid Google rate limits. Scraping Maps is against
+Google's ToS — keep volume low and use proxies for big runs.
