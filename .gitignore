@@ -8,3 +8,6 @@ out/
 .vercel
 next-env.d.ts
 *.zip
+
+# scraped lead exports (personal data, keep local)
+leads/

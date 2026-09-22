@@ -51,33 +51,51 @@ export default function BusinessCard({
         </div>
         <div>
           <dt className="text-xs uppercase text-slate-400">Address</dt>
-          <dd>{business.address} {business.zip}</dd>
+          <dd>{business.address.includes(business.zip) ? business.address : `${business.address} ${business.zip}`}</dd>
         </div>
-        <div>
-          <dt className="text-xs uppercase text-slate-400">Hours</dt>
-          <dd>{business.hours}</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase text-slate-400">Experience</dt>
-          <dd>{business.yearsInBusiness} years in business</dd>
-        </div>
+        {business.hours && (
+          <div>
+            <dt className="text-xs uppercase text-slate-400">Hours</dt>
+            <dd>{business.hours}</dd>
+          </div>
+        )}
+        {business.yearsInBusiness != null && (
+          <div>
+            <dt className="text-xs uppercase text-slate-400">Experience</dt>
+            <dd>{business.yearsInBusiness} years in business</dd>
+          </div>
+        )}
       </dl>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <a
-          href={`tel:${business.phone.replace(/\D/g, '')}`}
-          className="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700"
-        >
-          Call now
-        </a>
-        <a
-          href={business.website}
-          rel="nofollow noopener noreferrer"
-          target="_blank"
-          className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-        >
-          Visit website
-        </a>
+        {business.phone && (
+          <a
+            href={`tel:${business.phone.replace(/\D/g, '')}`}
+            className="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700"
+          >
+            Call now
+          </a>
+        )}
+        {business.website && (
+          <a
+            href={business.website}
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+            className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            Visit website
+          </a>
+        )}
+        {business.mapsUrl && (
+          <a
+            href={business.mapsUrl}
+            rel="nofollow noopener noreferrer"
+            target="_blank"
+            className="rounded-md border border-slate-200 px-3 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          >
+            View on map
+          </a>
+        )}
       </div>
     </article>
   );

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { categories, getCategoryBySlug } from '@/data/categories';
 import { cities, getCityBySlug } from '@/data/cities';
-import { generateBusinesses } from '@/data/businesses';
+import { getBusinesses } from '@/data/businesses';
 import {
   buildMetadata,
   itemListJsonLd,
@@ -59,7 +59,7 @@ export default async function CategoryCityPage({
   const city = getCityBySlug(citySlug);
   if (!category || !city) notFound();
 
-  const businesses = generateBusinesses(category, city);
+  const businesses = getBusinesses(category, city);
   const top = businesses.slice(0, 10);
 
   const crumbs = [

@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import type { Category } from './categories';
 import type { City } from './cities';
 
@@ -9,11 +11,27 @@ export interface Business {
   phone: string;
   address: string;
   zip: string;
-  yearsInBusiness: number;
+  yearsInBusiness?: number;
   website: string;
   tagline: string;
-  hours: string;
+  hours?: string;
   verified: boolean;
+  mapsUrl?: string;
+  source?: 'google-maps' | 'generated';
+}
+
+// Real listings written by scraper/scripts/import_to_site.py.
+const SCRAPED_DIR = path.join(process.cwd(), 'data', 'scraped');
+
+export function loadScrapedBusinesses(category: Category, city: City): Business[] | null {
+  const file = path.join(SCRAPED_DIR, category.slug, `${city.slug}.json`);
+  if (!fs.existsSync(file)) return null;
+  const list = JSON.parse(fs.readFileSync(file, 'utf8')) as Business[];
+  return list.length > 0 ? list : null;
+}
+
+export function getBusinesses(category: Category, city: City): Business[] {
+  return loadScrapedBusinesses(category, city) ?? generateBusinesses(category, city);
 }
 
 // Deterministic PRNG so SSG output is stable across builds.
@@ -208,6 +226,7 @@ export function generateBusinesses(category: Category, city: City, count = 12): 
       tagline,
       hours,
       verified: rand() < 0.55,
+      source: 'generated',
     });
   }
 
